@@ -198,15 +198,21 @@ function RecalculationBonusPoints(params)
   
   if(isConnect == false) then
     ConnectedCharacteristic[#ConnectedCharacteristic + 1] = params
+  else
+    for k,v in pairs(ConnectedCharacteristic) do
+	    if(v.GUID == params.GUID) then
+        ConnectedCharacteristic[k] = params
+      end
+    end
   end
-
+  
   local locMaxChar = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
 	    locMaxChar = locMaxChar + p.LBN + (p.CPM*p.VC) + (p.LM*p.LN)
     end
   end
-
+  
   ChangeMaximumStatisticValue(math.ceil(locMaxChar))
 end
 --Игровой персонаж
