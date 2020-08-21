@@ -1,2 +1,2 @@
-# Level_combine_with_characteristic_and_statistic
+# Уровень из РПГ игр
 Скрипт для Tabletop simulation
