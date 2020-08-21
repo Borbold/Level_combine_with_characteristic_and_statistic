@@ -1,0 +1,54 @@
+<Defaults>
+</Defaults>
+
+<Panel position='0 0 -21' height='190' width='1600' rotation='0 0 180'>
+	<TableLayout cellSpacing='10'>
+		<Row>
+			<Cell>
+				<Text id='name' resizeTextForBestFit='True' resizeTextMaxSize='80' color='#000000' alignment='MiddleLeft'>
+				Название
+				</Text>
+			</Cell>
+			<Cell>
+				<InputField id='inputValue' onEndEdit='InputChange' fontSize='65' color='#00000025'
+							characterValidation='Integer'>
+				</InputField>
+			</Cell>
+			<Cell>
+				<Button text='Заблокировать' id='changeLock' color='#00000025' textColor='#000000'
+					onClick='ChangeMeaningLock' resizeTextForBestFit='True' resizeTextMaxSize='60'>
+				</Button>
+			</Cell>
+		</Row>
+		<Row>
+			<Button id='buttonMinus' image='uiMinus' offsetXY='-765 0' height='75' width='70' onClick='Minus'>
+			</Button>
+			<ProgressBar id='bar' height='85' width='1450' color='#00000025' fillImageColor='#8b00ff' percentage='0' textColor='Transparent'>
+			</ProgressBar>
+			<Text id='textBar' color='#ffffff' fontSize='50' fontStyle='Bold' outline='#000000' outlineSize='1 1'>
+			0/0
+			</Text>
+			<Button id='buttonPlus' image='uiPlus' offsetXY='765 0' height='75' width='70' onClick='Plus'>
+			</Button>
+		</Row>
+	</TableLayout>
+</Panel>
+
+<Panel position='0 0 -22' visibility='Black' height='75' width='70' rotation='0 0 180'>
+	<Button onClick='PanelTool' image='uiGear' offsetXY='835 70'>
+	</Button>
+	<Panel id='panelTool' offsetXY='0 200' active='false'>
+		<InputField height='200' width='800' color='#000000' textColor='#ffffff00' interactable='false'>
+		</InputField>
+		<VerticalLayout height='200' width='800' spacing='20'>
+			<InputField id='inputMaxValue' onEndEdit='InputChange' placeholder='Максимальное значение' fontSize='60' characterValidation='Integer'>
+			</InputField>
+			<HorizontalLayout height='80' width='800' spacing='80'>
+				<InputField id='inputName' onEndEdit='InputChange' placeholder='Название' fontSize='60' characterValidation='Name'>
+				</InputField>
+				<InputField id='inputColor' onEndEdit='InputChange' placeholder="Цвет:#..." fontSize='60' characterLimit='6' characterValidation='Alphanumeric'>
+				</InputField>
+			</HorizontalLayout>
+		</VerticalLayout>
+	</Panel>
+</Panel>

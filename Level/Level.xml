@@ -1,0 +1,213 @@
+<Defaults>
+	<Cell dontUseTableCellBackground='true' />
+	<InputField class='changeExperienceInput' placeholder='Значение' color='#9966cc'
+		fontSize='60' characterValidation='Integer'/>
+	<InputField class='changeCharacteristic' fontSize='60' characterValidation='Integer'
+		onEndEdit='SetInputValue'/>
+	
+	<Text class='usualChar' color='white' resizeTextMaxSize='60' resizeTextForBestFit='True'/>
+	<Text class='peaceChar' color='green' resizeTextMaxSize='60' resizeTextForBestFit='True'/>
+	<Text class='combatChar' color='red' resizeTextMaxSize='60' resizeTextForBestFit='True'/>
+</Defaults>
+
+<Panel position='0 0 -21' height='190' width='1600'>
+	<TableLayout cellSpacing='10'>
+		<Row>
+			<Cell columnSpan='3'>
+				<Text id='level' fontSize='80' color='#000000' alignment='MiddleLeft'>
+				Ваш уровень: 1
+				</Text>
+			</Cell>
+			<Cell columnSpan='2'>
+				<InputField id='inputExperience' onEndEdit='InputChangeExperience' fontSize='65' color='#00000025'
+					characterValidation='Integer'>
+				</InputField>
+			</Cell>
+			<Cell>
+				<Button id='closeDistributionCharacteristic' onClick='CloseDistributionCharacteristic' resizeTextForBestFit='True'
+					resizeTextMaxSize='60' color='#00000025' interactable='false'>
+				Завершить распределение ОХ
+				</Button>
+			</Cell>
+			<Cell>
+				<Button onClick='ResetLevel' resizeTextForBestFit='True' resizeTextMaxSize='60' color='#00000025'>
+				Сбросить уровни
+				</Button>
+			</Cell>
+		</Row>
+		<Row>
+			<ProgressBar id='bar' height='85' width='1600' color='#00000025' fillImageColor='#8b00ff' percentage='0' showPercentageText='false'>
+			</ProgressBar>
+			<Text id='textBar' color='#ffffff' fontSize='50' fontStyle='Bold' outline='#000000' outlineSize='1 1'>
+			0/0
+			</Text>
+		</Row>
+	</TableLayout>
+</Panel>
+
+<Panel position='0 0 -22' visibility='Black'>
+	<Button onClick='PanelTool' image='uiGear' height='75' width='70' offsetXY='835 70'>
+	</Button>
+	<VerticalScrollView id='panelTool' height='270' width='1600'
+		color='black' offsetXY='0 235' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
+		<TableLayout height='800' cellSpacing='5'>
+			<Row>
+				<Cell columnSpan='2'>
+					<Text text='Максимальный уровень'
+						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#6600ff'/>
+				</Cell>
+				<Cell columnSpan='4'>
+					<Text text='Изменить изначальное значение опыта'
+						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#9966cc'/>
+				</Cell>
+			</Row>
+			<Row>
+				<Cell columnSpan='2'>
+					<InputField id='maxLevel' class='changeExperienceInput'
+						onEndEdit='ChangeMaxLevel' color='#6600ff'>
+					20
+					</InputField>
+				</Cell>
+				<Cell>
+					<InputField id='value1' class='changeExperienceInput'
+						onEndEdit='ChangeValueExperience'>
+					50
+					</InputField>
+				</Cell>
+				<Cell>
+					<InputField id='value2' class='changeExperienceInput'
+						onEndEdit='ChangeValueExperience'>
+					100
+					</InputField>
+				</Cell>
+				<Cell>
+					<InputField id='value3' class='changeExperienceInput'
+						onEndEdit='ChangeValueExperience'>
+					150
+					</InputField>
+				</Cell>
+				<Cell>
+					<InputField id='value4' class='changeExperienceInput'
+						onEndEdit='ChangeValueExperience'>
+					200
+					</InputField>
+				</Cell>
+			</Row>
+			
+			<Row>
+				<Cell columnSpan='4'>
+					<Text class='usualChar'>
+					Изменение ОХ
+					</Text>
+				</Cell>
+				<Cell columnSpan='2'>
+					<Text class='usualChar'>
+					Получить ОХ, пропустив указаное количество ур.
+					</Text>
+				</Cell>
+			</Row>
+			<Row>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='startCharacteristicUsual' placeholder='Начальные ОХ'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='characteristicPerLevelUsual' placeholder='ОХ за уровень'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='1' id='levelPassUsual'
+						class='changeCharacteristic'>
+					1
+					</InputField>
+				</Cell>
+			</Row>
+			
+			<Row>
+				<Cell columnSpan='4'>
+					<Text class='combatChar'>
+					Изменение боевых ОХ
+					</Text>
+				</Cell>
+				<Cell columnSpan='2'>
+					<Text class='combatChar'>
+					Получить ОХ, пропустив указаное количество ур.
+					</Text>
+				</Cell>
+			</Row>
+			<Row>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='startCharacteristicCombat' placeholder='Начальные ОХ'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='characteristicPerLevelCombat' placeholder='ОХ за уровень'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='1' id='levelPassCombat'
+						class='changeCharacteristic'>
+					1
+					</InputField>
+				</Cell>
+			</Row>
+			
+			<Row>
+				<Cell columnSpan='4'>
+					<Text class='peaceChar'>
+					Изменение мирных ОХ
+					</Text>
+				</Cell>
+				<Cell columnSpan='2'>
+					<Text class='peaceChar'>
+					Получить ОХ, пропустив указаное количество ур.
+					</Text>
+				</Cell>
+			</Row>
+			<Row>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='startCharacteristicPeace' placeholder='Начальные ОХ'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='0' id='characteristicPerLevelPeace' placeholder='ОХ за уровень'
+						class='changeCharacteristic'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField value='1' id='levelPassPeace'
+						class='changeCharacteristic'>
+					1
+					</InputField>
+				</Cell>
+			</Row>
+			
+			<Row>
+				<Cell columnSpan='3'>
+					<InputField placeholder='Начальное знач. статы' onEndEdit='ChangeStatisticBonus'
+						fontSize='60' characterValidation='Integer'>
+					</InputField>
+				</Cell>
+				<Cell columnSpan='3'>
+					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60'>
+					Произвести подключение
+					</Button>
+				</Cell>
+			</Row>
+		</TableLayout>
+	</VerticalScrollView>
+</Panel>
+
+<Panel active='false'>
+	<Text id='freeCharacteristicUsual'>
+	</Text>
+	<Text id='freeCharacteristicCombat'>
+	</Text>
+	<Text id='freeCharacteristicPeace'>
+	</Text>
+</Panel>
