@@ -3,7 +3,7 @@ function UpdateSave()
     local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
         ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
         ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
-        ["levelBonusN"] = levelBonusN
+        ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight
     }
     savedData = JSON.encode(dataToSave)
     self.script_state = savedData
@@ -48,26 +48,71 @@ function Confer(savedData)
   GUIDLevelIndex = loadedData.GUIDLevelIndex or ""
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
-  characteristicBonus = loadedData.characteristicBonus or 0
+  characteristicBonus = loadedData.characteristicBonus or 1
+  countField = loadedData.countField or 1
+  dataHeight = loadedData.dataHeight or 510
   local indexString = string.find(self.getName(), ":")
   characteristicName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
   levelNumber = loadedData.levelNumber or 1
   levelBonusN = loadedData.levelBonusN or 0
   inputGUID, inputCPM, inputLM = loadedData.inputGUID or {}, loadedData.inputCPM or {}, loadedData.inputLM or {}
-  dataHeight = 510
+  originalXml = self.UI.getXml()
 end
 
 function FunctionCall()
 	Wait.frames(RebuildAssets, 10)
-  Wait.frames(SetUIValue, 15)
+  Wait.frames(AddNewFieldForConnection, 13)
+  Wait.frames(SetUIValue, 16)
 end
 
 function onLoad(savedData)
-    CreateGlobalVariables()
-    if(savedData ~= "") then
-        Confer(savedData)
-    end
-    FunctionCall()
+  CreateGlobalVariables()
+  if(savedData ~= "") then
+    Confer(savedData)
+  end
+  FunctionCall()
+end
+
+function AddNewFieldForConnection()
+	local allXml = originalXml
+
+  local searchString = "<NewRow />"
+  local searchStringLength = #searchString
+
+  local indexVisibility = allXml:find(searchString)
+  
+  local startXml = allXml:sub(1, indexVisibility + searchStringLength)
+  local endXml = allXml:sub(indexVisibility + searchStringLength + 1)
+
+  local newFields = ""
+  for fieldIndex = 1, countField do
+    newFields = newFields ..
+    "<Row preferredHeight='90'>\n" ..
+    " <Cell>\n" ..
+    "   <InputField id='GUID_"..fieldIndex.."' class='fieldForConnect' placeholder='GUID' />\n" ..
+    " </Cell>\n" ..
+    " <Cell>\n" ..
+	  "		<InputField id='CPM_"..fieldIndex.."' class='fieldForConnect' placeholder='CPM' />\n" ..
+    " </Cell>\n" ..
+    " <Cell>\n" .. 
+    "   <InputField id='LM_"..fieldIndex.."' class='fieldForConnect' placeholder='LM' />\n" ..
+    " </Cell>\n" ..
+    " <Cell>\n" .. 
+    "   <Button class='buttonForConnect' />\n" ..
+    " </Cell>\n" ..
+    "</Row>\n"
+  end
+
+  startXml = startXml .. newFields .. endXml
+  self.UI.setXml(startXml)
+  EnlargeHeightPanel(countField)
+end
+
+function EnlargeHeightPanel(count)
+  --220 название и выбор + текст
+  --preferredHeight=90 cellSpacing=10
+  dataHeight = 220 + count * 90 + count * 10
+  Wait.Frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
 end
 
 function ChangeName(player, input)
@@ -82,9 +127,9 @@ function SetUIValue()
   self.UI.setValue("textCharacteristicBonus", characteristicBonus)
   self.UI.setValue("GUIDLevel", GUIDLevelIndex)
   for i = 1, #inputGUID do
-    self.UI.setAttribute("GUID", "text", inputGUID[i])
-    self.UI.setAttribute("CPM", "text", inputCPM[i])
-    self.UI.setAttribute("LM", "text", inputLM[i])
+    self.UI.setAttribute("GUID_"..i.."", "text", inputGUID[i])
+    self.UI.setAttribute("CPM_"..i.."", "text", inputCPM[i])
+    self.UI.setAttribute("LM_"..i.."", "text", inputLM[i])
   end
 end
 
@@ -294,10 +339,12 @@ function ResetCharacteristic()
   minCharacteristic, characteristic, characteristicBonus = 0, 0, 0
   levelNumber, inputCPM, inputLM = 1, 0, 0
   inputGUID, inputCPM, inputLM = {}, {}, {}
+  countField = 1
   self.UI.setValue("textCharacteristic", 0)
   self.UI.setValue("textCharacteristicBonus", 0)
   ShowUI("textCharacteristic") ShowUI("textCharacteristicBonus")
   EnableCharacteristic("Reset")
+  Wait.frames(AddNewFieldForConnection, 13)
 end
 
 function NewLevel()
@@ -331,6 +378,9 @@ function EnableCharacteristic(check)
       end
     end
   end
+
+  countField = countField + 1
+  AddNewFieldForConnection()
   UpdateSave()
 end
 

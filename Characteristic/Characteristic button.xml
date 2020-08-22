@@ -7,6 +7,10 @@
 	<InputField class='inputCharacteristic' height='70' width='120' fontSize='50'
 		color='#00000000' textColor='#ffffff00' characterValidation='Integer'
 		onValueChanged='ChangeInputCharacteristic' onEndEdit='InputEndChange'/>
+	
+	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
+	<Button class='buttonForConnect' onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60'
+		text='Подключить' color='green' />
 </Defaults>
 
 <Panel position='0 0 -21' height='190' width='1600'>
@@ -102,63 +106,7 @@
 						</Text>
 					</Cell>
 				</Row>
-				<Row preferredHeight='90'>
-					<Cell>
-						<InputField id='GUID_1' onEndEdit='EditInput' placeholder='GUID' fontSize='60' characterValidation='Alphanumeric'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='CPM_1' onEndEdit='EditInput' placeholder='CPM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='LM_1' onEndEdit='EditInput' placeholder='LM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<Button onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60' color='green'>
-						Подключить
-						</Button>
-					</Cell>
-				</Row>
-				<Row preferredHeight='90'>
-					<Cell>
-						<InputField id='GUID_2' onEndEdit='EditInput' placeholder='GUID' fontSize='60' characterValidation='Alphanumeric'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='CPM_2' onEndEdit='EditInput' placeholder='CPM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='LM_2' onEndEdit='EditInput' placeholder='LM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<Button onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60' color='green'>
-						Подключить
-						</Button>
-					</Cell>
-				</Row>
-				<Row preferredHeight='90'>
-					<Cell>
-						<InputField id='GUID_3' onEndEdit='EditInput' placeholder='GUID' fontSize='60' characterValidation='Alphanumeric'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='CPM_3' onEndEdit='EditInput' placeholder='CPM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<InputField id='LM_3' onEndEdit='EditInput' placeholder='LM' fontSize='60' characterValidation='Decimal'>
-						</InputField>
-					</Cell>
-					<Cell>
-						<Button onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60' color='green'>
-						Подключить
-						</Button>
-					</Cell>
-				</Row>
+				<NewRow />
 			</TableLayout>
 		</TableLayout>
 	</VerticalScrollView>

@@ -64,7 +64,7 @@ function CreateStatistics(count)
 end
 
 function AddNewStatistic(countStatisticIndex)
-  local allXml = self.UI.getXml()
+  local allXml = originalXml
 
   local searchString = "visibility="
   local searchStringLength = #searchString
@@ -90,7 +90,8 @@ function AddNewStatistic(countStatisticIndex)
 	  "			<Text id='textBar"..statisticIndex.."' class='textForBar'/>\n" ..
 	  "		</Panel>\n" ..
     " </Cell>\n" ..
-    " <Cell>\n<Button image='uiPlus' onClick='Plus("..statisticIndex..")'/>\n" ..
+    " <Cell>\n" ..
+    "   <Button image='uiPlus' onClick='Plus("..statisticIndex..")'/>\n" ..
     " </Cell>\n" ..
     "</Row>\n"
   end

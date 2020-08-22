@@ -163,11 +163,11 @@ function CheckPlayer(playerColor)
 end
 
 function DenoteSth()
-    for iColor,_ in pairs(colorPlayer) do
-        if(CheckColor(iColor)) then
-	        return iColor
-        end
+  for iColor,_ in pairs(colorPlayer) do
+    if(CheckColor(iColor)) then
+	    return iColor
     end
+  end
 end
 
 function CheckColor(color)
@@ -199,9 +199,9 @@ function RecalculationBonusPoints(params)
   if(isConnect == false) then
     ConnectedCharacteristic[#ConnectedCharacteristic + 1] = params
   else
-    for k,v in pairs(ConnectedCharacteristic) do
-	    if(v.GUID == params.GUID) then
-        ConnectedCharacteristic[k] = params
+    for index,par in pairs(ConnectedCharacteristic) do
+	    if(par.GUID == params.GUID) then
+        ConnectedCharacteristic[index] = params
       end
     end
   end
