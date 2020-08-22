@@ -38,9 +38,6 @@ function PerformParameterCheck()
     if(locType == combat) then locType = 1
     else locType = 2 end
     CheckOption(locType) self.UI.setAttribute("selectionType", "value", locType)
-    DeactivateUI("buttonPlusBonus") DeactivateUI("buttonMinusBonus")
-  elseif(CheckGMNot(usual)) then
-    ActivateUI("buttonPlusBonus") ActivateUI("buttonMinusBonus")
   end
 end
 
@@ -110,7 +107,7 @@ function AddNewFieldForConnection()
 end
 
 function EnlargeHeightPanel(count)
-  if(CheckOption(usual)) then
+  if(CheckGMNot(usual)) then
     --220 название и выбор + текст
     --preferredHeight=90 cellSpacing=10
     dataHeight = 220 + count * 90 + count * 10
@@ -148,9 +145,9 @@ function PanelTool()
 end
 
 function ChangeText(id, text)
-    self.UI.setAttribute(id, "text", text)
-    self.UI.setAttribute(id, "color", "#ffffff00")
-    self.UI.setAttribute(id, "textColor", "#ffffff")
+  self.UI.setAttribute(id, "text", text)
+  self.UI.setAttribute(id, "color", "#ffffff00")
+  self.UI.setAttribute(id, "textColor", "#ffffff")
 end
 
 function HideUI(id)
@@ -302,9 +299,9 @@ end
 
 function CheckPlayerOrGM(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
-        return true
-    end
-    return false
+    return true
+  end
+  return false
 end
 
 function CheckPlayer(playerColor)
@@ -386,7 +383,9 @@ function EnableCharacteristic(check)
   end
   
   if(CheckGMNot(usual) and (not check or check ~= "NotChangeHeight")) then
-    countField = countField + 1
+    if(check ~= "Reset") then
+      countField = countField + 1
+    end
     AddNewFieldForConnection()
   end
   UpdateSave()

@@ -57,13 +57,13 @@ function SetStatisticObjects()
 end
 
 function CreateStatistics(count)
-  AddNewStatistic(count)
+  AddNewField(count)
   for i = 1, count do
     Wait.Frames(|| ChangeStatistic(i), 10)
   end
 end
 
-function AddNewStatistic(countStatisticIndex)
+function AddNewField(countStatisticIndex)
   local allXml = originalXml
 
   local searchString = "visibility="
