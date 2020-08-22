@@ -3,7 +3,8 @@ function UpdateSave()
     local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
         ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
         ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
-        ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight
+        ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
+        ["ConnectedCharacteristic"] = ConnectedCharacteristic
     }
     savedData = JSON.encode(dataToSave)
     self.script_state = savedData
@@ -51,6 +52,7 @@ function Confer(savedData)
   characteristicBonus = loadedData.characteristicBonus or 1
   countField = loadedData.countField or 1
   dataHeight = loadedData.dataHeight or 510
+  ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
   local indexString = string.find(self.getName(), ":")
   characteristicName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
   levelNumber = loadedData.levelNumber or 1
@@ -62,7 +64,6 @@ end
 function FunctionCall()
 	Wait.frames(RebuildAssets, 10)
   Wait.frames(AddNewFieldForConnection, 13)
-  Wait.frames(SetUIValue, 16)
 end
 
 function onLoad(savedData)
@@ -89,7 +90,7 @@ function AddNewFieldForConnection()
     newFields = newFields ..
     "<Row preferredHeight='90'>\n" ..
     " <Cell>\n" ..
-    "   <InputField id='GUID_"..fieldIndex.."' class='fieldForConnect' placeholder='GUID' />\n" ..
+    "   <InputField id='GUID_"..fieldIndex.."' class='fieldForConnectGUID' placeholder='GUID' />\n" ..
     " </Cell>\n" ..
     " <Cell>\n" ..
 	  "		<InputField id='CPM_"..fieldIndex.."' class='fieldForConnect' placeholder='CPM' />\n" ..
@@ -109,10 +110,15 @@ function AddNewFieldForConnection()
 end
 
 function EnlargeHeightPanel(count)
-  --220 название и выбор + текст
-  --preferredHeight=90 cellSpacing=10
-  dataHeight = 220 + count * 90 + count * 10
-  Wait.Frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
+  if(CheckOption(usual)) then
+    --220 название и выбор + текст
+    --preferredHeight=90 cellSpacing=10
+    dataHeight = 220 + count * 90 + count * 10
+    Wait.Frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
+  else
+    Wait.Frames(|| self.UI.setAttribute("panelTable", "height", 160), 5)
+  end
+  Wait.frames(SetUIValue, 10)
 end
 
 function ChangeName(player, input)
@@ -134,11 +140,11 @@ function SetUIValue()
 end
 
 function PanelTool()
-    if(self.UI.getAttribute("panelTool", "active") == "true") then
-	    self.UI.hide("panelTool")
-    else
-        self.UI.show("panelTool")
-    end
+  if(self.UI.getAttribute("panelTool", "active") == "true") then
+	  self.UI.hide("panelTool")
+  else
+    self.UI.show("panelTool")
+  end
 end
 
 function ChangeText(id, text)
@@ -172,11 +178,11 @@ function InputEndChange()
 end
 
 function Plus(player, id)
-    ChangeCharacteristic(player.color, id, 1, true)
+  ChangeCharacteristic(player.color, id, 1, true)
 end
 
 function Minus(player, id)
-    ChangeCharacteristic(player.color, id, -1, true)
+  ChangeCharacteristic(player.color, id, -1, true)
 end
 
 function ChangeCharacteristic(playerColor, id, value, button)
@@ -194,7 +200,7 @@ function ChangeCharacteristic(playerColor, id, value, button)
       self.UI.setValue(id, givenValue)
       characteristicBonus = givenValue
     end
-    EnableCharacteristic()
+    EnableCharacteristic("NotChangeHeight")
   end
 end
 
@@ -303,36 +309,36 @@ end
 
 function CheckPlayer(playerColor)
 	if(CheckPlayerOrGM(playerColor)) then
-        return true
-    end
-    broadcastToAll("Ёта дощечка не вашего цвета!")
-    return false
+    return true
+  end
+  broadcastToAll("Ёта дощечка не вашего цвета!")
+  return false
 end
 
 function DenoteSth()
 	local color = ""
-    for iColor,_ in pairs(colorPlayer) do
-        if(CheckColor(iColor)) then
-	        color = iColor
-            break
-        end
+  for iColor,_ in pairs(colorPlayer) do
+    if(CheckColor(iColor)) then
+	    color = iColor
+      break
     end
-    return color
+  end
+  return color
 end
 
 function CheckColor(color)
-    local colorObject = {
-        ["R"] = Round(self.getColorTint()[1], 2),
-        ["G"] = Round(self.getColorTint()[2], 2),
-        ["B"] = Round(self.getColorTint()[3], 2)
-    }
-	  if(colorObject.R == colorPlayer[color].r and
-        colorObject.G == colorPlayer[color].g and
-        colorObject.B == colorPlayer[color].b) then
-        return true
-    else
-        return false
-    end
+  local colorObject = {
+    ["R"] = Round(self.getColorTint()[1], 2),
+    ["G"] = Round(self.getColorTint()[2], 2),
+    ["B"] = Round(self.getColorTint()[3], 2)
+  }
+	if(colorObject.R == colorPlayer[color].r and
+    colorObject.G == colorPlayer[color].g and
+    colorObject.B == colorPlayer[color].b) then
+    return true
+  else
+    return false
+  end
 end
 
 function ResetCharacteristic()
@@ -378,14 +384,41 @@ function EnableCharacteristic(check)
       end
     end
   end
-
-  countField = countField + 1
-  AddNewFieldForConnection()
+  
+  if(CheckGMNot(usual) and (not check or check ~= "NotChangeHeight")) then
+    countField = countField + 1
+    AddNewFieldForConnection()
+  end
   UpdateSave()
 end
 
 function RecalculationBonusPoints(params)
-  characteristicBonus = (params.CPM*params.VC) + (params.LM*params.LN)
+  local isConnect = false
+  for i = 1, #ConnectedCharacteristic do
+    if(ConnectedCharacteristic[i].GUID == params.GUID) then
+      isConnect = true
+      if(getObjectFromGUID(params.GUID) == nil) then
+        ConnectedCharacteristic[i] = nil
+      end
+    end
+  end
+  
+  if(isConnect == false) then
+    ConnectedCharacteristic[#ConnectedCharacteristic + 1] = params
+  else
+    for index,par in pairs(ConnectedCharacteristic) do
+	    if(par.GUID == params.GUID) then
+        ConnectedCharacteristic[index] = params
+      end
+    end
+  end
+  
+  characteristicBonus = 0
+  for _,p in pairs(ConnectedCharacteristic) do
+    if(p ~= nil) then
+	    characteristicBonus = characteristicBonus + (p.CPM*p.VC) + (p.LM*p.LN)
+    end
+  end
 	self.UI.setAttribute("textCharacteristicBonus", "text", Round(characteristicBonus))
   UpdateSave()
 end

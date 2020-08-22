@@ -8,7 +8,8 @@
 		color='#00000000' textColor='#ffffff00' characterValidation='Integer'
 		onValueChanged='ChangeInputCharacteristic' onEndEdit='InputEndChange'/>
 	
-	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
+	<InputField class='fieldForConnectGUID' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
+	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='Decimal'/>
 	<Button class='buttonForConnect' onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60'
 		text='Подключить' color='green' />
 </Defaults>

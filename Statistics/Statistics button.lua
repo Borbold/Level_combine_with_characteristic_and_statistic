@@ -100,7 +100,6 @@ function InputChange(player, input, idInput)
     elseif(idInput == "inputColor") then
         ChangeProgressBarColor(input)
     end
-    UpdateSave()
 end
 
 function ChangeName(value)
