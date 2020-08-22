@@ -68,7 +68,7 @@ end
 function onLoad(savedData)
   CreateGlobalVariables()
   if(savedData ~= "") then
-    Confer(savedData)
+    Wait.Frames(|| Confer(savedData), 8)
   end
   FunctionCall()
 end
