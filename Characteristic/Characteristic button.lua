@@ -4,7 +4,8 @@ function UpdateSave()
         ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
         ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
         ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
-        ["ConnectedCharacteristic"] = ConnectedCharacteristic
+        ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
+        ["idForGameCharacter"] = idForGameCharacter
     }
     savedData = JSON.encode(dataToSave)
     self.script_state = savedData
@@ -50,6 +51,8 @@ function Confer(savedData)
   countField = loadedData.countField or 1
   dataHeight = loadedData.dataHeight or 510
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
+  gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
+  idForGameCharacter = loadedData.idForGameCharacter or 0
   local indexString = string.find(self.getName(), ":")
   characteristicName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
   levelNumber = loadedData.levelNumber or 1
@@ -196,6 +199,14 @@ function ChangeCharacteristic(playerColor, id, value, button)
       characteristicBonus = givenValue
     end
     EnableCharacteristic("NotChangeHeight")
+    Wait.Frames(ChangeCharacteristicInGameCharacter, 3)
+  end
+end
+
+function ChangeCharacteristicInGameCharacter()
+  print(gameCharacter)
+	if(gameCharacter ~= nil) then
+    gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
   end
 end
 
@@ -422,6 +433,13 @@ end
 
 function RecalculationLevelFromStatisticBonusPoint(params)
 	levelBonusN = params.levelBonusN
+  UpdateSave()
+end
+--Игровой персонаж
+function SetGameCharacter(parametrs)
+  gameCharacterGUID = parametrs.gameChar.getGUID()
+	gameCharacter = parametrs.gameChar
+  idForGameCharacter = parametrs.id
   UpdateSave()
 end
 

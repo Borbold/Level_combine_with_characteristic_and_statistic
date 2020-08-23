@@ -497,6 +497,7 @@ function SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
   local params = {statistics = allStatisticGUID, characteristics = allFeatureGUID}
 	gameCharacter.call("SetGUID", params)
   SetObjectsStatistics(gameCharacter, allStatisticGUID)
+  SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
 end
 function SetObjectsStatistics(gameCharacter, allStatisticGUID)
   local parametrs = {
@@ -507,6 +508,17 @@ function SetObjectsStatistics(gameCharacter, allStatisticGUID)
     parametrs.id = index
     --Задать Игровому персонажу
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
+  end
+end
+function SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
+  local parametrs = {
+    gameChar = gameCharacter,
+    id = 1
+  }
+  for index,char in pairs(allFeatureGUID) do
+    parametrs.id = index
+    --Задать Игровому персонажу
+	  getObjectFromGUID(char).call("SetGameCharacter", parametrs)
   end
 end
 

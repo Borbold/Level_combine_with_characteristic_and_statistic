@@ -111,6 +111,7 @@ function AddNewField()
   local strVis = "Black|"..DenoteSth()
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
+  local isIncreaseWidth, lengthText = false, 0
   local newCharacteristic = ""
   if(#allCharacteristics > 0) then
     for characteristicIndex = 1, #allCharacteristicsGUID do
@@ -118,10 +119,14 @@ function AddNewField()
       local charact = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristic")
       local bonusChar = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristicBonus")
       local textChar = name .. ": ну=" .. charact .. ",нау=" .. bonusChar
+      if(#textChar > 15) then
+        isIncreaseWidth = true
+        lengthText = #textChar
+      end
       newCharacteristic = newCharacteristic ..
       "<Row preferredHeight='50'>\n" ..
       " <Cell>\n" ..
-      "   <Text class='forCharacteristic' text='"..textChar.."'/>\n" ..
+      "   <Text id='tChar"..characteristicIndex.."' class='forCharacteristic' text='"..textChar.."'/>\n" ..
       " </Cell>\n" ..
       "</Row>\n"
     end
@@ -170,6 +175,9 @@ function AddNewField()
   self.UI.setXml(startXml)
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
+  if(isIncreaseWidth) then
+    EnlargeWidthPanelChar(lengthText)
+  end
 end
 
 function EnlargeHeightPanelStat(countStatisticIndex)
@@ -185,6 +193,25 @@ function EnlargeHeightPanelChar(countCharacteristicIndex)
     --preferredHeight=50 cellSpacing=5
     local newHeightPanel = countCharacteristicIndex * 50 + countCharacteristicIndex * 5
     Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "height", newHeightPanel), 5)
+  end
+end
+function EnlargeWidthPanelChar(lengthText)
+  local locDifference = lengthText - 15
+  local locWidth = self.UI.getAttribute("TLPanelChar", "width")
+  for i = 1, locDifference do
+    locWidth = locWidth + i + (i - 1)
+  end
+  Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth), 5)
+  Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
+end
+
+function ChangeCharacteristic(id)
+  if(allStatistics[id]) then
+    local name = allCharacteristics[id].UI.getAttribute("name", "text")
+    local charact = allCharacteristics[id].UI.getValue("textCharacteristic")
+    local bonusChar = allCharacteristics[id].UI.getValue("textCharacteristicBonus")
+    local textChar = name .. ": ну=" .. charact .. ",нау=" .. bonusChar
+    self.UI.setAttribute("tChar"..id, "text", textChar)
   end
 end
 
