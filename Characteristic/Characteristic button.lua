@@ -164,20 +164,18 @@ function ActivateUI(id)
 	self.UI.setAttribute(id, "active", true)
 end
 
+function InputEndChange()
+	self.UI.setAttribute("inputCharacteristicBonus", "text", 999)
+end
+
 function ChangeInputCharacteristic(player, input)
   local id = "textCharacteristicBonus"
   input = (input ~= "" and input) or 0
 	ChangeCharacteristic(player.color, id, tonumber(input), false)
 end
-
-function InputEndChange()
-	self.UI.setAttribute("inputCharacteristicBonus", "text", 999)
-end
-
 function Plus(player, id)
   ChangeCharacteristic(player.color, id, 1, true)
 end
-
 function Minus(player, id)
   ChangeCharacteristic(player.color, id, -1, true)
 end

@@ -11,50 +11,49 @@ local allIndex = {
 }
 
 function UpdateSave(levelUP)
-    ChecLevelPass(levelUP)
-    self.setName(Player[DenoteSth()].steam_name or DenoteSth())
-    local dataToSave = { ["savedExp"] = exp, ["savedLastLevel"] = level, ["nextLevelExperience"] = nextLevelExperience,
-        ["allFeatureGUID"] = allFeatureGUID,
-        ["startCharacteristic"] = startCharacteristic,
-        ["characteristicPerLevel"] = characteristicPerLevel,
-        ["levelPass"] = levelPass, ["localLevelPass"] = localLevelPass,
-        ["listCharacteristicPerLevel"] = listCharacteristicPerLevel,
-        ["maxLevel"] = maxLevel
-    }
-    local savedData = JSON.encode(dataToSave)
-    self.script_state = savedData
+  ChecLevelPass(levelUP)
+  self.setName(Player[DenoteSth()].steam_name or DenoteSth())
+  local dataToSave = { ["savedExp"] = exp, ["savedLastLevel"] = level, ["nextLevelExperience"] = nextLevelExperience,
+    ["allFeatureGUID"] = allFeatureGUID,
+    ["startCharacteristic"] = startCharacteristic,
+    ["characteristicPerLevel"] = characteristicPerLevel,
+    ["levelPass"] = levelPass, ["localLevelPass"] = localLevelPass,
+    ["listCharacteristicPerLevel"] = listCharacteristicPerLevel,
+    ["maxLevel"] = maxLevel
+  }
+  local savedData = JSON.encode(dataToSave)
+  self.script_state = savedData
 end
 
 function ChecLevelPass(levelUP)
     local locIndex = allIndex["LPU"]
     if(CheckLevelPass(localLevelPass[locIndex])) then
-        self.UI.setValue("freeCharacteristicUsual", (startCharacteristic[allIndex["SU"]] + GetSumAllCharacteristicPerLevel(usual)) - GetSumAllCharacteristic(usual))
-        EnableFeatureChange(usual, levelUP)
-        localLevelPass[locIndex] = levelPass[locIndex]
+      self.UI.setValue("freeCharacteristicUsual", (startCharacteristic[allIndex["SU"]] + GetSumAllCharacteristicPerLevel(usual)) - GetSumAllCharacteristic(usual))
+      EnableFeatureChange(usual, levelUP)
+      localLevelPass[locIndex] = levelPass[locIndex]
     end
     locIndex = allIndex["LPC"]
     if(CheckLevelPass(localLevelPass[locIndex])) then
-        self.UI.setValue("freeCharacteristicCombat", (startCharacteristic[allIndex["SC"]] + GetSumAllCharacteristicPerLevel(combat)) - GetSumAllCharacteristic(combat))
-        EnableFeatureChange(combat, levelUP)
-        localLevelPass[locIndex] = levelPass[locIndex]
+      self.UI.setValue("freeCharacteristicCombat", (startCharacteristic[allIndex["SC"]] + GetSumAllCharacteristicPerLevel(combat)) - GetSumAllCharacteristic(combat))
+      EnableFeatureChange(combat, levelUP)
+      localLevelPass[locIndex] = levelPass[locIndex]
     end
     locIndex = allIndex["LPP"]
     if(CheckLevelPass(localLevelPass[locIndex])) then
-        self.UI.setValue("freeCharacteristicPeace", (startCharacteristic[allIndex["SP"]] + GetSumAllCharacteristicPerLevel(peace)) - GetSumAllCharacteristic(peace))
-        EnableFeatureChange(peace, levelUP)
-        localLevelPass[locIndex] = levelPass[locIndex]
+      self.UI.setValue("freeCharacteristicPeace", (startCharacteristic[allIndex["SP"]] + GetSumAllCharacteristicPerLevel(peace)) - GetSumAllCharacteristic(peace))
+      EnableFeatureChange(peace, levelUP)
+      localLevelPass[locIndex] = levelPass[locIndex]
     end
 end
 
 function CheckLevelPass(levelPass)
 	if(levelPass < 0 or (exp == 0 and level == 1)) then
-        return true
-    end
-    return false
+    return true
+  end
+  return false
 end
 
 function CreateGlobalVariables()
-    self.setGMNotes("Уровень")
     colorPlayer = {
         ["White"] = {r = 1, g = 1, b = 1},
         ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
@@ -112,7 +111,7 @@ function SetCharacteristic()
   for index,value in pairs(allIndex) do
     Wait.Frames(|| ChangeInputValue(index, value), 5)
   end
-
+  
   Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 20)
   Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 20)
   Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 20)
@@ -126,32 +125,32 @@ function ChangeInputValue(id, value)
 end
 
 function SetTextCharacteristic(idStart, idPerLevel, idLevelPass)
-    if(GetSumAllCharacteristic(usual) ~= 0) then
-        self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
-        self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
-        self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
-    elseif(GetSumAllCharacteristic(combat) ~= 0) then
-        self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
-        self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
-        self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
-    elseif(GetSumAllCharacteristic(peace) ~= 0) then
-        self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
-        self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
-        self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
-    else
-        self.UI.setAttribute(idStart, "text", "")
-        self.UI.setAttribute(idPerLevel, "text", "")
-        self.UI.setAttribute(idLevelPass, "text", 1)
-    end
+  if(GetSumAllCharacteristic(usual) ~= 0) then
+    self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
+    self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
+    self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
+  elseif(GetSumAllCharacteristic(combat) ~= 0) then
+    self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
+    self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
+    self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
+  elseif(GetSumAllCharacteristic(peace) ~= 0) then
+    self.UI.setAttribute(idStart, "text", startCharacteristic[idStart])
+    self.UI.setAttribute(idPerLevel, "text", characteristicPerLevel[idPerLevel])
+    self.UI.setAttribute(idLevelPass, "text", levelPass[idLevelPass])
+  else
+    self.UI.setAttribute(idStart, "text", "")
+    self.UI.setAttribute(idPerLevel, "text", "")
+    self.UI.setAttribute(idLevelPass, "text", 1)
+  end
 end
 
 function onLoad(savedData)
-    CreateGlobalVariables()
-    if(savedData != "") then
-        Confer(savedData)
-    end
-    FunctionCall()
-    Wait.Frames(SetInteracteble, 3)
+  CreateGlobalVariables()
+  if(savedData != "") then
+    Confer(savedData)
+  end
+  FunctionCall()
+  Wait.Frames(SetInteracteble, 3)
 end
 
 function SetInteracteble()
@@ -163,23 +162,23 @@ function SetInteracteble()
 end
 
 function SetInputValue(player, input, id)
-    SetValue(id, input)
+  SetValue(id, input)
 end
 
 function SetValue(id, input)
-    if(input == "") then return end
+  if(input == "") then return end
     
-    input = tonumber(input)
-    if(CheckIndex(id, "start")) then
-        startCharacteristic[id] = input
-    elseif(CheckIndex(id, "PerLevel")) then
-        characteristicPerLevel[id] = input
-        SetUpListCharacteristicPerLevel()
-    elseif(CheckIndex(id, "Pass")) then
-        levelPass[id] = input
-    end
-    ChangeInputValue(id, input)
-    UpdateSave()
+  input = tonumber(input)
+  if(CheckIndex(id, "start")) then
+    startCharacteristic[id] = input
+  elseif(CheckIndex(id, "PerLevel")) then
+    characteristicPerLevel[id] = input
+    SetUpListCharacteristicPerLevel()
+  elseif(CheckIndex(id, "Pass")) then
+    levelPass[id] = input
+  end
+  ChangeInputValue(id, input)
+  UpdateSave()
 end
 
 function CheckIndex(index, type)
@@ -190,13 +189,13 @@ function CheckIndex(index, type)
 end
 
 function GetSumAllCharacteristic(type)
-    local sum = 0
-    for _,feature in pairs(allFeatureObject) do
-        if(string.match(feature.getGMNotes(), type)) then
-	        sum = sum + tonumber(feature.UI.getValue("textCharacteristic"))
-        end
+  local sum = 0
+  for _,feature in pairs(allFeatureObject) do
+    if(string.match(feature.getGMNotes(), type)) then
+	    sum = sum + tonumber(feature.UI.getValue("textCharacteristic"))
     end
-    return sum
+  end
+  return sum
 end
 
 function GetSumAllCharacteristicPerLevel(type)
@@ -256,20 +255,20 @@ function PanelTool()
 end
 
 function SumMx(expectedValue)
-    local sum = 0
+  local sum = 0
 	for i = 1, #expectedValue do
-        sum = sum + expectedValue[i]
-    end
-    return sum
+    sum = sum + expectedValue[i]
+  end
+  return sum
 end
 
 function SumDx(expectedValue, rangeValues, randomRange)
 	local sum = 0
-    for i = 1, #expectedValue do
-        sum = sum + ((rangeValues[i] - expectedValue[i]) ^ 2) * randomRange[i]
-    end
-    sum = sum ^ 0.5
-    return sum
+  for i = 1, #expectedValue do
+    sum = sum + ((rangeValues[i] - expectedValue[i]) ^ 2) * randomRange[i]
+  end
+  sum = sum ^ 0.5
+  return sum
 end
 
 function InputChangeExperience(player, input)
@@ -333,64 +332,64 @@ function SetLevelUIAndCheckMaxLevel(expLeft, nextLevelExp)
 end
 
 function ElevateLevel()
-    MinusLevelPass()
-    SetUpListCharacteristicPerLevel()
-    SetMinCharacteristic()
-    local message = ""
-    if(level < maxLevel) then
-      message = "[b]" .. self.getName() .. "[/b] поднял(а) уровень!\nТеперь он(а) имеет " .. level .. " лвл"
-    elseif(level == maxLevel) then
-      message = "Поздравляем!\n[b]"..self.getName().."[/b] достиг максимального уровня!"
-    end
-    broadcastToAll(message)
+  MinusLevelPass()
+  SetUpListCharacteristicPerLevel()
+  SetMinCharacteristic()
+  local message = ""
+  if(level < maxLevel) then
+    message = "[b]" .. self.getName() .. "[/b] поднял(а) уровень!\nТеперь он(а) имеет " .. level .. " лвл"
+  elseif(level == maxLevel) then
+    message = "Поздравляем!\n[b]"..self.getName().."[/b] достиг максимального уровня!"
+  end
+  broadcastToAll(message)
 end
 
 function MinusLevelPass()
-    for index,_ in pairs(localLevelPass) do
-        localLevelPass[index] = localLevelPass[index] - 1
-    end
+  for index,_ in pairs(localLevelPass) do
+    localLevelPass[index] = localLevelPass[index] - 1
+  end
 end
 
 function SetUpListCharacteristicPerLevel()
-    if(CheckLevelPass(localLevelPass[allIndex["LPU"]])) then
-        listCharacteristicPerLevel[allIndex["PLU"]][level] = characteristicPerLevel[allIndex["PLU"]]
-    end
-    if(CheckLevelPass(localLevelPass[allIndex["LPC"]])) then
-        listCharacteristicPerLevel[allIndex["PLC"]][level] = characteristicPerLevel[allIndex["PLC"]]
-    end
-    if(CheckLevelPass(localLevelPass[allIndex["LPP"]])) then
-        listCharacteristicPerLevel[allIndex["PLP"]][level] = characteristicPerLevel[allIndex["PLP"]]
-    end
+  if(CheckLevelPass(localLevelPass[allIndex["LPU"]])) then
+    listCharacteristicPerLevel[allIndex["PLU"]][level] = characteristicPerLevel[allIndex["PLU"]]
+  end
+  if(CheckLevelPass(localLevelPass[allIndex["LPC"]])) then
+    listCharacteristicPerLevel[allIndex["PLC"]][level] = characteristicPerLevel[allIndex["PLC"]]
+  end
+  if(CheckLevelPass(localLevelPass[allIndex["LPP"]])) then
+    listCharacteristicPerLevel[allIndex["PLP"]][level] = characteristicPerLevel[allIndex["PLP"]]
+  end
 end
 
 function ResetLevel(player)
 	if(player.color == "Black") then
-      RetraceValues()
-      -- Оставь так, ибо обычным CreateNewVariable обработка идет некорректно
-      listCharacteristicPerLevel[allIndex["PLU"]] = {}
-      listCharacteristicPerLevel[allIndex["PLC"]] = {}
-      listCharacteristicPerLevel[allIndex["PLP"]] = {}
-      EnableFeatureChange("reset")
-      ResetCharacteristic()
-      UpdateExperience() UpdateSave()
-      for _,value in pairs(allIndex) do
-          if(CheckIndex(value, "start")) then
-              self.UI.setAttribute(value, "interactable", true)
-          end
-      end
-      Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 5)
-      Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 5)
-      Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 5)
+    RetraceValues()
+    -- Оставь так, ибо обычным CreateNewVariable обработка идет некорректно
+    listCharacteristicPerLevel[allIndex["PLU"]] = {}
+    listCharacteristicPerLevel[allIndex["PLC"]] = {}
+    listCharacteristicPerLevel[allIndex["PLP"]] = {}
+    EnableFeatureChange("reset")
+    ResetCharacteristic()
+    UpdateExperience() UpdateSave()
+    for _,value in pairs(allIndex) do
+        if(CheckIndex(value, "start")) then
+            self.UI.setAttribute(value, "interactable", true)
+        end
+    end
+    Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 5)
+    Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 5)
+    Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 5)
   else
       WriteMessagePlayerToColor("Вы не ГМ, вам нельзя обнулять уровни!")
   end
 end
 
 function RetraceValues()
-    level = 1 exp = 0
-    startCharacteristic = CreateNewVariable("S", 0)
-    characteristicPerLevel = CreateNewVariable("PL", 0)
-    levelPass = CreateNewVariable("LP", 1) localLevelPass = levelPass
+  level = 1 exp = 0
+  startCharacteristic = CreateNewVariable("S", 0)
+  characteristicPerLevel = CreateNewVariable("PL", 0)
+  levelPass = CreateNewVariable("LP", 1) localLevelPass = levelPass
 end
 
 function EnableFeatureChange(type, levelUP)
@@ -428,14 +427,14 @@ function ResetCharacteristic()
 end
 
 function CloseDistributionCharacteristic(player)
-    local freeValue = tonumber(self.UI.getValue("freeCharacteristicUsual", "value"))
-    freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicCombat", "value"))
-    freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicPeace", "value"))
+  local freeValue = tonumber(self.UI.getValue("freeCharacteristicUsual", "value"))
+  freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicCombat", "value"))
+  freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicPeace", "value"))
 	if(CheckPlayer(player.color) and CheckFreeValue(freeValue)) then
-        broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " завершил(а) распределение ОХ", DenoteSth())
-        SetMinCharacteristic()
-        DisableFeatureChange()
-    end
+    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " завершил(а) распределение ОХ", DenoteSth())
+    SetMinCharacteristic()
+    DisableFeatureChange()
+  end
 end
 
 function CheckFreeValue(freeValue)
@@ -448,8 +447,8 @@ end
 
 function SetMinCharacteristic()
 	for _,feature in pairs(allFeatureObject) do
-	    feature.call("NewLevel")
-    end
+	  feature.call("NewLevel")
+  end
 end
 
 function DisableFeatureChange()
@@ -508,21 +507,21 @@ function SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
 end
 
 function SetObjectFeature()
-    for id,guid in pairs(allFeatureGUID) do
-        if(getObjectFromGUID(guid) ~= nil) then
-            local object = getObjectFromGUID(guid)
-            allFeatureObject[id] = object
-            object.UI.setValue("GUIDLevel", self.getGUID())
-        end
+  for id,guid in pairs(allFeatureGUID) do
+    if(getObjectFromGUID(guid) ~= nil) then
+      local object = getObjectFromGUID(guid)
+      object.UI.setValue("GUIDLevel", self.getGUID())
+      allFeatureObject[id] = object
     end
+  end
 end
 
 function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
-        return true
-    end
-    broadcastToAll("Эта дощечка не вашего цвета!")
-    return false
+    return true
+  end
+  broadcastToAll("Эта дощечка не вашего цвета!")
+  return false
 end
 
 function DenoteSth()
