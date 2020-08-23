@@ -31,7 +31,8 @@ function Confer(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     SetStatisticObjects()
-    Wait.Frames(CreateFields, 3)
+    Wait.Frames(SetCharacteristicObjects, 13)
+    Wait.Frames(CreateFields, 15)
   end
 end
 
