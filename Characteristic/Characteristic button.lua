@@ -381,7 +381,7 @@ function EnableCharacteristic(check)
   end
   
   if(CheckGMNot(usual) and (not check or check ~= "NotChangeHeight")) then
-    if(check ~= "Reset") then
+    if(check ~= "Reset" and #inputGUID >= countField) then
       countField = countField + 1
     end
     AddNewFieldForConnection()

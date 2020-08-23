@@ -553,6 +553,7 @@ function CheckColor(color)
 end
 
 function ChangeStatisticBonus(player, input)
+  input = tonumber(input)
 	params = { levelBonusN = input or 0 }
   for _,feature in pairs(allFeatureObject) do
     feature.call("RecalculationLevelFromStatisticBonusPoint", params)
