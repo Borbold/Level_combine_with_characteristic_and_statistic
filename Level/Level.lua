@@ -491,6 +491,9 @@ function Connect()
   if(gameCharacter and allStatisticGUID) then
     SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
   end
+  if(gameCharacter and allFeatureGUID) then
+    SetCharacteristicInGameCharacter(gameCharacter, allFeatureGUID)
+  end
 end
 
 function SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
@@ -504,6 +507,9 @@ function SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
     --Задать Игровому персонажу
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
+end
+function SetCharacteristicInGameCharacter(gameCharacter, allFeatureGUID)
+	gameCharacter.call("SetCharacteristic", allFeatureGUID)
 end
 
 function SetObjectFeature()

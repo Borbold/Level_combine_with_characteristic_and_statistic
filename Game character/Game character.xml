@@ -6,26 +6,29 @@
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50' text='?'/>
 	<Text class='defaultText' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50'/>
+	<Text class='forCharacteristic' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
+		outline='#000000' outlineSize='1 1' height='50' alignment='MiddleLeft'/>
 </Defaults>
 
 <Panel position='0 0 -350' rotation='-40 0 0' visibility=''>
 	<Button image='uiBars' offsetXY='363 -140' onClick='ActiveDeactivePanel("characteristicPanel")' height='75' width='75'/>
 	<VerticalScrollView id='characteristicPanel' height='215' width='800' active='false'
 		verticalScrollbarVisibility='AutoHideAndExpandViewport' offsetXY='0 220'>
-		<TableLayout id='TLPanel' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
-			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
+		<TableLayout id='TLPanelChar' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
+			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
-				<Cell columnSpan='3'>
+				<Cell>
 					<Text class='defaultText'>
 					Здесь будет указываться ваша характеристика
 					</Text>
 				</Cell>
 			</Row>
+			<NewRowC />
 		</TableLayout>
 	</VerticalScrollView>
 	
 	<VerticalScrollView height='215' width='800' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout id='TLPanel' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
+		<TableLayout id='TLPanelStat' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell columnSpan='3'>
@@ -34,7 +37,7 @@
 					</Text>
 				</Cell>
 			</Row>
-			<NewRow />
+			<NewRowS />
 		</TableLayout>
 	</VerticalScrollView>
 </Panel>

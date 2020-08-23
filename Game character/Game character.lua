@@ -1,6 +1,6 @@
 function UpdateSave()
   local dataToSave = {
-    ["allStatisticsGUID"] = allStatisticsGUID
+    ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -24,29 +24,28 @@ end
 
 function Confer(savedData)
   originalXml = self.UI.getXml()
+  allCharacteristics, allStatisticsGUID = {}, {}
   RebuildAssets()
   if(savedData ~= "") then
     local loadedData = JSON.decode(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
+    allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     SetStatisticObjects()
-    Wait.Frames(|| CreateStatistics(#allStatisticsGUID), 3)
+    Wait.Frames(|| CreateFields(true), 3)
   end
 end
 
 function SetStatistics(statistics)
-  self.UI.setXml(originalXml)
-  allStatisticsGUID = {}
   for k,stat in pairs(statistics) do
 	  allStatisticsGUID[k] = stat
   end
   SetStatisticObjects()
-  Wait.Frames(|| CreateStatistics(#allStatisticsGUID), 3)
+  Wait.Frames(|| CreateFields(true), 3)
   UpdateSave()
 end
-
 function SetStatisticObjects()
   allStatistics = {}
-	for k,statisticGUID in pairs(allStatisticsGUID) do
+	for k,statisticGUID in ipairs(allStatisticsGUID) do
     if(getObjectFromGUID(statisticGUID)) then
 	    allStatistics[k] = getObjectFromGUID(statisticGUID)
     else
@@ -56,14 +55,37 @@ function SetStatisticObjects()
   end
 end
 
-function CreateStatistics(count)
-  AddNewField(count)
-  for i = 1, count do
-    Wait.Frames(|| ChangeStatistic(i), 10)
+function SetCharacteristic(characteristics)
+  allCharacteristicsGUID = {}
+  for k,char in pairs(characteristics) do
+	  allCharacteristicsGUID[k] = char
+  end
+  SetCharacteristicObjects()
+  Wait.Frames(CreateFields, 3)
+  UpdateSave()
+end
+function SetCharacteristicObjects()
+	for k,characteristicGUID in ipairs(allCharacteristicsGUID) do
+    if(getObjectFromGUID(characteristicGUID)) then
+	    allCharacteristics[k] = getObjectFromGUID(characteristicGUID)
+    else
+      broadcastToAll("Одна или несколько характеристик были удалены. Произведите переподключение")
+      return
+    end
   end
 end
 
-function AddNewField(countStatisticIndex)
+function CreateFields(changeStat)
+  self.UI.setXml(originalXml)
+  AddNewField()
+  if(changeStat == true) then
+    for i = 1, #allStatisticsGUID do
+      Wait.Frames(|| ChangeStatistic(i), 10)
+    end
+  end
+end
+
+function AddNewField()
   local allXml = originalXml
 
   local searchString = "visibility="
@@ -77,26 +99,54 @@ function AddNewField(countStatisticIndex)
   local strVis = "Black|"..DenoteSth()
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newStatistic = ""
-  for statisticIndex = 1, countStatisticIndex do
-    newStatistic = newStatistic ..
-    "<Row preferredHeight='50'>\n" ..
-    " <Cell>\n" ..
-    "   <Button image='uiMinus' onClick='Minus("..statisticIndex..")'/>\n" ..
-    " </Cell>\n" ..
-    " <Cell>\n" ..
-	  "		<Panel>\n" ..
-	  "			<ProgressBar id='bar"..statisticIndex.."' class='classBar'/>\n" ..
-	  "			<Text id='textBar"..statisticIndex.."' class='textForBar'/>\n" ..
-	  "		</Panel>\n" ..
-    " </Cell>\n" ..
-    " <Cell>\n" ..
-    "   <Button image='uiPlus' onClick='Plus("..statisticIndex..")'/>\n" ..
-    " </Cell>\n" ..
-    "</Row>\n"
+  local newCharacteristic = ""
+  if(#allCharacteristics > 0) then
+    for characteristicIndex = 1, #allCharacteristicsGUID do
+      local name = allCharacteristics[characteristicIndex].UI.getAttribute("name", "text")
+      local charact = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristic")
+      local bonusChar = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristicBonus")
+      local textChar = name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+      newCharacteristic = newCharacteristic ..
+      "<Row preferredHeight='50'>\n" ..
+      " <Cell>\n" ..
+      "   <Text class='forCharacteristic' text='"..textChar.."'/>\n" ..
+      " </Cell>\n" ..
+      "</Row>\n"
+    end
   end
 
-  searchString = "<NewRow />"
+  searchString = "<NewRowC />"
+  searchStringLength = #searchString
+
+  local indexEndFirstCharacteristic = allXml:find(searchString)
+
+  startXml = allXml:sub(1, indexEndFirstCharacteristic + searchStringLength)
+  endXml = allXml:sub(indexEndFirstCharacteristic + searchStringLength)
+
+  allXml = startXml .. newCharacteristic .. endXml
+  ----------------------------------------------------------------------------------------------------------
+  local newStatistic = ""
+  if(#allStatistics > 0) then
+    for statisticIndex = 1, #allStatisticsGUID do
+      newStatistic = newStatistic ..
+      "<Row preferredHeight='50'>\n" ..
+      " <Cell>\n" ..
+      "   <Button image='uiMinus' onClick='Minus("..statisticIndex..")'/>\n" ..
+      " </Cell>\n" ..
+      " <Cell>\n" ..
+	    "		<Panel>\n" ..
+	    "			<ProgressBar id='bar"..statisticIndex.."' class='classBar'/>\n" ..
+	    "			<Text id='textBar"..statisticIndex.."' class='textForBar'/>\n" ..
+	    "		</Panel>\n" ..
+      " </Cell>\n" ..
+      " <Cell>\n" ..
+      "   <Button image='uiPlus' onClick='Plus("..statisticIndex..")'/>\n" ..
+      " </Cell>\n" ..
+      "</Row>\n"
+    end
+  end
+
+  searchString = "<NewRowS />"
   searchStringLength = #searchString
 
   local indexEndFirstStatistic = allXml:find(searchString)
@@ -106,14 +156,23 @@ function AddNewField(countStatisticIndex)
 
   startXml = startXml .. newStatistic .. endXml
   self.UI.setXml(startXml)
-  EnlargeHeightPanel(countStatisticIndex + 1)
+  EnlargeHeightPanelStat(#allStatisticsGUID + 1)
+  EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
 end
 
-function EnlargeHeightPanel(countStatisticIndex)
+function EnlargeHeightPanelStat(countStatisticIndex)
   if(countStatisticIndex > 4) then
     --preferredHeight=50 cellSpacing=5
     local newHeightPanel = countStatisticIndex * 50 + countStatisticIndex * 5
-    Wait.Frames(|| self.UI.setAttribute("TLPanel", "height", newHeightPanel), 5)
+    Wait.Frames(|| self.UI.setAttribute("TLPanelStat", "height", newHeightPanel), 5)
+  end
+end
+
+function EnlargeHeightPanelChar(countCharacteristicIndex)
+  if(countCharacteristicIndex > 4) then
+    --preferredHeight=50 cellSpacing=5
+    local newHeightPanel = countCharacteristicIndex * 50 + countCharacteristicIndex * 5
+    Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "height", newHeightPanel), 5)
   end
 end
 
@@ -135,7 +194,7 @@ function Minus(player, val)
 	  allStatistics[val].call("Minus", player)
     Wait.Frames(|| ChangeStatistic(val), 2)
   else
-    broadcastToAll("Вы удалили эту характеристику. Произведите переподключение")
+    broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
 end
 function Plus(player, val)
@@ -144,7 +203,7 @@ function Plus(player, val)
 	  allStatistics[val].call("Plus", player)
     Wait.Frames(|| ChangeStatistic(val), 2)
   else
-    broadcastToAll("Вы удалили эту характеристику. Произведите переподключение")
+    broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
 end
 
@@ -173,9 +232,8 @@ function CheckColor(color)
 end
 
 function ActiveDeactivePanel(player, idPanel)
-  local locActive = self.UI.getAttribute(idPanel, "active") and true
-  print(locActive)
-	self.UI.setAttribute(idPanel, "active", locActive)
+  local locActive = self.UI.getAttribute(idPanel, "active") == "false"
+	self.UI.setAttribute(idPanel, "active", tostring(locActive))
 end
 
 function RebuildAssets()
