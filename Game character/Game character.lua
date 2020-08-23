@@ -24,27 +24,50 @@ end
 
 function Confer(savedData)
   originalXml = self.UI.getXml()
-  allCharacteristics, allStatisticsGUID = {}, {}
+  allCharacteristics, allStatistics = {}, {}
   RebuildAssets()
   if(savedData ~= "") then
     local loadedData = JSON.decode(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     SetStatisticObjects()
-    Wait.Frames(|| CreateFields(true), 3)
+    Wait.Frames(CreateFields, 3)
   end
 end
 
-function SetStatistics(statistics)
-  for k,stat in pairs(statistics) do
-	  allStatisticsGUID[k] = stat
-  end
-  SetStatisticObjects()
-  Wait.Frames(|| CreateFields(true), 3)
+function SetGUID(params)
+  SetStatistic(params.statistics)
+  SetCharacteristic(params.characteristics)
+
+  Wait.Frames(CreateFields, 3)
   UpdateSave()
 end
+function SetStatistic(statistics)
+  if(statistics) then
+    allStatisticsGUID = {}
+    for k,stat in pairs(statistics) do
+	    allStatisticsGUID[k] = stat
+    end
+    SetObjects("Stat")
+  end
+end
+function SetCharacteristic(characteristics)
+  if(characteristics) then
+    allCharacteristicsGUID = {}
+    for k,char in pairs(characteristics) do
+	    allCharacteristicsGUID[k] = char
+    end
+    SetObjects("Char")
+  end
+end
+function SetObjects(what)
+	if(what == "Stat") then
+    SetStatisticObjects()
+  elseif(what == "Char") then
+    SetCharacteristicObjects()
+  end
+end
 function SetStatisticObjects()
-  allStatistics = {}
 	for k,statisticGUID in ipairs(allStatisticsGUID) do
     if(getObjectFromGUID(statisticGUID)) then
 	    allStatistics[k] = getObjectFromGUID(statisticGUID)
@@ -53,16 +76,6 @@ function SetStatisticObjects()
       return
     end
   end
-end
-
-function SetCharacteristic(characteristics)
-  allCharacteristicsGUID = {}
-  for k,char in pairs(characteristics) do
-	  allCharacteristicsGUID[k] = char
-  end
-  SetCharacteristicObjects()
-  Wait.Frames(CreateFields, 3)
-  UpdateSave()
 end
 function SetCharacteristicObjects()
 	for k,characteristicGUID in ipairs(allCharacteristicsGUID) do
@@ -75,13 +88,11 @@ function SetCharacteristicObjects()
   end
 end
 
-function CreateFields(changeStat)
+function CreateFields()
   self.UI.setXml(originalXml)
   AddNewField()
-  if(changeStat == true) then
-    for i = 1, #allStatisticsGUID do
-      Wait.Frames(|| ChangeStatistic(i), 10)
-    end
+  for i = 1, #allStatisticsGUID do
+    Wait.Frames(|| ChangeStatistic(i), 10)
   end
 end
 

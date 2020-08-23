@@ -439,10 +439,10 @@ end
 
 function CheckFreeValue(freeValue)
 	if(freeValue == 0) then
-        return true
-    end
-    WriteMessagePlayerToColor("У вас остались нераспределенные характеристики: " .. freeValue)
-    return false
+    return true
+  end
+  WriteMessagePlayerToColor("У вас остались нераспределенные характеристики: " .. freeValue)
+  return false
 end
 
 function SetMinCharacteristic()
@@ -461,9 +461,9 @@ function DisableFeatureChange()
 end
 
 function WriteMessagePlayerToColor(message)
-    if(Player[DenoteSth()].steam_name ~= nil) then
-        printToColor(message, DenoteSth())
-    end
+  if(Player[DenoteSth()].steam_name ~= nil) then
+      printToColor(message, DenoteSth())
+  end
 end
 
 function Connect()
@@ -488,16 +488,17 @@ function Connect()
   if(#allFeatureGUID == 0) then broadcastToAll("Характеристики не были найдены/добавлены на стол") end
   SetObjectFeature()
   UpdateSave()
-  if(gameCharacter and allStatisticGUID) then
-    SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
-  end
-  if(gameCharacter and allFeatureGUID) then
-    SetCharacteristicInGameCharacter(gameCharacter, allFeatureGUID)
+  if(gameCharacter and (allStatisticGUID or allFeatureGUID)) then
+    SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
   end
 end
 
-function SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
-	gameCharacter.call("SetStatistics", allStatisticGUID)
+function SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
+  local params = {statistics = allStatisticGUID, characteristics = allFeatureGUID}
+	gameCharacter.call("SetGUID", params)
+  SetObjectsStatistics(gameCharacter, allStatisticGUID)
+end
+function SetObjectsStatistics(gameCharacter, allStatisticGUID)
   local parametrs = {
     gameChar = gameCharacter,
     id = 1
@@ -507,9 +508,6 @@ function SetStatisticInGameCharacter(gameCharacter, allStatisticGUID)
     --Задать Игровому персонажу
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
-end
-function SetCharacteristicInGameCharacter(gameCharacter, allFeatureGUID)
-	gameCharacter.call("SetCharacteristic", allFeatureGUID)
 end
 
 function SetObjectFeature()
