@@ -155,10 +155,10 @@ end
 
 function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
-        return true
-    end
-    broadcastToAll("Эта дощечка не вашего цвета!")
-    return false
+    return true
+  end
+  broadcastToAll("Эта дощечка не вашего цвета!")
+  return false
 end
 
 function DenoteSth()

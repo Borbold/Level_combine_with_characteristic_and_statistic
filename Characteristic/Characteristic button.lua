@@ -204,7 +204,6 @@ function ChangeCharacteristic(playerColor, id, value, button)
 end
 
 function ChangeCharacteristicInGameCharacter()
-  print(gameCharacter)
 	if(gameCharacter ~= nil) then
     gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
   end
