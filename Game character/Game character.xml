@@ -9,6 +9,21 @@
 </Defaults>
 
 <Panel position='0 0 -350' rotation='-40 0 0' visibility=''>
+	<Button image='uiBars' offsetXY='363 -140' onClick='ActiveDeactivePanel("characteristicPanel")' height='75' width='75'/>
+	<VerticalScrollView id='characteristicPanel' height='215' width='800' active='false'
+		verticalScrollbarVisibility='AutoHideAndExpandViewport' offsetXY='0 220'>
+		<TableLayout id='TLPanel' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
+			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
+			<Row preferredHeight='50'>
+				<Cell columnSpan='3'>
+					<Text class='defaultText'>
+					Здесь будет указываться ваша характеристика
+					</Text>
+				</Cell>
+			</Row>
+		</TableLayout>
+	</VerticalScrollView>
+	
 	<VerticalScrollView height='215' width='800' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
 		<TableLayout id='TLPanel' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
@@ -19,6 +34,7 @@
 					</Text>
 				</Cell>
 			</Row>
+			<NewRow />
 		</TableLayout>
 	</VerticalScrollView>
 </Panel>

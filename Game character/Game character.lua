@@ -96,7 +96,7 @@ function AddNewField(countStatisticIndex)
     "</Row>\n"
   end
 
-  searchString = "</Row>"
+  searchString = "<NewRow />"
   searchStringLength = #searchString
 
   local indexEndFirstStatistic = allXml:find(searchString)
@@ -172,13 +172,20 @@ function CheckColor(color)
   end
 end
 
+function ActiveDeactivePanel(player, idPanel)
+  local locActive = self.UI.getAttribute(idPanel, "active") and true
+  print(locActive)
+	self.UI.setAttribute(idPanel, "active", locActive)
+end
+
 function RebuildAssets()
   local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
   local assets = {
     {name = 'uiGear', url = root .. 'gear.png'},
     {name = 'uiClose', url = root .. 'close.png'},
     {name = 'uiPlus', url = root .. 'plus.png'},
-    {name = 'uiMinus', url = root .. 'minus.png'}
+    {name = 'uiMinus', url = root .. 'minus.png'},
+    {name = 'uiBars', url = root .. 'bars.png'}
   }
   self.UI.setCustomAssets(assets)
 end
