@@ -19,7 +19,7 @@ function UpdateSave(levelUP)
     ["characteristicPerLevel"] = characteristicPerLevel,
     ["levelPass"] = levelPass, ["localLevelPass"] = localLevelPass,
     ["listCharacteristicPerLevel"] = listCharacteristicPerLevel,
-    ["maxLevel"] = maxLevel
+    ["maxLevel"] = maxLevel, ["LBN"] = LBN
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -83,6 +83,7 @@ function Confer(savedData)
   localLevelPass = loadedData.localLevelPass or CreateNewVariable("LP", 1)
   listCharacteristicPerLevel = loadedData.listCharacteristicPerLevel or CreateNewVariable("PL", {})
   allFeatureGUID = loadedData.allFeatureGUID or {}
+  LBN = loadedData.LBN or 0
   SetObjectFeature()
   exp = loadedData.savedExp or 0
   level = loadedData.savedLastLevel or 1
@@ -107,6 +108,9 @@ end
 
 function SetCharacteristic()
   self.UI.setAttribute("maxLevel", "text", maxLevel)
+  if(LBN > 0) then
+    self.UI.setAttribute("idLBN", "text", LBN)
+  end
 
   for index,value in pairs(allIndex) do
     Wait.Frames(|| ChangeInputValue(index, value), 5)
@@ -537,7 +541,6 @@ function SetLBNValue()
   for _,feature in pairs(allFeatureObject) do
     feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
   end
-  LBN = nil
 end
 
 function CheckPlayer(playerColor)
@@ -574,13 +577,14 @@ end
 
 function ChangeStatisticBonus(player, input)
   if(#allFeatureObject > 0) then
-	  local LBN = tonumber(input) or 0
+	  LBN = (tonumber(input) >= 0 and tonumber(input)) or 0
     for _,feature in pairs(allFeatureObject) do
       feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
     end
   else
     LBN = tonumber(input) or 0
   end
+  UpdateSave()
 end
 
 function ChangeMaxLevel(player, input)

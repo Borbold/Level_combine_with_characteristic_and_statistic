@@ -20,8 +20,7 @@
 			</Cell>
 			<Cell columnSpan='2'>
 				<InputField id='inputExperience' onEndEdit='InputChangeExperience' fontSize='65' color='#00000025'
-					characterValidation='Integer'>
-				</InputField>
+					characterValidation='Integer' />
 			</Cell>
 			<Cell>
 				<Button id='closeDistributionCharacteristic' onClick='CloseDistributionCharacteristic' resizeTextForBestFit='True'
@@ -36,8 +35,8 @@
 			</Cell>
 		</Row>
 		<Row>
-			<ProgressBar id='bar' height='85' width='1600' color='#00000025' fillImageColor='#8b00ff' percentage='0' showPercentageText='false'>
-			</ProgressBar>
+			<ProgressBar id='bar' height='85' width='1600' color='#00000025' fillImageColor='#8b00ff'
+				percentage='0' showPercentageText='false' />
 			<Text id='textBar' color='#ffffff' fontSize='50' fontStyle='Bold' outline='#000000' outlineSize='1 1'>
 			0/0
 			</Text>
@@ -109,13 +108,11 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicUsual' placeholder='Начальные ОХ'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelUsual' placeholder='ОХ за уровень'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='1' id='levelPassUsual'
@@ -140,13 +137,11 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicCombat' placeholder='Начальные ОХ'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelCombat' placeholder='ОХ за уровень'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='1' id='levelPassCombat'
@@ -171,13 +166,11 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicPeace' placeholder='Начальные ОХ'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelPeace' placeholder='ОХ за уровень'
-						class='changeCharacteristic'>
-					</InputField>
+						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='1' id='levelPassPeace'
@@ -189,9 +182,8 @@
 			
 			<Row>
 				<Cell columnSpan='3'>
-					<InputField placeholder='Начальное знач. статы' onEndEdit='ChangeStatisticBonus'
-						fontSize='60' characterValidation='Integer'>
-					</InputField>
+					<InputField id='idLBN' placeholder='Начальное знач. статы' onEndEdit='ChangeStatisticBonus'
+						fontSize='60' characterValidation='Integer' />
 				</Cell>
 				<Cell columnSpan='3'>
 					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60'>
@@ -204,10 +196,7 @@
 </Panel>
 
 <Panel active='false'>
-	<Text id='freeCharacteristicUsual'>
-	</Text>
-	<Text id='freeCharacteristicCombat'>
-	</Text>
-	<Text id='freeCharacteristicPeace'>
-	</Text>
+	<Text id='freeCharacteristicUsual' />
+	<Text id='freeCharacteristicCombat' />
+	<Text id='freeCharacteristicPeace' />
 </Panel>
