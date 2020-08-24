@@ -487,6 +487,7 @@ function Connect()
   end
   if(#allFeatureGUID == 0) then broadcastToAll("’арактеристики не были найдены/добавлены на стол") end
   SetObjectFeature()
+  SetLBNValue()
   UpdateSave()
   if(gameCharacter and (allStatisticGUID or allFeatureGUID)) then
     SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
@@ -532,6 +533,13 @@ function SetObjectFeature()
   end
 end
 
+function SetLBNValue()
+  for _,feature in pairs(allFeatureObject) do
+    feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+  end
+  LBN = nil
+end
+
 function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
     return true
@@ -565,10 +573,7 @@ function CheckColor(color)
 end
 
 function ChangeStatisticBonus(player, input)
-	params = { levelBonusN = tonumber(input) or 0 }
-  for _,feature in pairs(allFeatureObject) do
-    feature.call("RecalculationLevelFromStatisticBonusPoint", params)
-  end
+	LBN = tonumber(input) or 0
 end
 
 function ChangeMaxLevel(player, input)

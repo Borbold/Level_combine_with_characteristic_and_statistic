@@ -430,8 +430,8 @@ function RecalculationBonusPoints(params)
   UpdateSave()
 end
 
-function RecalculationLevelFromStatisticBonusPoint(params)
-	levelBonusN = params.levelBonusN
+function RecalculationLevelFromStatisticBonusPoint(LBN)
+	levelBonusN = LBN
   UpdateSave()
 end
 --Игровой персонаж
