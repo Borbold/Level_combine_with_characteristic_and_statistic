@@ -111,17 +111,15 @@ function AddNewField()
   local strVis = "Black|"..DenoteSth()
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local isIncreaseWidth, lengthText = false, 0
-  local newCharacteristic = ""
+  local newCharacteristic, longestLine = "", 15
   if(#allCharacteristics > 0) then
     for characteristicIndex = 1, #allCharacteristicsGUID do
       local name = allCharacteristics[characteristicIndex].UI.getAttribute("name", "text")
       local charact = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristic")
       local bonusChar = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristicBonus")
       local textChar = name .. ": ну=" .. charact .. ",нау=" .. bonusChar
-      if(#textChar > 15) then
-        isIncreaseWidth = true
-        lengthText = #textChar
+      if(#textChar > longestLine) then
+        longestLine = #textChar
       end
       newCharacteristic = newCharacteristic ..
       "<Row preferredHeight='50'>\n" ..
@@ -175,9 +173,7 @@ function AddNewField()
   self.UI.setXml(startXml)
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
-  if(isIncreaseWidth) then
-    EnlargeWidthPanelChar(lengthText)
-  end
+  EnlargeWidthPanelChar(longestLine)
 end
 
 function EnlargeHeightPanelStat(countStatisticIndex)

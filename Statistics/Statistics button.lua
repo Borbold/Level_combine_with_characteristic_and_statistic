@@ -8,37 +8,46 @@ function UpdateSave()
     self.script_state = savedData
 end
 
+function CreateGlobalVariable()
+  colorPlayer = {
+    ["White"] = {r = 1, g = 1, b = 1},
+    ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
+    ["Blue"] = {r = 0.12, g = 0.53, b = 1},
+    ["Green"] = {r = 0.19, g = 0.7, b = 0.17},
+    ["Yellow"] = {r = 0.9, g = 0.9, b = 0.17},
+    ["Orange"] = {r = 0.96, g = 0.39, b = 0.11},
+    ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
+    ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
+    ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
+    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
+  }
+  progressBarColor = "" statisticName = ""
+  currentStatisticValue, maximumStatisticValue = 0, 0
+  lockChange = false
+  ConnectedCharacteristic = {}
+  listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
+end
+
+function Confer(savedData)
+  local loadedData = JSON.decode(savedData)
+  ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
+  currentStatisticValue = loadedData.currentStatisticValue or 0
+  maximumStatisticValue = loadedData.maximumStatisticValue or 0
+  gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
+  idForGameCharacter = loadedData.idForGameCharacter or 0
+  progressBarColor = loadedData.progressBarColor or "#ffffff"
+  local indexString = string.find(self.getName(), ":")
+  statisticName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
+end
+
 function onLoad(savedData)
-    self.setGMNotes("Статистика")
-    colorPlayer = {
-        ["White"] = {r = 1, g = 1, b = 1},
-        ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
-        ["Blue"] = {r = 0.12, g = 0.53, b = 1},
-        ["Green"] = {r = 0.19, g = 0.7, b = 0.17},
-        ["Yellow"] = {r = 0.9, g = 0.9, b = 0.17},
-        ["Orange"] = {r = 0.96, g = 0.39, b = 0.11},
-        ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
-        ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
-        ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
-        ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
-    }
-    progressBarColor = "" statisticName = ""
-    currentStatisticValue, maximumStatisticValue = 0, 0
-    lockChange = false
-    listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
-    Wait.Frames(RebuildAssets, 5)
-    if(savedData != "") then
-        local loadedData = JSON.decode(savedData)
-        ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
-        currentStatisticValue = loadedData.currentStatisticValue or 0
-        maximumStatisticValue = loadedData.maximumStatisticValue or 0
-        gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
-        idForGameCharacter = loadedData.idForGameCharacter or 0
-        progressBarColor = loadedData.progressBarColor or "#ffffff"
-        local indexString = string.find(self.getName(), ":")
-        statisticName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
-    end
-    Wait.Frames(UpdateValue, 8)
+  self.setGMNotes("Статистика")
+  CreateGlobalVariable()
+  Wait.Frames(RebuildAssets, 5)
+  if(savedData != "") then
+    Confer(savedData)
+  end
+  Wait.Frames(UpdateValue, 8)
 end
 
 function HideUI()
