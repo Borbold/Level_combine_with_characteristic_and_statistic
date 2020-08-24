@@ -1,6 +1,6 @@
 <Defaults>
-	<ProgressBar class='classBar' fontSize='30' color='white' fillImageColor='red' percentage='75'
-		percentageTextFormat='0' textColor='white' fontStyle='Bold' height='50' width='690'
+	<ProgressBar class='classBar' fontSize='30' color='#00000025' fillImageColor='red' percentage='75'
+		percentageTextFormat='0' textColor='Transparent' fontStyle='Bold' height='50' width='690'
 		showPercentageText='false'/>
 	<Text class='textForBar' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50' text='?'/>
