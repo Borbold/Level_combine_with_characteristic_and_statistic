@@ -573,7 +573,14 @@ function CheckColor(color)
 end
 
 function ChangeStatisticBonus(player, input)
-	LBN = tonumber(input) or 0
+  if(#allFeatureObject > 0) then
+	  local LBN = tonumber(input) or 0
+    for _,feature in pairs(allFeatureObject) do
+      feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+    end
+  else
+    LBN = tonumber(input) or 0
+  end
 end
 
 function ChangeMaxLevel(player, input)
