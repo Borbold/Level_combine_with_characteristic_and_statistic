@@ -6,7 +6,7 @@
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50' text='?'/>
 	<Text class='defaultText' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50'/>
-	<Text class='forCharacteristic' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
+	<Text class='forCharacteristic' resizeTextForBestFit='true' resizeTextMaxSize='50'
 		outline='#000000' outlineSize='1 1' height='50' alignment='MiddleLeft'/>
 </Defaults>
 

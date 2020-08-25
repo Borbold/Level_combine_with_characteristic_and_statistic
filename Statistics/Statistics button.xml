@@ -47,9 +47,9 @@
 	</TableLayout>
 </Panel>
 
-<Panel position='0 0 -22' visibility='Black' height='75' width='70' rotation='0 0 180'>
-	<Button onClick='PanelTool' image='uiGear' offsetXY='835 70'>
-	</Button>
+<Panel position='0 0 -22' visibility='Black' rotation='0 0 180'>
+	<Button onClick='PanelTool' image='uiGear' height='75' width='70'
+		offsetXY='835 70' />
 	<Panel id='panelTool' offsetXY='0 200' active='false'>
 		<InputField height='200' width='800' color='#000000' textColor='#ffffff00'
 			interactable='false' />

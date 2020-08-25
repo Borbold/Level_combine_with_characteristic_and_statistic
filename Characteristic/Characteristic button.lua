@@ -35,10 +35,12 @@ function PerformParameterCheck()
   if(not CheckGMNot("Характеристика")) then
     self.setGMNotes("Характеристика " .. usual)
   elseif(not CheckGMNot(usual)) then
-    local locType = self.getGMNotes():sub(16)
-    if(locType == combat) then locType = 1
+    local locType, locTypeText = 0, self.getGMNotes():sub(16)
+    if(locTypeText == combat) then locType = 1
     else locType = 2 end
-    CheckOption(locType) self.UI.setAttribute("selectionType", "value", locType)
+    CheckOption(locType)
+    self.UI.setAttribute("selectionType", "value", locType)
+    self.UI.setAttribute("selectionType", "text", locTypeText)
   end
 end
 
@@ -294,6 +296,7 @@ end
 
 function DropdownChange(player, option)
   self.setGMNotes("Характеристика " .. option)
+  self.UI.setAttribute("selectionType", "text", option)
   CheckOption(option)
 end
 

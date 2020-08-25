@@ -28,9 +28,8 @@
 				height='95' width='1600' columnWidths='0 90 0 90 0 90 0 90'>
 				<Row>
 					<Cell>
-						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'>
-						ОХ
-						</Text>
+						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'
+							text='ОХ' />
 					</Cell>
 					<Cell>
 						<Button id='buttonMinus' class='basicButton' image='uiMinus'
@@ -48,11 +47,10 @@
 						<Button id='buttonPlus' class='basicButton' image='uiPlus'
 							onClick='Plus("textCharacteristic")' />
 					</Cell>
-					
+					<!-- Сверху очки характеристик, снизу бонус -->
 					<Cell>
-						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'>
-						ОБХ
-						</Text>
+						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'
+							text='ОБХ' />
 					</Cell>
 					<Cell>
 						<Button id='buttonMinusBonus' class='basicButton' image='uiMinus'
@@ -61,9 +59,8 @@
 					<Cell>
 						<Panel>
 							<InputField class='basicInpitField' />
-							<InputField id='inputCharacteristicBonus' class='inputCharacteristic' offsetXY='5 0'>
-							999
-							</InputField>
+							<InputField id='inputCharacteristicBonus' class='inputCharacteristic'
+								offsetXY='5 0' text='999' />
 							<Text id='textCharacteristicBonus' class='bestFit'>
 							0
 							</Text>
@@ -79,16 +76,15 @@
 	</TableLayout>
 </Panel>
 
-<Panel position='0 0 -22' visibility='Black' height='75' width='70'>
-	<Button onClick='PanelTool' image='uiGear' height='75' width='70' offsetXY='835 70'>
-	</Button>
+<Panel position='0 0 -22' visibility='Black'>
+	<Button onClick='PanelTool' image='uiGear' height='75' width='70'
+		offsetXY='835 70' />
 	<VerticalScrollView id='panelTool' height='160' width='1600'
 		color='black' offsetXY='0 180' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout id='panelTable'  cellSpacing='10' height='510'>
+		<TableLayout id='panelTable'  cellSpacing='10' height='510'
+			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='60'>
-				<Cell columnSpan='2' dontUseTableCellBackground='true'>
-				</Cell>
-				<Cell columnSpan='2' dontUseTableCellBackground='true'>
+				<Cell columnSpan='4'>
 					<Text class='bestFit'>
 					Выберите тип характеристики
 					</Text>
@@ -96,31 +92,31 @@
 			</Row>
 			<Row preferredHeight='90'>
 				<Cell columnSpan='2'>
-					<InputField id='inputName' onEndEdit='ChangeName' placeholder='Название' fontSize='60' characterValidation='Name'>
-					</InputField>
+					<InputField id='inputName' onEndEdit='ChangeName' placeholder='Название'
+						fontSize='60' characterValidation='Name' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<Dropdown id='selectionType' onValueChanged='DropdownChange' fontSize='55' height='70' itemHeight='80'
-						itemBackgroundColors='black' itemTextColor='white' dropdownBackgroundColor='#808080'>
+						itemBackgroundColors='black' itemTextColor='white' dropdownBackgroundColor='#808080' text='обычная'>
 						<Option>обычная</Option>
 						<Option>боевая</Option>
 						<Option>мирная</Option>
 					</Dropdown>
 				</Cell>
 			</Row>
-			<TableLayout cellSpacing='10' offsetXY='0 -160'>
+			<TableLayout cellSpacing='10' offsetXY='0 -160' cellBackgroundColor='1 1 1 0'>
 				<Row preferredHeight='60'>
-					<Cell dontUseTableCellBackground='true'>
+					<Cell>
 						<Text class='bestFit'>
 						Установите GUID необходимой плашки
 						</Text>
 					</Cell>
-					<Cell dontUseTableCellBackground='true'>
+					<Cell>
 						<Text class='bestFit'>
 						Установите множитель за каждое ОХ
 						</Text>
 					</Cell>
-					<Cell dontUseTableCellBackground='true'>
+					<Cell>
 						<Text class='bestFit'>
 						Установите множитель за каждый Уровень
 						</Text>

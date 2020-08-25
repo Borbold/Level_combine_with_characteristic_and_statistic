@@ -499,7 +499,7 @@ function Connect()
 end
 
 function SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
-  local params = {statistics = allStatisticGUID, characteristics = allFeatureGUID}
+  local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID}
 	gameCharacter.call("SetGUID", params)
   SetObjectsStatistics(gameCharacter, allStatisticGUID)
   SetObjectsCharacteristics(gameCharacter, allFeatureGUID)

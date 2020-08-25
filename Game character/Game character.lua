@@ -37,25 +37,25 @@ function Confer(savedData)
 end
 
 function SetGUID(params)
-  SetStatistic(params.statistics)
-  SetCharacteristic(params.characteristics)
+  SetStatistic(params.statisticsGUID)
+  SetCharacteristic(params.characteristicsGUID)
 
   Wait.Frames(CreateFields, 3)
   UpdateSave()
 end
-function SetStatistic(statistics)
-  if(statistics) then
+function SetStatistic(statisticsGUID)
+  if(statisticsGUID) then
     allStatisticsGUID = {}
-    for k,stat in pairs(statistics) do
+    for k,stat in pairs(statisticsGUID) do
 	    allStatisticsGUID[k] = stat
     end
     SetObjects("Stat")
   end
 end
-function SetCharacteristic(characteristics)
-  if(characteristics) then
+function SetCharacteristic(characteristicsGUID)
+  if(characteristicsGUID) then
     allCharacteristicsGUID = {}
-    for k,char in pairs(characteristics) do
+    for k,char in pairs(characteristicsGUID) do
 	    allCharacteristicsGUID[k] = char
     end
     SetObjects("Char")
@@ -113,18 +113,22 @@ function AddNewField()
   ----------------------------------------------------------------------------------------------------------
   local newCharacteristic, longestLine = "", 15
   if(#allCharacteristics > 0) then
-    for characteristicIndex = 1, #allCharacteristicsGUID do
-      local name = allCharacteristics[characteristicIndex].UI.getAttribute("name", "text")
-      local charact = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristic")
-      local bonusChar = allCharacteristics[characteristicIndex].UI.getValue("textCharacteristicBonus")
-      local textChar = name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+    for index,char in pairs(allCharacteristics) do
+      local textChar = CreateNameForCharacteristic(char)
       if(#textChar > longestLine) then
         longestLine = #textChar
       end
+
+      local locColor = "#ffffff"
+      local typeChar = char.UI.getAttribute("selectionType", "text")
+      if(typeChar ~= "обычная") then
+        locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or locColor
+      end
+
       newCharacteristic = newCharacteristic ..
       "<Row preferredHeight='50'>\n" ..
       " <Cell>\n" ..
-      "   <Text id='tChar"..characteristicIndex.."' class='forCharacteristic' text='"..textChar.."'/>\n" ..
+      "   <Text id='tChar"..index.."' class='forCharacteristic' color='"..locColor.."' text='"..textChar.."'/>\n" ..
       " </Cell>\n" ..
       "</Row>\n"
     end
@@ -174,6 +178,13 @@ function AddNewField()
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
   EnlargeWidthPanelChar(longestLine)
+end
+
+function CreateNameForCharacteristic(char)
+  local name = char.UI.getAttribute("name", "text")
+  local charact = char.UI.getValue("textCharacteristic")
+  local bonusChar = char.UI.getValue("textCharacteristicBonus")
+  return name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
 end
 
 function EnlargeHeightPanelStat(countStatisticIndex)
