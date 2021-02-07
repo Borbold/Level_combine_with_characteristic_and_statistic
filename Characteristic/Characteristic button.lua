@@ -48,7 +48,7 @@ function Confer(loadedData)
   GUIDLevelIndex = loadedData.GUIDLevelIndex or ""
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
-  characteristicBonus = loadedData.characteristicBonus or 1
+  characteristicBonus = loadedData.characteristicBonus or 0
   countField = loadedData.countField or 1
   dataHeight = loadedData.dataHeight or 510
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
@@ -161,14 +161,14 @@ function ActivateUI(id)
 	self.UI.setAttribute(id, "active", true)
 end
 
-function InputEndChange()
-	self.UI.setAttribute("inputCharacteristicBonus", "text", 999)
-end
-
 function ChangeCharacteristicInGameCharacter()
 	if(gameCharacter ~= nil) then
     gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
   end
+end
+
+function ChangeCharacteristicBonusText(_, input)
+  self.UI.setAttribute("textCharacteristicBonus", "text", input)
 end
 
 function Plus(player, id)
@@ -176,12 +176,6 @@ function Plus(player, id)
 end
 function Minus(player, id)
   ChangeCharacteristic(player.color, id, -1, true)
-end
-
-function ChangeInputCharacteristic(player, input)
-  local id = "textCharacteristicBonus"
-  input = (input ~= "" and input) or 0
-	ChangeCharacteristic(player.color, id, tonumber(input), false)
 end
 function ChangeCharacteristic(playerColor, id, value, button)
   local givenValue = 0
@@ -198,7 +192,7 @@ function ChangeCharacteristic(playerColor, id, value, button)
       self.UI.setValue(id, givenValue)
       characteristicBonus = givenValue
     end
-    EnableCharacteristic("NotChangeHeight")
+    EnableCharacteristic("NotChangeHeight", value, button)
     Wait.Frames(ChangeCharacteristicInGameCharacter, 3)
   end
 end
@@ -324,12 +318,13 @@ function ResetCharacteristic()
   EnableCharacteristic("Reset")
   Wait.frames(AddNewFieldForConnection, 13)
 end
-function EnableCharacteristic(check)
+function EnableCharacteristic(check, value, button)
   for i,_ in ipairs(inputGUID) do
     local inputObj = getObjectFromGUID(inputGUID[i])
     if(inputObj ~= nil) then
+      local locVC = (button and value) or ((characteristic or 0) + (characteristicBonus or 0))
       params = { CPM = inputCPM[i] or 0, LM = inputLM[i] or 0,
-                 VC = (characteristic or 0) + (characteristicBonus or 0), LN = levelNumber or 0,
+                 VC = locVC, LN = levelNumber or 0,
                  LBN = levelBonusN or 0, GUID = self.getGUID() }
 	    inputObj.call("RecalculationBonusPoints", params)
     else
@@ -367,14 +362,15 @@ function RecalculationBonusPoints(params)
       end
     end
   end
-  
-  characteristicBonus = 0
+
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
-	    characteristicBonus = characteristicBonus + (p.CPM*p.VC) + (p.LM*p.LN)
+      local locVC = p.CPM*p.VC
+      local locLN = p.LM*p.LN
+      characteristicBonus = characteristicBonus + locVC + locLN
     end
   end
-	self.UI.setAttribute("textCharacteristicBonus", "text", Round(characteristicBonus))
+	self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
   UpdateSave()
 end
 

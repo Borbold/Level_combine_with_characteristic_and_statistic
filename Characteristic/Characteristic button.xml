@@ -4,9 +4,6 @@
 	<Button class='basicButton' height='75' width='70'/>
 	<InputField class='basicInpitField' height='85' width='300'
 		color='#000000' textColor='#ffffff00' interactable='false'/>
-	<InputField class='inputCharacteristic' height='70' width='120' fontSize='50'
-		color='#00000000' textColor='#ffffff00' characterValidation='Integer'
-		onValueChanged='ChangeInputCharacteristic' onEndEdit='InputEndChange'/>
 	
 	<InputField class='fieldForConnectGUID' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
 	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='Decimal'/>
@@ -59,8 +56,6 @@
 					<Cell>
 						<Panel>
 							<InputField class='basicInpitField' />
-							<InputField id='inputCharacteristicBonus' class='inputCharacteristic'
-								offsetXY='5 0' text='999' />
 							<Text id='textCharacteristicBonus' class='bestFit'>
 							0
 							</Text>
