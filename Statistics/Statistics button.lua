@@ -1,11 +1,11 @@
 ﻿function UpdateSave()
-    self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (statisticName or ""))
-    local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
-        ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
-        ["ConnectedCharacteristic"] = ConnectedCharacteristic
-    }
-    local savedData = JSON.encode(dataToSave)
-    self.script_state = savedData
+  self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (statisticName or ""))
+  local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
+    ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
+    ["ConnectedCharacteristic"] = ConnectedCharacteristic
+  }
+  local savedData = JSON.encode(dataToSave)
+  self.script_state = savedData
 end
 
 function CreateGlobalVariable()
@@ -21,15 +21,14 @@ function CreateGlobalVariable()
     ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
     ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
   }
-  progressBarColor = "" statisticName = ""
+  progressBarColor, statisticName = "", ""
   currentStatisticValue, maximumStatisticValue = 0, 0
   lockChange = false
   ConnectedCharacteristic = {}
   listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
 end
 
-function Confer(savedData)
-  local loadedData = JSON.decode(savedData)
+function Confer(loadedData)
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
   currentStatisticValue = loadedData.currentStatisticValue or 0
   maximumStatisticValue = loadedData.maximumStatisticValue or 0
@@ -45,104 +44,51 @@ function onLoad(savedData)
   CreateGlobalVariable()
   Wait.Frames(RebuildAssets, 5)
   if(savedData != "") then
-    Confer(savedData)
+    local loadedData = JSON.decode(savedData)
+    Confer(loadedData)
   end
   Wait.Frames(UpdateValue, 8)
 end
 
 function HideUI()
 	for i = 1, #listIdUI do
-        self.UI.hide(listIdUI[i])
-    end
+    self.UI.hide(listIdUI[i])
+  end
 end
 
 function ShowUI()
-	for i = 1, #listIdUI do
-        self.UI.show(listIdUI[i])
-    end
+  for i = 1, #listIdUI do
+    self.UI.show(listIdUI[i])
+  end
 end
 
 function ChangeMeaningLock(player)
-    if(player.color == "Black") then
-        if(lockChange == false) then
-            lockChange = true
-            ChangeTextButton("changeLock", "Разблокировать")
-            HideUI()
-        else
-            lockChange = false
-            ChangeTextButton("changeLock", "Заблокировать")
-            ShowUI()
-        end
+  if(player.color == "Black") then
+    if(lockChange == false) then
+      lockChange = true
+      ChangeTextButton("changeLock", "Разблокировать")
+      HideUI()
     else
-        broadcastToAll("[b]" .. player.steam_name .. "[/b]" .. " только ГМ-у дозволена данная функция", "Red")
+      lockChange = false
+      ChangeTextButton("changeLock", "Заблокировать")
+      ShowUI()
     end
+  else
+    broadcastToAll("[b]" .. player.steam_name .. "[/b]" .. " только ГМ-у дозволена данная функция", "Red")
+  end
 end
 
 function ChangeTextButton(id, text)
-    self.UI.setAttribute(id, "text", text)
-    self.UI.setAttribute(id, "color", "#ffffff00")
-    self.UI.setAttribute(id, "textColor", "#000000")
+  self.UI.setAttribute(id, "text", text)
+  self.UI.setAttribute(id, "color", "#ffffff00")
+  self.UI.setAttribute(id, "textColor", "#000000")
 end
 
 function PanelTool()
-    if(self.UI.getAttribute("panelTool", "active") == "true") then
-	    self.UI.hide("panelTool")
-    else
-        self.UI.show("panelTool")
-    end
-end
-
-function Minus(player)
-  ChangeStatistics(player.color, -1)
-end
-function Plus(player)
-  ChangeStatistics(player.color, 1)
-end
-
-function InputChange(player, input, idInput)
-    if(idInput == "inputValue") then
-	    ChangeStatistics(player.color, input)
-    elseif(idInput == "inputMaxValue") then
-        ChangeMaximumStatisticValue(input)
-    elseif(idInput == "inputName") then
-        ChangeName(input)
-    elseif(idInput == "inputColor") then
-        ChangeProgressBarColor(input)
-    end
-end
-
-function ChangeName(value)
-    value = value or ""
-    if(value == "") then value = statisticName end
-    statisticName = value
-    self.UI.setAttribute("name", "text", statisticName)
-end
-
-function ChangeProgressBarColor(value)
-    value = value or ""
-    if(value == "" or string.len(value) < 6) then value = progressBarColor end
-    progressBarColor = value
-    if(string.match(progressBarColor, "#") == nil) then progressBarColor = "#" .. progressBarColor end
-    self.UI.setAttribute("bar", "fillImageColor", progressBarColor)
-end
-
-function ChangeMaximumStatisticValue(value)
-  value = (value ~= "" and tonumber(value) > 0 and value) or maximumStatisticValue
-  maximumStatisticValue = tonumber(value)
-  currentStatisticValue = (maximumStatisticValue < tonumber(currentStatisticValue) and maximumStatisticValue) or currentStatisticValue
-  UpdateValue()
-end
-
-function ChangeStatistics(playerColor, value)
-  if(CheckPlayer(playerColor)) then
-    if(lockChange == false) then
-      if(value and value == "") then value = 0 end
-      currentStatisticValue = currentStatisticValue + tonumber(value)
-      if(currentStatisticValue < 0) then currentStatisticValue = 0 end
-      if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
-      UpdateValue()
-      Wait.Frames(ChangeStatisticInGameCharacter, 3)
-    end
+  if(self.UI.getAttribute("panelTool", "active") == "true") then
+    self.UI.hide("panelTool")
+  else
+    self.UI.show("panelTool")
   end
 end
 
@@ -162,6 +108,36 @@ function ChangeStatisticInGameCharacter()
   end
 end
 
+function InputChange(player, input, idInput)
+  if(idInput == "inputValue") then
+	  ChangeStatistics(player.color, input)
+  elseif(idInput == "inputMaxValue") then
+    ChangeMaximumStatisticValue(input)
+  elseif(idInput == "inputName") then
+    ChangeName(input)
+  elseif(idInput == "inputColor") then
+    ChangeProgressBarColor(input)
+  end
+end
+
+function Minus(player)
+  ChangeStatistics(player.color, -1)
+end
+function Plus(player)
+  ChangeStatistics(player.color, 1)
+end
+function ChangeStatistics(playerColor, value)
+  if(CheckPlayer(playerColor)) then
+    if(lockChange == false) then
+      if(value and value == "") then value = 0 end
+      currentStatisticValue = currentStatisticValue + tonumber(value)
+      if(currentStatisticValue < 0) then currentStatisticValue = 0 end
+      if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
+      UpdateValue()
+      Wait.Frames(ChangeStatisticInGameCharacter, 3)
+    end
+  end
+end
 function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
     return true
@@ -169,7 +145,6 @@ function CheckPlayer(playerColor)
   broadcastToAll("Эта дощечка не вашего цвета!")
   return false
 end
-
 function DenoteSth()
   for iColor,_ in pairs(colorPlayer) do
     if(CheckColor(iColor)) then
@@ -177,7 +152,6 @@ function DenoteSth()
     end
   end
 end
-
 function CheckColor(color)
   local colorObject = {
     ["R"] = Round(self.getColorTint()[1], 2),
@@ -191,6 +165,9 @@ function CheckColor(color)
   else
     return false
   end
+end
+function Round(num, idp)
+  return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
 
 function RecalculationBonusPoints(params)
@@ -220,8 +197,28 @@ function RecalculationBonusPoints(params)
 	    locMaxChar = locMaxChar + p.LBN + (p.CPM*p.VC) + (p.LM*p.LN)
     end
   end
-  
   ChangeMaximumStatisticValue(math.ceil(locMaxChar))
+end
+function ChangeMaximumStatisticValue(value)
+  value = (value ~= "" and tonumber(value) > 0 and value) or maximumStatisticValue
+  maximumStatisticValue = tonumber(value)
+  currentStatisticValue = (maximumStatisticValue < tonumber(currentStatisticValue) and maximumStatisticValue) or currentStatisticValue
+  UpdateValue()
+end
+
+function ChangeName(value)
+  value = value or ""
+  if(value == "") then value = statisticName end
+  statisticName = value
+  self.UI.setAttribute("name", "text", statisticName)
+end
+
+function ChangeProgressBarColor(value)
+  value = value or ""
+  if(value == "" or value:len() < 6) then value = progressBarColor end
+  progressBarColor = value
+  if(string.match(progressBarColor, "#") == nil) then progressBarColor = "#" .. progressBarColor end
+  self.UI.setAttribute("bar", "fillImageColor", progressBarColor)
 end
 --Игровой персонаж
 function SetGameCharacter(parametrs)
@@ -232,16 +229,12 @@ function SetGameCharacter(parametrs)
 end
 
 function RebuildAssets()
-    local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
-    local assets = {
-        {name = 'uiGear', url = root .. 'gear.png'},
-        {name = 'uiClose', url = root .. 'close.png'},
-        {name = 'uiPlus', url = root .. 'plus.png'},
-        {name = 'uiMinus', url = root .. 'minus.png'}
-    }
-    self.UI.setCustomAssets(assets)
-end
-
-function Round(num, idp)
-    return tonumber(string.format("%." .. (idp or 0) .. "f", num))
+  local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
+  local assets = {
+    {name = 'uiGear', url = root .. 'gear.png'},
+    {name = 'uiClose', url = root .. 'close.png'},
+    {name = 'uiPlus', url = root .. 'plus.png'},
+    {name = 'uiMinus', url = root .. 'minus.png'}
+  }
+  self.UI.setCustomAssets(assets)
 end
