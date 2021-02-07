@@ -1,4 +1,4 @@
-local allIndex = {
+п»їlocal allIndex = {
   ["SU"] = "startCharacteristicUsual",
   ["SC"] = "startCharacteristicCombat",
   ["SP"] = "startCharacteristicPeace",
@@ -71,7 +71,7 @@ function CreateGlobalVariables()
     allFeatureGUID = {} allFeatureObject = {}
     listCharacteristicPerLevel = CreateNewVariable("PL", {})
     nextLevelExperience = {} rangeValues = {50, 100, 150, 200}
-    usual = "обычная" combat = "боевая" peace = "мирная"
+    usual = "РѕР±С‹С‡РЅР°СЏ" combat = "Р±РѕРµРІР°СЏ" peace = "РјРёСЂРЅР°СЏ"
 end
 
 function Confer(savedData)
@@ -290,7 +290,7 @@ function AllowChange()
 	if((#allFeatureObject > 0 and featureDistribution == "false") or #allFeatureObject == 0) then
         return true
     end
-    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " не закончил(а) распределение характеристик")
+    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " РЅРµ Р·Р°РєРѕРЅС‡РёР»(Р°) СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє")
     return false
 end
 
@@ -331,7 +331,7 @@ function SetLevelUIAndCheckMaxLevel(expLeft, nextLevelExp)
   end
   self.UI.setAttribute("bar", "percentage", per)
   self.UI.setValue("textBar", strPer)
-  self.UI.setValue("level", "Ваш уровень: " .. level)
+  self.UI.setValue("level", "Р’Р°С€ СѓСЂРѕРІРµРЅСЊ: " .. level)
   return isLevelMax
 end
 
@@ -341,9 +341,9 @@ function ElevateLevel()
   SetMinCharacteristic()
   local message = ""
   if(level < maxLevel) then
-    message = "[b]" .. self.getName() .. "[/b] поднял(а) уровень!\nТеперь он(а) имеет " .. level .. " лвл"
+    message = "[b]" .. self.getName() .. "[/b] РїРѕРґРЅСЏР»(Р°) СѓСЂРѕРІРµРЅСЊ!\nРўРµРїРµСЂСЊ РѕРЅ(Р°) РёРјРµРµС‚ " .. level .. " Р»РІР»"
   elseif(level == maxLevel) then
-    message = "Поздравляем!\n[b]"..self.getName().."[/b] достиг максимального уровня!"
+    message = "РџРѕР·РґСЂР°РІР»СЏРµРј!\n[b]"..self.getName().."[/b] РґРѕСЃС‚РёРі РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ СѓСЂРѕРІРЅСЏ!"
   end
   broadcastToAll(message)
 end
@@ -369,7 +369,7 @@ end
 function ResetLevel(player)
 	if(player.color == "Black") then
     RetraceValues()
-    -- Оставь так, ибо обычным CreateNewVariable обработка идет некорректно
+    -- РћСЃС‚Р°РІСЊ С‚Р°Рє, РёР±Рѕ РѕР±С‹С‡РЅС‹Рј CreateNewVariable РѕР±СЂР°Р±РѕС‚РєР° РёРґРµС‚ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
     listCharacteristicPerLevel[allIndex["PLU"]] = {}
     listCharacteristicPerLevel[allIndex["PLC"]] = {}
     listCharacteristicPerLevel[allIndex["PLP"]] = {}
@@ -385,7 +385,7 @@ function ResetLevel(player)
     Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 5)
     Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 5)
   else
-      WriteMessagePlayerToColor("Вы не ГМ, вам нельзя обнулять уровни!")
+      WriteMessagePlayerToColor("Р’С‹ РЅРµ Р“Рњ, РІР°Рј РЅРµР»СЊР·СЏ РѕР±РЅСѓР»СЏС‚СЊ СѓСЂРѕРІРЅРё!")
   end
 end
 
@@ -425,7 +425,7 @@ end
 
 function ResetCharacteristic()
 	for k,feature in pairs(allFeatureObject) do
-    if(feature == nil) then broadcastToAll("Есть удаленная характеристика. Переподключите их и сбросте уровень") end
+    if(feature == nil) then broadcastToAll("Р•СЃС‚СЊ СѓРґР°Р»РµРЅРЅР°СЏ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєР°. РџРµСЂРµРїРѕРґРєР»СЋС‡РёС‚Рµ РёС… Рё СЃР±СЂРѕСЃС‚Рµ СѓСЂРѕРІРµРЅСЊ") end
 	  feature.call("ResetCharacteristic")
   end
 end
@@ -435,7 +435,7 @@ function CloseDistributionCharacteristic(player)
   freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicCombat", "value"))
   freeValue = freeValue + tonumber(self.UI.getValue("freeCharacteristicPeace", "value"))
 	if(CheckPlayer(player.color) and CheckFreeValue(freeValue)) then
-    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " завершил(а) распределение ОХ", DenoteSth())
+    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " Р·Р°РІРµСЂС€РёР»(Р°) СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РћРҐ", DenoteSth())
     SetMinCharacteristic()
     DisableFeatureChange()
   end
@@ -445,7 +445,7 @@ function CheckFreeValue(freeValue)
 	if(freeValue == 0) then
     return true
   end
-  WriteMessagePlayerToColor("У вас остались нераспределенные характеристики: " .. freeValue)
+  WriteMessagePlayerToColor("РЈ РІР°СЃ РѕСЃС‚Р°Р»РёСЃСЊ РЅРµСЂР°СЃРїСЂРµРґРµР»РµРЅРЅС‹Рµ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё: " .. freeValue)
   return false
 end
 
@@ -475,21 +475,21 @@ function Connect()
   local gameCharacter local allStatisticGUID = {}
   for _,object in pairs(getAllObjects()) do
     if(object.getColorTint() == self.getColorTint()) then
-      if(string.match(object.getGMNotes(), "Характеристика")) then
+      if(string.match(object.getGMNotes(), "РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєР°")) then
 	      allFeatureGUID[#allFeatureGUID + 1] = object.getGUID()
-        broadcastToAll(object.getName() .. " добавлена к уровню")
+        broadcastToAll(object.getName() .. " РґРѕР±Р°РІР»РµРЅР° Рє СѓСЂРѕРІРЅСЋ")
       end
-      if(string.match(object.getGMNotes(), "Статистика")) then
+      if(string.match(object.getGMNotes(), "РЎС‚Р°С‚РёСЃС‚РёРєР°")) then
 	      allStatisticGUID[#allStatisticGUID + 1] = object.getGUID()
-        broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
+        broadcastToAll(object.getName() .. " РґРѕР±Р°РІР»РµРЅР° Рє СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРјСѓ РїРµСЂСЃРѕРЅР°Р¶Сѓ")
       end
-      if(string.match(object.getGMNotes(), "Игровой персонаж")) then
+      if(string.match(object.getGMNotes(), "РРіСЂРѕРІРѕР№ РїРµСЂСЃРѕРЅР°Р¶")) then
 	      gameCharacter = object
-        broadcastToAll(object.getGMNotes() .. " существует")
+        broadcastToAll(object.getGMNotes() .. " СЃСѓС‰РµСЃС‚РІСѓРµС‚")
       end
     end
   end
-  if(#allFeatureGUID == 0) then broadcastToAll("Характеристики не были найдены/добавлены на стол") end
+  if(#allFeatureGUID == 0) then broadcastToAll("РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РЅРµ Р±С‹Р»Рё РЅР°Р№РґРµРЅС‹/РґРѕР±Р°РІР»РµРЅС‹ РЅР° СЃС‚РѕР»") end
   SetObjectFeature()
   SetLBNValue()
   UpdateSave()
@@ -511,7 +511,7 @@ function SetObjectsStatistics(gameCharacter, allStatisticGUID)
   }
   for index,stat in pairs(allStatisticGUID) do
     parametrs.id = index
-    --Задать Игровому персонажу
+    --Р—Р°РґР°С‚СЊ РРіСЂРѕРІРѕРјСѓ РїРµСЂСЃРѕРЅР°Р¶Сѓ
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
 end
@@ -522,7 +522,7 @@ function SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
   }
   for index,char in pairs(allFeatureGUID) do
     parametrs.id = index
-    --Задать Игровому персонажу
+    --Р—Р°РґР°С‚СЊ РРіСЂРѕРІРѕРјСѓ РїРµСЂСЃРѕРЅР°Р¶Сѓ
 	  getObjectFromGUID(char).call("SetGameCharacter", parametrs)
   end
 end
@@ -547,7 +547,7 @@ function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
     return true
   end
-  broadcastToAll("Эта дощечка не вашего цвета!")
+  broadcastToAll("Р­С‚Р° РґРѕС‰РµС‡РєР° РЅРµ РІР°С€РµРіРѕ С†РІРµС‚Р°!")
   return false
 end
 

@@ -1,4 +1,4 @@
-function UpdateSave()
+п»їfunction UpdateSave()
     self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (statisticName or ""))
     local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
         ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
@@ -41,7 +41,7 @@ function Confer(savedData)
 end
 
 function onLoad(savedData)
-  self.setGMNotes("Статистика")
+  self.setGMNotes("РЎС‚Р°С‚РёСЃС‚РёРєР°")
   CreateGlobalVariable()
   Wait.Frames(RebuildAssets, 5)
   if(savedData != "") then
@@ -66,15 +66,15 @@ function ChangeMeaningLock(player)
     if(player.color == "Black") then
         if(lockChange == false) then
             lockChange = true
-            ChangeTextButton("changeLock", "Разблокировать")
+            ChangeTextButton("changeLock", "Р Р°Р·Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ")
             HideUI()
         else
             lockChange = false
-            ChangeTextButton("changeLock", "Заблокировать")
+            ChangeTextButton("changeLock", "Р—Р°Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ")
             ShowUI()
         end
     else
-        broadcastToAll("[b]" .. player.steam_name .. "[/b]" .. " только ГМ-у дозволена данная функция", "Red")
+        broadcastToAll("[b]" .. player.steam_name .. "[/b]" .. " С‚РѕР»СЊРєРѕ Р“Рњ-Сѓ РґРѕР·РІРѕР»РµРЅР° РґР°РЅРЅР°СЏ С„СѓРЅРєС†РёСЏ", "Red")
     end
 end
 
@@ -166,7 +166,7 @@ function CheckPlayer(playerColor)
 	if(DenoteSth() == playerColor or playerColor == "Black") then
     return true
   end
-  broadcastToAll("Эта дощечка не вашего цвета!")
+  broadcastToAll("Р­С‚Р° РґРѕС‰РµС‡РєР° РЅРµ РІР°С€РµРіРѕ С†РІРµС‚Р°!")
   return false
 end
 
@@ -223,7 +223,7 @@ function RecalculationBonusPoints(params)
   
   ChangeMaximumStatisticValue(math.ceil(locMaxChar))
 end
---Игровой персонаж
+--РРіСЂРѕРІРѕР№ РїРµСЂСЃРѕРЅР°Р¶
 function SetGameCharacter(parametrs)
   gameCharacterGUID = parametrs.gameChar.getGUID()
 	gameCharacter = parametrs.gameChar

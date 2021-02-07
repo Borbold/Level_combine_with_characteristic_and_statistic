@@ -1,4 +1,4 @@
-function UpdateSave()
+п»їfunction UpdateSave()
     self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (characteristicName or ""))
     local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
         ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
@@ -12,7 +12,7 @@ function UpdateSave()
 end
 
 function CreateGlobalVariables()
-  usual, combat, peace = "обычная", "боевая", "мирная"
+  usual, combat, peace = "РѕР±С‹С‡РЅР°СЏ", "Р±РѕРµРІР°СЏ", "РјРёСЂРЅР°СЏ"
   colorPlayer = {
     ["White"] = {r = 1, g = 1, b = 1},
     ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
@@ -32,8 +32,8 @@ function CreateGlobalVariables()
 end
 
 function PerformParameterCheck()
-  if(not CheckGMNot("Характеристика")) then
-    self.setGMNotes("Характеристика " .. usual)
+  if(not CheckGMNot("РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєР°")) then
+    self.setGMNotes("РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєР° " .. usual)
   elseif(not CheckGMNot(usual)) then
     local locType, locTypeText = 0, self.getGMNotes():sub(16)
     if(locTypeText == combat) then locType = 1
@@ -113,7 +113,7 @@ end
 
 function EnlargeHeightPanel(count)
   if(CheckGMNot(usual)) then
-    --220 название и выбор + текст
+    --220 РЅР°Р·РІР°РЅРёРµ Рё РІС‹Р±РѕСЂ + С‚РµРєСЃС‚
     --preferredHeight=90 cellSpacing=10
     dataHeight = 220 + count * 90 + count * 10
     Wait.Frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
@@ -228,7 +228,7 @@ end
 function CheckCharacteristic(givenValue, value)
   local objectLevel = getObjectFromGUID(self.UI.getValue("GUIDLevel"))
   if(ExceptionObject(objectLevel) == false) then
-    print("Характеристике не задан Уровень")
+    print("РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєРµ РЅРµ Р·Р°РґР°РЅ РЈСЂРѕРІРµРЅСЊ")
     return false
   end
   
@@ -236,7 +236,7 @@ function CheckCharacteristic(givenValue, value)
   if(not CheckValue(givenValue, givenFreeValue)) then return false end
 
   SetFreeValue(objectLevel, givenFreeValue)
-  WriteMessagePlayerToColor("У вас осталось: " .. givenFreeValue .. " свободных характеристик")
+  WriteMessagePlayerToColor("РЈ РІР°СЃ РѕСЃС‚Р°Р»РѕСЃСЊ: " .. givenFreeValue .. " СЃРІРѕР±РѕРґРЅС‹С… С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє")
   return true
 end
 
@@ -295,7 +295,7 @@ function WriteMessagePlayerToColor(message)
 end
 
 function DropdownChange(player, option)
-  self.setGMNotes("Характеристика " .. option)
+  self.setGMNotes("РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєР° " .. option)
   self.UI.setAttribute("selectionType", "text", option)
   CheckOption(option)
 end
@@ -319,7 +319,7 @@ function CheckPlayer(playerColor)
 	if(CheckPlayerOrGM(playerColor)) then
     return true
   end
-  broadcastToAll("Эта дощечка не вашего цвета!")
+  broadcastToAll("Р­С‚Р° РґРѕС‰РµС‡РєР° РЅРµ РІР°С€РµРіРѕ С†РІРµС‚Р°!")
   return false
 end
 
@@ -388,7 +388,7 @@ function EnableCharacteristic(check)
 	    getObjectFromGUID(inputGUID[i]).call("RecalculationBonusPoints", params)
     else
       if(inputGUID[i] and check ~= "Reset") then
-        broadcastToAll("Плашки с таким GUID нету", "Red")
+        broadcastToAll("РџР»Р°С€РєРё СЃ С‚Р°РєРёРј GUID РЅРµС‚Сѓ", "Red")
       end
     end
   end
@@ -437,7 +437,7 @@ function RecalculationLevelFromStatisticBonusPoint(LBN)
 	levelBonusN = LBN
   UpdateSave()
 end
---Игровой персонаж
+--РРіСЂРѕРІРѕР№ РїРµСЂСЃРѕРЅР°Р¶
 function SetGameCharacter(parametrs)
   gameCharacterGUID = parametrs.gameChar.getGUID()
 	gameCharacter = parametrs.gameChar

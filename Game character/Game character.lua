@@ -1,4 +1,4 @@
-function UpdateSave()
+п»їfunction UpdateSave()
   local dataToSave = {
     ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID
   }
@@ -73,7 +73,7 @@ function SetStatisticObjects()
     if(getObjectFromGUID(statisticGUID)) then
 	    allStatistics[k] = getObjectFromGUID(statisticGUID)
     else
-      broadcastToAll("Одна или несколько статистик были удалены. Произведите переподключение")
+      broadcastToAll("РћРґРЅР° РёР»Рё РЅРµСЃРєРѕР»СЊРєРѕ СЃС‚Р°С‚РёСЃС‚РёРє Р±С‹Р»Рё СѓРґР°Р»РµРЅС‹. РџСЂРѕРёР·РІРµРґРёС‚Рµ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёРµ")
       return
     end
   end
@@ -83,7 +83,7 @@ function SetCharacteristicObjects()
     if(getObjectFromGUID(characteristicGUID)) then
 	    allCharacteristics[k] = getObjectFromGUID(characteristicGUID)
     else
-      broadcastToAll("Одна или несколько характеристик были удалены. Произведите переподключение")
+      broadcastToAll("РћРґРЅР° РёР»Рё РЅРµСЃРєРѕР»СЊРєРѕ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє Р±С‹Р»Рё СѓРґР°Р»РµРЅС‹. РџСЂРѕРёР·РІРµРґРёС‚Рµ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёРµ")
       return
     end
   end
@@ -106,7 +106,7 @@ function AddNewField()
   local indexVisibility = allXml:find(searchString)
 
   local startXml = allXml:sub(1, indexVisibility + searchStringLength)
-  local endXml = allXml:sub(indexVisibility + searchStringLength + 1)--+1 нужен для того чтобы убрать лишний "
+  local endXml = allXml:sub(indexVisibility + searchStringLength + 1)--+1 РЅСѓР¶РµРЅ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СѓР±СЂР°С‚СЊ Р»РёС€РЅРёР№ "
 
   local strVis = "Black|"..DenoteSth()
   allXml = startXml .. strVis .. endXml
@@ -121,8 +121,8 @@ function AddNewField()
 
       local locColor = "#ffffff"
       local typeChar = char.UI.getAttribute("selectionType", "text")
-      if(typeChar ~= "обычная") then
-        locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or locColor
+      if(typeChar ~= "РѕР±С‹С‡РЅР°СЏ") then
+        locColor = (typeChar == "Р±РѕРµРІР°СЏ" and "#ff0000") or (typeChar == "РјРёСЂРЅР°СЏ" and "#00ff00") or locColor
       end
 
       newCharacteristic = newCharacteristic ..
@@ -184,7 +184,7 @@ function CreateNameForCharacteristic(char)
   local name = char.UI.getAttribute("name", "text")
   local charact = char.UI.getValue("textCharacteristic")
   local bonusChar = char.UI.getValue("textCharacteristicBonus")
-  return name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+  return name .. ": РћРҐ=" .. charact .. ",РћР‘РҐ=" .. bonusChar
 end
 
 function EnlargeHeightPanelStat(countStatisticIndex)
@@ -217,7 +217,7 @@ function ChangeCharacteristic(id)
     local name = allCharacteristics[id].UI.getAttribute("name", "text")
     local charact = allCharacteristics[id].UI.getValue("textCharacteristic")
     local bonusChar = allCharacteristics[id].UI.getValue("textCharacteristicBonus")
-    local textChar = name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+    local textChar = name .. ": РћРҐ=" .. charact .. ",РћР‘РҐ=" .. bonusChar
     self.UI.setAttribute("tChar"..id, "text", textChar)
   end
 end
@@ -240,7 +240,7 @@ function Minus(player, val)
 	  allStatistics[val].call("Minus", player)
     Wait.Frames(|| ChangeStatistic(val), 2)
   else
-    broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
+    broadcastToAll("Р’С‹ СѓРґР°Р»РёР»Рё СЌС‚Сѓ СЃС‚Р°С‚РёСЃС‚РёРєСѓ. РџСЂРѕРёР·РІРµРґРёС‚Рµ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёРµ")
   end
 end
 function Plus(player, val)
@@ -249,7 +249,7 @@ function Plus(player, val)
 	  allStatistics[val].call("Plus", player)
     Wait.Frames(|| ChangeStatistic(val), 2)
   else
-    broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
+    broadcastToAll("Р’С‹ СѓРґР°Р»РёР»Рё СЌС‚Сѓ СЃС‚Р°С‚РёСЃС‚РёРєСѓ. РџСЂРѕРёР·РІРµРґРёС‚Рµ РїРµСЂРµРїРѕРґРєР»СЋС‡РµРЅРёРµ")
   end
 end
 
