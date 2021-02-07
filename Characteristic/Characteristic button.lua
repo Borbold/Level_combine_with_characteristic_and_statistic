@@ -1,14 +1,14 @@
 ﻿function UpdateSave()
-    self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (characteristicName or ""))
-    local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
-        ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
-        ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
-        ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
-        ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
-        ["idForGameCharacter"] = idForGameCharacter
-    }
-    savedData = JSON.encode(dataToSave)
-    self.script_state = savedData
+  self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (characteristicName or ""))
+  local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
+    ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
+    ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
+    ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
+    ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
+    ["idForGameCharacter"] = idForGameCharacter
+  }
+  savedData = JSON.encode(dataToSave)
+  self.script_state = savedData
 end
 
 function CreateGlobalVariables()
@@ -44,8 +44,7 @@ function PerformParameterCheck()
   end
 end
 
-function Confer(savedData)
-  local loadedData = JSON.decode(savedData)
+function Confer(loadedData)
   GUIDLevelIndex = loadedData.GUIDLevelIndex or ""
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
@@ -71,7 +70,8 @@ end
 function onLoad(savedData)
   CreateGlobalVariables()
   if(savedData ~= "") then
-    Wait.Frames(|| Confer(savedData), 8)
+    local loadedData = JSON.decode(savedData)
+    Wait.Frames(|| Confer(loadedData), 8)
   end
   FunctionCall()
 end
@@ -89,28 +89,28 @@ function AddNewFieldForConnection()
 
   local newFields = ""
   for fieldIndex = 1, countField do
-    newFields = newFields ..
-    "<Row preferredHeight='90'>\n" ..
-    " <Cell>\n" ..
-    "   <InputField id='GUID_"..fieldIndex.."' class='fieldForConnectGUID' placeholder='GUID' />\n" ..
-    " </Cell>\n" ..
-    " <Cell>\n" ..
-	  "		<InputField id='CPM_"..fieldIndex.."' class='fieldForConnect' placeholder='CPM' />\n" ..
-    " </Cell>\n" ..
-    " <Cell>\n" .. 
-    "   <InputField id='LM_"..fieldIndex.."' class='fieldForConnect' placeholder='LM' />\n" ..
-    " </Cell>\n" ..
-    " <Cell>\n" .. 
-    "   <Button class='buttonForConnect' />\n" ..
-    " </Cell>\n" ..
-    "</Row>\n"
+    newFields = newFields .. [[
+      <Row preferredHeight='90'>
+        <Cell>
+          <InputField id='GUID_]]..fieldIndex..[[' class='fieldForConnectGUID' placeholder='GUID' />
+        </Cell>
+        <Cell>
+          <InputField id='CPM_]]..fieldIndex..[[' class='fieldForConnect' placeholder='CPM' />
+        </Cell>
+        <Cell>
+          <InputField id='LM_]]..fieldIndex..[[' class='fieldForConnect' placeholder='LM' />
+        </Cell>
+        <Cell>
+          <Button class='buttonForConnect' />
+        </Cell>
+      </Row>
+    ]]
   end
 
   startXml = startXml .. newFields .. endXml
   self.UI.setXml(startXml)
   EnlargeHeightPanel(countField)
 end
-
 function EnlargeHeightPanel(count)
   if(CheckGMNot(usual)) then
     --220 название и выбор + текст
@@ -128,7 +128,6 @@ function ChangeName(player, input)
   SetUIValue()
   UpdateSave()
 end
-
 function SetUIValue()
   self.UI.setAttribute("name", "text", characteristicName)
 	self.UI.setValue("textCharacteristic", characteristic)
@@ -155,15 +154,8 @@ function ChangeText(id, text)
   self.UI.setAttribute(id, "textColor", "#ffffff")
 end
 
-function HideUI(id)
-	self.UI.setAttribute(id, "visibility", "Black")
-end
 function DeactivateUI(id)
 	self.UI.setAttribute(id, "active", false)
-end
-
-function ShowUI(id)
-    self.UI.setAttribute(id, "visibility", "")
 end
 function ActivateUI(id)
 	self.UI.setAttribute(id, "active", true)
@@ -173,11 +165,12 @@ function InputEndChange()
 	self.UI.setAttribute("inputCharacteristicBonus", "text", 999)
 end
 
-function ChangeInputCharacteristic(player, input)
-  local id = "textCharacteristicBonus"
-  input = (input ~= "" and input) or 0
-	ChangeCharacteristic(player.color, id, tonumber(input), false)
+function ChangeCharacteristicInGameCharacter()
+	if(gameCharacter ~= nil) then
+    gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
+  end
 end
+
 function Plus(player, id)
   ChangeCharacteristic(player.color, id, 1, true)
 end
@@ -185,6 +178,11 @@ function Minus(player, id)
   ChangeCharacteristic(player.color, id, -1, true)
 end
 
+function ChangeInputCharacteristic(player, input)
+  local id = "textCharacteristicBonus"
+  input = (input ~= "" and input) or 0
+	ChangeCharacteristic(player.color, id, tonumber(input), false)
+end
 function ChangeCharacteristic(playerColor, id, value, button)
   local givenValue = 0
   if(button == true) then
@@ -204,27 +202,6 @@ function ChangeCharacteristic(playerColor, id, value, button)
     Wait.Frames(ChangeCharacteristicInGameCharacter, 3)
   end
 end
-
-function ChangeCharacteristicInGameCharacter()
-	if(gameCharacter ~= nil) then
-    gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
-  end
-end
-
-function ExceptionIdCharacteristic(id)
-	if(id == "textCharacteristic") then
-    return true
-  end
-  return false
-end
-
-function ExceptionIdBonus(id)
-	if(id == "textCharacteristicBonus") then
-    return true
-  end
-  return false
-end
-
 function CheckCharacteristic(givenValue, value)
   local objectLevel = getObjectFromGUID(self.UI.getValue("GUIDLevel"))
   if(ExceptionObject(objectLevel) == false) then
@@ -239,7 +216,6 @@ function CheckCharacteristic(givenValue, value)
   WriteMessagePlayerToColor("У вас осталось: " .. givenFreeValue .. " свободных характеристик")
   return true
 end
-
 function GetFreeValue(objectLevel)
   if(CheckGMNot(usual)) then
     return tonumber(objectLevel.UI.getValue("freeCharacteristicUsual"))
@@ -250,17 +226,15 @@ function GetFreeValue(objectLevel)
   end
   return 0
 end
-
 function SetFreeValue(objectLevel, givenFreeValue)
-    if(CheckGMNot(usual)) then
-        objectLevel.UI.setValue("freeCharacteristicUsual", givenFreeValue)
-    elseif(CheckGMNot(combat)) then
-        objectLevel.UI.setValue("freeCharacteristicCombat", givenFreeValue)
-    elseif(CheckGMNot(peace)) then
-        objectLevel.UI.setValue("freeCharacteristicPeace", givenFreeValue)
-    end
+  if(CheckGMNot(usual)) then
+    objectLevel.UI.setValue("freeCharacteristicUsual", givenFreeValue)
+  elseif(CheckGMNot(combat)) then
+    objectLevel.UI.setValue("freeCharacteristicCombat", givenFreeValue)
+  elseif(CheckGMNot(peace)) then
+    objectLevel.UI.setValue("freeCharacteristicPeace", givenFreeValue)
+  end
 end
-
 function CheckGMNot(type)
 	if(string.match(self.getGMNotes(), type)) then
     return true
@@ -268,30 +242,48 @@ function CheckGMNot(type)
   return false
 end
 
-function ExceptionObject(object)
-	if(object == nil) then
-        return false
-    end
-    return true
+function CheckValue(givenValue, givenFreeValue)
+  ShowUI("buttonPlus") ShowUI("buttonMinus")
+  if(givenFreeValue < 0) then
+    HideUI("buttonPlus")
+    return false
+  end
+  if(givenValue < minCharacteristic) then
+    HideUI("buttonMinus")
+    return false
+  end
+  return true
+end
+function ShowUI(id)
+  self.UI.setAttribute(id, "visibility", "")
+end
+function HideUI(id)
+	self.UI.setAttribute(id, "visibility", "Black")
 end
 
-function CheckValue(givenValue, givenFreeValue)
-    ShowUI("buttonPlus") ShowUI("buttonMinus")
-	  if(givenFreeValue < 0) then
-        HideUI("buttonPlus")
-        return false
-    end
-    if(givenValue < minCharacteristic) then
-        HideUI("buttonMinus")
-        return false
-    end
+function ExceptionIdCharacteristic(id)
+	if(id == "textCharacteristic") then
     return true
+  end
+  return false
+end
+function ExceptionIdBonus(id)
+	if(id == "textCharacteristicBonus") then
+    return true
+  end
+  return false
+end
+function ExceptionObject(object)
+  if(object == nil) then
+    return false
+  end
+  return true
 end
 
 function WriteMessagePlayerToColor(message)
-    if(Player[DenoteSth()].steam_name ~= nil) then
-        printToColor(message, DenoteSth())
-    end
+  if(Player[DenoteSth()].steam_name ~= nil) then
+    printToColor(message, DenoteSth())
+  end
 end
 
 function DropdownChange(player, option)
@@ -299,20 +291,12 @@ function DropdownChange(player, option)
   self.UI.setAttribute("selectionType", "text", option)
   CheckOption(option)
 end
-
 function CheckOption(option)
   if(option == usual) then
     self.UI.setAttribute("panelTable", "height", dataHeight)
   else
     self.UI.setAttribute("panelTable", "height", 160)
   end
-end
-
-function CheckPlayerOrGM(playerColor)
-	if(DenoteSth() == playerColor or playerColor == "Black") then
-    return true
-  end
-  return false
 end
 
 function CheckPlayer(playerColor)
@@ -322,31 +306,11 @@ function CheckPlayer(playerColor)
   broadcastToAll("Эта дощечка не вашего цвета!")
   return false
 end
-
-function DenoteSth()
-	local color = ""
-  for iColor,_ in pairs(colorPlayer) do
-    if(CheckColor(iColor)) then
-	    color = iColor
-      break
-    end
-  end
-  return color
-end
-
-function CheckColor(color)
-  local colorObject = {
-    ["R"] = Round(self.getColorTint()[1], 2),
-    ["G"] = Round(self.getColorTint()[2], 2),
-    ["B"] = Round(self.getColorTint()[3], 2)
-  }
-	if(colorObject.R == colorPlayer[color].r and
-    colorObject.G == colorPlayer[color].g and
-    colorObject.B == colorPlayer[color].b) then
+function CheckPlayerOrGM(playerColor)
+	if(DenoteSth() == playerColor or playerColor == "Black") then
     return true
-  else
-    return false
   end
+  return false
 end
 
 function ResetCharacteristic()
@@ -360,32 +324,14 @@ function ResetCharacteristic()
   EnableCharacteristic("Reset")
   Wait.frames(AddNewFieldForConnection, 13)
 end
-
-function NewLevel()
-  minCharacteristic = characteristic
-  levelNumber = levelNumber + 1
-  UpdateSave()
-end
-
-function EditInput(player, input, id)
-  local index = id:find("_")
-  local number = tonumber(id:sub(index + 1))
-	if(id:match("GUID")) then
-    inputGUID[number] = input
-  elseif(id:match("CPM")) then
-    inputCPM[number] = tonumber(input) or 0
-  elseif(id:match("LM")) then
-    inputLM[number] = tonumber(input) or 0
-  end
-end
-
 function EnableCharacteristic(check)
   for i,_ in ipairs(inputGUID) do
-    if(getObjectFromGUID(inputGUID[i]) ~= nil) then
+    local inputObj = getObjectFromGUID(inputGUID[i])
+    if(inputObj ~= nil) then
       params = { CPM = inputCPM[i] or 0, LM = inputLM[i] or 0,
                  VC = (characteristic or 0) + (characteristicBonus or 0), LN = levelNumber or 0,
                  LBN = levelBonusN or 0, GUID = self.getGUID() }
-	    getObjectFromGUID(inputGUID[i]).call("RecalculationBonusPoints", params)
+	    inputObj.call("RecalculationBonusPoints", params)
     else
       if(inputGUID[i] and check ~= "Reset") then
         broadcastToAll("Плашки с таким GUID нету", "Red")
@@ -401,7 +347,6 @@ function EnableCharacteristic(check)
   end
   UpdateSave()
 end
-
 function RecalculationBonusPoints(params)
   local isConnect = false
   for i = 1, #ConnectedCharacteristic do
@@ -433,6 +378,24 @@ function RecalculationBonusPoints(params)
   UpdateSave()
 end
 
+function NewLevel()
+  minCharacteristic = characteristic
+  levelNumber = levelNumber + 1
+  UpdateSave()
+end
+
+function EditInput(player, input, id)
+  local index = id:find("_")
+  local number = tonumber(id:sub(index + 1))
+	if(id:match("GUID")) then
+    inputGUID[number] = input
+  elseif(id:match("CPM")) then
+    inputCPM[number] = tonumber(input) or 0
+  elseif(id:match("LM")) then
+    inputLM[number] = tonumber(input) or 0
+  end
+end
+
 function RecalculationLevelFromStatisticBonusPoint(LBN)
 	levelBonusN = LBN
   UpdateSave()
@@ -445,17 +408,41 @@ function SetGameCharacter(parametrs)
   UpdateSave()
 end
 
-function RebuildAssets()
-    local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
-    local assets = {
-        {name = 'uiGear', url = root .. 'gear.png'},
-        {name = 'uiClose', url = root .. 'close.png'},
-        {name = 'uiPlus', url = root .. 'plus.png'},
-        {name = 'uiMinus', url = root .. 'minus.png'}
-    }
-    self.UI.setCustomAssets(assets)
+function DenoteSth()
+	local color = ""
+  for iColor,_ in pairs(colorPlayer) do
+    if(CheckColor(iColor)) then
+	    color = iColor
+      break
+    end
+  end
+  return color
+end
+function CheckColor(color)
+  local colorObject = {
+    ["R"] = Round(self.getColorTint()[1], 2),
+    ["G"] = Round(self.getColorTint()[2], 2),
+    ["B"] = Round(self.getColorTint()[3], 2)
+  }
+	if(colorObject.R == colorPlayer[color].r and
+    colorObject.G == colorPlayer[color].g and
+    colorObject.B == colorPlayer[color].b) then
+    return true
+  else
+    return false
+  end
+end
+function Round(num, idp)
+  return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
 
-function Round(num, idp)
-    return tonumber(string.format("%." .. (idp or 0) .. "f", num))
+function RebuildAssets()
+  local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
+  local assets = {
+    {name = 'uiGear', url = root .. 'gear.png'},
+    {name = 'uiClose', url = root .. 'close.png'},
+    {name = 'uiPlus', url = root .. 'plus.png'},
+    {name = 'uiMinus', url = root .. 'minus.png'}
+  }
+  self.UI.setCustomAssets(assets)
 end

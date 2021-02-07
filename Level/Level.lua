@@ -26,24 +26,24 @@ function UpdateSave(levelUP)
 end
 
 function ChecLevelPass(levelUP)
-    local locIndex = allIndex["LPU"]
-    if(CheckLevelPass(localLevelPass[locIndex])) then
-      self.UI.setValue("freeCharacteristicUsual", (startCharacteristic[allIndex["SU"]] + GetSumAllCharacteristicPerLevel(usual)) - GetSumAllCharacteristic(usual))
-      EnableFeatureChange(usual, levelUP)
-      localLevelPass[locIndex] = levelPass[locIndex]
-    end
-    locIndex = allIndex["LPC"]
-    if(CheckLevelPass(localLevelPass[locIndex])) then
-      self.UI.setValue("freeCharacteristicCombat", (startCharacteristic[allIndex["SC"]] + GetSumAllCharacteristicPerLevel(combat)) - GetSumAllCharacteristic(combat))
-      EnableFeatureChange(combat, levelUP)
-      localLevelPass[locIndex] = levelPass[locIndex]
-    end
-    locIndex = allIndex["LPP"]
-    if(CheckLevelPass(localLevelPass[locIndex])) then
-      self.UI.setValue("freeCharacteristicPeace", (startCharacteristic[allIndex["SP"]] + GetSumAllCharacteristicPerLevel(peace)) - GetSumAllCharacteristic(peace))
-      EnableFeatureChange(peace, levelUP)
-      localLevelPass[locIndex] = levelPass[locIndex]
-    end
+  local locIndex = allIndex["LPU"]
+  if(CheckLevelPass(localLevelPass[locIndex])) then
+    self.UI.setValue("freeCharacteristicUsual", (startCharacteristic[allIndex["SU"]] + GetSumAllCharacteristicPerLevel(usual)) - GetSumAllCharacteristic(usual))
+    EnableFeatureChange(usual, levelUP)
+    localLevelPass[locIndex] = levelPass[locIndex]
+  end
+  locIndex = allIndex["LPC"]
+  if(CheckLevelPass(localLevelPass[locIndex])) then
+    self.UI.setValue("freeCharacteristicCombat", (startCharacteristic[allIndex["SC"]] + GetSumAllCharacteristicPerLevel(combat)) - GetSumAllCharacteristic(combat))
+    EnableFeatureChange(combat, levelUP)
+    localLevelPass[locIndex] = levelPass[locIndex]
+  end
+  locIndex = allIndex["LPP"]
+  if(CheckLevelPass(localLevelPass[locIndex])) then
+    self.UI.setValue("freeCharacteristicPeace", (startCharacteristic[allIndex["SP"]] + GetSumAllCharacteristicPerLevel(peace)) - GetSumAllCharacteristic(peace))
+    EnableFeatureChange(peace, levelUP)
+    localLevelPass[locIndex] = levelPass[locIndex]
+  end
 end
 
 function CheckLevelPass(levelPass)
@@ -54,24 +54,24 @@ function CheckLevelPass(levelPass)
 end
 
 function CreateGlobalVariables()
-    colorPlayer = {
-        ["White"] = {r = 1, g = 1, b = 1},
-        ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
-        ["Blue"] = {r = 0.12, g = 0.53, b = 1},
-        ["Green"] = {r = 0.19, g = 0.7, b = 0.17},
-        ["Yellow"] = {r = 0.9, g = 0.9, b = 0.17},
-        ["Orange"] = {r = 0.96, g = 0.39, b = 0.11},
-        ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
-        ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
-        ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
-        ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
-    }
-    RetraceValues()
-    lockDistributionCharacteristic = false
-    allFeatureGUID = {} allFeatureObject = {}
-    listCharacteristicPerLevel = CreateNewVariable("PL", {})
-    nextLevelExperience = {} rangeValues = {50, 100, 150, 200}
-    usual = "обычная" combat = "боевая" peace = "мирная"
+  colorPlayer = {
+    ["White"] = {r = 1, g = 1, b = 1},
+    ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
+    ["Blue"] = {r = 0.12, g = 0.53, b = 1},
+    ["Green"] = {r = 0.19, g = 0.7, b = 0.17},
+    ["Yellow"] = {r = 0.9, g = 0.9, b = 0.17},
+    ["Orange"] = {r = 0.96, g = 0.39, b = 0.11},
+    ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
+    ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
+    ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
+    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
+  }
+  RetraceValues()
+  lockDistributionCharacteristic = false
+  allFeatureGUID = {} allFeatureObject = {}
+  listCharacteristicPerLevel = CreateNewVariable("PL", {})
+  nextLevelExperience = {} rangeValues = {50, 100, 150, 200}
+  usual = "обычная" combat = "боевая" peace = "мирная"
 end
 
 function Confer(savedData)
@@ -497,6 +497,20 @@ function Connect()
     SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
   end
 end
+function SetObjectFeature()
+  for id,guid in pairs(allFeatureGUID) do
+    local obj = getObjectFromGUID(guid)
+    if(obj ~= nil) then
+      obj.UI.setValue("GUIDLevel", self.getGUID())
+      allFeatureObject[id] = obj
+    end
+  end
+end
+function SetLBNValue()
+  for _,feature in pairs(allFeatureObject) do
+    feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+  end
+end
 
 function SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
   local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID}
@@ -520,26 +534,10 @@ function SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
     gameChar = gameCharacter,
     id = 1
   }
-  for index,char in pairs(allFeatureGUID) do
+  for index,charac in pairs(allFeatureGUID) do
     parametrs.id = index
     --Задать Игровому персонажу
-	  getObjectFromGUID(char).call("SetGameCharacter", parametrs)
-  end
-end
-
-function SetObjectFeature()
-  for id,guid in pairs(allFeatureGUID) do
-    if(getObjectFromGUID(guid) ~= nil) then
-      local object = getObjectFromGUID(guid)
-      object.UI.setValue("GUIDLevel", self.getGUID())
-      allFeatureObject[id] = object
-    end
-  end
-end
-
-function SetLBNValue()
-  for _,feature in pairs(allFeatureObject) do
-    feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+	  getObjectFromGUID(charac).call("SetGameCharacter", parametrs)
   end
 end
 
@@ -549,30 +547,6 @@ function CheckPlayer(playerColor)
   end
   broadcastToAll("Эта дощечка не вашего цвета!")
   return false
-end
-
-function DenoteSth()
-	local color = ""
-  for iColor,_ in pairs(colorPlayer) do
-    if(CheckColor(iColor)) then
-	    color = iColor
-      break
-    end
-  end
-  return color
-end
-
-function CheckColor(color)
-  local colorObject = {
-    ["R"] = Round(self.getColorTint()[1], 2),
-    ["G"] = Round(self.getColorTint()[2], 2),
-    ["B"] = Round(self.getColorTint()[3], 2)
-  }
-	if(colorObject.R == colorPlayer[color].r and colorObject.G == colorPlayer[color].g and colorObject.B == colorPlayer[color].b) then
-    return true
-  else
-    return false
-  end
 end
 
 function ChangeStatisticBonus(player, input)
@@ -593,14 +567,38 @@ function ChangeMaxLevel(player, input)
   UpdateSave()
 end
 
+function DenoteSth()
+	local color = ""
+  for iColor,_ in pairs(colorPlayer) do
+    if(CheckColor(iColor)) then
+	    color = iColor
+      break
+    end
+  end
+  return color
+end
+function CheckColor(color)
+  local colorObject = {
+    ["R"] = Round(self.getColorTint()[1], 2),
+    ["G"] = Round(self.getColorTint()[2], 2),
+    ["B"] = Round(self.getColorTint()[3], 2)
+  }
+	if(colorObject.R == colorPlayer[color].r and
+     colorObject.G == colorPlayer[color].g and
+     colorObject.B == colorPlayer[color].b) then
+    return true
+  else
+    return false
+  end
+end
+function Round(num, idp)
+  return tonumber(string.format("%." .. (idp or 0) .. "f", num))
+end
+
 function RebuildAssets()
   local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
   local assets = {
     {name = 'uiGear', url = root .. 'gear.png'}
   }
   self.UI.setCustomAssets(assets)
-end
-
-function Round(num, idp)
-    return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end

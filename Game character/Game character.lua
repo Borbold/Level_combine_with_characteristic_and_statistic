@@ -70,8 +70,9 @@ function SetObjects(what)
 end
 function SetStatisticObjects()
 	for k,statisticGUID in ipairs(allStatisticsGUID) do
-    if(getObjectFromGUID(statisticGUID)) then
-	    allStatistics[k] = getObjectFromGUID(statisticGUID)
+    local statObj = getObjectFromGUID(statisticGUID)
+    if(statObj ~= nil) then
+	    allStatistics[k] = statObj
     else
       broadcastToAll("Одна или несколько статистик были удалены. Произведите переподключение")
       return
@@ -80,8 +81,9 @@ function SetStatisticObjects()
 end
 function SetCharacteristicObjects()
 	for k,characteristicGUID in ipairs(allCharacteristicsGUID) do
-    if(getObjectFromGUID(characteristicGUID)) then
-	    allCharacteristics[k] = getObjectFromGUID(characteristicGUID)
+    local characObj = getObjectFromGUID(statisticGUID)
+    if(characObj ~= nil) then
+	    allCharacteristics[k] = characObj
     else
       broadcastToAll("Одна или несколько характеристик были удалены. Произведите переподключение")
       return
@@ -96,7 +98,6 @@ function CreateFields()
     Wait.Frames(|| ChangeStatistic(i), 10)
   end
 end
-
 function AddNewField()
   local allXml = originalXml
 
@@ -147,21 +148,22 @@ function AddNewField()
   local newStatistic = ""
   if(#allStatistics > 0) then
     for statisticIndex = 1, #allStatisticsGUID do
-      newStatistic = newStatistic ..
-      "<Row preferredHeight='50'>\n" ..
-      " <Cell>\n" ..
-      "   <Button image='uiMinus' onClick='Minus("..statisticIndex..")'/>\n" ..
-      " </Cell>\n" ..
-      " <Cell>\n" ..
-	    "		<Panel>\n" ..
-	    "			<ProgressBar id='bar"..statisticIndex.."' class='classBar'/>\n" ..
-	    "			<Text id='textBar"..statisticIndex.."' class='textForBar'/>\n" ..
-	    "		</Panel>\n" ..
-      " </Cell>\n" ..
-      " <Cell>\n" ..
-      "   <Button image='uiPlus' onClick='Plus("..statisticIndex..")'/>\n" ..
-      " </Cell>\n" ..
-      "</Row>\n"
+      newStatistic = newStatistic .. [[
+        <Row preferredHeight='50'>
+          <Cell>
+            <Button image='uiMinus' onClick='Minus(]]..statisticIndex..[[)'/>
+          </Cell>
+          <Cell>
+            <Panel>
+              <ProgressBar id='bar]]..statisticIndex..[[' class='classBar'/>
+              <Text id='textBar]]..statisticIndex..[[' class='textForBar'/>
+            </Panel>
+          </Cell>
+          <Cell>
+            <Button image='uiPlus' onClick='Plus(]]..statisticIndex..[[)'/>
+          </Cell>
+        </Row>
+      ]]
     end
   end
 
@@ -222,18 +224,6 @@ function ChangeCharacteristic(id)
   end
 end
 
-function ChangeStatistic(id)
-  if(allStatistics[id]) then
-    self.UI.setAttribute("bar"..id, "color", allStatistics[id].UI.getAttribute("bar", "color"))
-    self.UI.setAttribute("bar"..id, "fillImageColor", allStatistics[id].UI.getAttribute("bar", "fillImageColor"))
-    self.UI.setAttribute("bar"..id, "percentage", allStatistics[id].UI.getAttribute("bar", "percentage"))
-
-    local name = allStatistics[id].UI.getAttribute("name", "text")
-    local textBar = allStatistics[id].UI.getValue("textBar")
-    self.UI.setAttribute("textBar"..id, "text", name .. ":" .. textBar)
-  end
-end
-
 function Minus(player, val)
   val = tonumber(val)
   if(allStatistics[val]) then
@@ -252,6 +242,22 @@ function Plus(player, val)
     broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
 end
+function ChangeStatistic(id)
+  if(allStatistics[id]) then
+    self.UI.setAttribute("bar"..id, "color", allStatistics[id].UI.getAttribute("bar", "color"))
+    self.UI.setAttribute("bar"..id, "fillImageColor", allStatistics[id].UI.getAttribute("bar", "fillImageColor"))
+    self.UI.setAttribute("bar"..id, "percentage", allStatistics[id].UI.getAttribute("bar", "percentage"))
+
+    local name = allStatistics[id].UI.getAttribute("name", "text")
+    local textBar = allStatistics[id].UI.getValue("textBar")
+    self.UI.setAttribute("textBar"..id, "text", name .. ":" .. textBar)
+  end
+end
+
+function ActiveDeactivePanel(player, idPanel)
+  local locActive = self.UI.getAttribute(idPanel, "active") == "false"
+	self.UI.setAttribute(idPanel, "active", tostring(locActive))
+end
 
 function DenoteSth()
 	local color = ""
@@ -263,23 +269,22 @@ function DenoteSth()
   end
   return color
 end
-
 function CheckColor(color)
   local colorObject = {
     ["R"] = Round(self.getColorTint()[1], 2),
     ["G"] = Round(self.getColorTint()[2], 2),
     ["B"] = Round(self.getColorTint()[3], 2)
   }
-	if(colorObject.R == colorPlayer[color].r and colorObject.G == colorPlayer[color].g and colorObject.B == colorPlayer[color].b) then
+	if(colorObject.R == colorPlayer[color].r and
+     colorObject.G == colorPlayer[color].g and
+     colorObject.B == colorPlayer[color].b) then
     return true
   else
     return false
   end
 end
-
-function ActiveDeactivePanel(player, idPanel)
-  local locActive = self.UI.getAttribute(idPanel, "active") == "false"
-	self.UI.setAttribute(idPanel, "active", tostring(locActive))
+function Round(num, idp)
+  return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
 
 function RebuildAssets()
@@ -292,8 +297,4 @@ function RebuildAssets()
     {name = 'uiBars', url = root .. 'bars.png'}
   }
   self.UI.setCustomAssets(assets)
-end
-
-function Round(num, idp)
-  return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
