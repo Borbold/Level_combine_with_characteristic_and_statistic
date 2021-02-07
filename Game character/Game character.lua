@@ -81,7 +81,7 @@ function SetStatisticObjects()
 end
 function SetCharacteristicObjects()
 	for k,characteristicGUID in ipairs(allCharacteristicsGUID) do
-    local characObj = getObjectFromGUID(statisticGUID)
+    local characObj = getObjectFromGUID(characteristicGUID)
     if(characObj ~= nil) then
 	    allCharacteristics[k] = characObj
     else
