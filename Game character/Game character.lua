@@ -219,7 +219,7 @@ function EnlargeWidthPanelChar(lengthText)
 end
 
 function ChangeCharacteristic(id)
-  if(allStatistics[id]) then
+  if(allCharacteristics[id]) then
     local name = allCharacteristics[id].UI.getAttribute("name", "text")
     local charact = allCharacteristics[id].UI.getValue("textCharacteristic")
     local bonusChar = allCharacteristics[id].UI.getValue("textCharacteristicBonus")
