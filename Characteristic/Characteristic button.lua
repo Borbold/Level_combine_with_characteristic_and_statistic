@@ -25,7 +25,7 @@ function CreateGlobalVariables()
     ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
     ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
   }
-  GUIDLevelIndex = "" characteristicName = ""
+  GUIDLevelIndex, characteristicName = "", ""
   minCharacteristic, characteristic = 0, 0
   characteristicBonus, pureCharacteristicBonus = 0, 0
   levelBonusN, levelNumber = 0, 1
@@ -333,9 +333,8 @@ function EnableCharacteristic(check, value, button)
   for i,_ in ipairs(inputGUID) do
     local inputObj = getObjectFromGUID(inputGUID[i])
     if(inputObj ~= nil) then
-      local locVC = (button and value) or ((characteristic or 0) + (characteristicBonus or 0))
-      params = { CPM = inputCPM[i] or 0, LM = inputLM[i] or 0,
-                 VC = locVC, LN = levelNumber or 0,
+      params = { CPM = RecalculationEquals(i) or 0, LM = inputLM[i] or 0,
+                 LN = levelNumber or 0,
                  LBN = levelBonusN or 0, GUID = self.getGUID() }
 	    inputObj.call("RecalculationBonusPoints", params)
     else
@@ -373,12 +372,12 @@ function RecalculationBonusPoints(params)
       end
     end
   end
-
+  
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
-      local locVC = p.CPM*p.VC
+      local locVC = p.CPM
       local locLN = p.LM*p.LN
-      characteristicBonus = characteristicBonus + locVC + locLN
+      characteristicBonus = pureCharacteristicBonus + locVC + locLN
     end
   end
 	self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
@@ -397,9 +396,72 @@ function EditInput(player, input, id)
 	if(id:match("GUID")) then
     inputGUID[number] = input
   elseif(id:match("CPM")) then
-    inputCPM[number] = tonumber(input) or 0
+    local equals = RecalculationEquals(number, input)
   elseif(id:match("LM")) then
     inputLM[number] = tonumber(input) or 0
+  end
+end
+function RecalculationEquals(id, input)
+  if(input) then
+    inputCPM[id] = input
+    local equals = (characteristic or 0) + (characteristicBonus or 0)
+    local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
+    for S in input:gmatch("%S+") do
+      for sign, found in pairs(signFound) do
+        if(sign == "+" and found) then
+          equals = equals + S
+          signFound[sign] = false
+          break
+        elseif(sign == "-" and found) then
+          equals = equals - S
+          signFound[sign] = false
+          break
+        elseif(sign == "*" and found) then
+          equals = equals * S
+          signFound[sign] = false
+          break
+        elseif(sign == "/" and found) then
+          equals = equals / S
+          signFound[sign] = false
+          break
+        end
+      end
+
+      if(S == "+" or S == "-" or S == "*" or S == "/") then
+        signFound[S] = true
+      end
+    end
+    return equals
+  else
+    input = inputCPM[id]
+    local equals = (characteristic or 0) + (characteristicBonus or 0)
+    local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
+    for S in input:gmatch("%S+") do
+      for sign, found in pairs(signFound) do
+        if(sign == "+" and found) then
+          equals = equals + S
+          signFound[sign] = false
+          break
+        elseif(sign == "-" and found) then
+          equals = equals - S
+          signFound[sign] = false
+          break
+        elseif(sign == "*" and found) then
+          equals = equals * S
+          signFound[sign] = false
+          break
+        elseif(sign == "/" and found) then
+          equals = equals / S
+          signFound[sign] = false
+          break
+        end
+      end
+
+      if(S == "+" or S == "-" or S == "*" or S == "/") then
+        signFound[S] = true
+      end
+    end
+    return equals
   end
 end
 

@@ -6,7 +6,7 @@
 		color='#000000' textColor='#ffffff00' interactable='false'/>
 	
 	<InputField class='fieldForConnectGUID' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
-	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='Decimal'/>
+	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='None'/>
 	<Button class='buttonForConnect' onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60'
 		text='Подключить' color='green' />
 </Defaults>
@@ -109,7 +109,7 @@
 					</Cell>
 					<Cell>
 						<Text class='bestFit'>
-						Установите множитель за каждое ОХ
+						Напишите формулу для перерасчета значений
 						</Text>
 					</Cell>
 					<Cell>
