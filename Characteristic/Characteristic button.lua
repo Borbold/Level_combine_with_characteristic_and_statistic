@@ -12,7 +12,7 @@
 end
 
 function CreateGlobalVariables()
-  usual, combat, peace = "обычная", "боевая", "мирная"
+  usual, combat, peace, empty = "обычная", "боевая", "мирная", "пустая"
   colorPlayer = {
     ["White"] = {r = 1, g = 1, b = 1},
     ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
@@ -37,8 +37,9 @@ function PerformParameterCheck()
     self.setGMNotes("Характеристика " .. usual)
   elseif(not CheckGMNot(usual)) then
     local locType, locTypeText = 0, self.getGMNotes():sub(16)
-    if(locTypeText == combat) then locType = 1
-    else locType = 2 end
+    if(CheckGMNot(combat)) then locType = 1
+    elseif(CheckGMNot(peace)) then locType = 2
+    else locType = 3 end
     CheckOption(locType)
     self.UI.setAttribute("selectionType", "value", locType)
     self.UI.setAttribute("selectionType", "text", locTypeText)
@@ -191,11 +192,7 @@ function Minus(player, id)
 end
 function ChangeCharacteristic(playerColor, id, value, button)
   local givenValue = 0
-  if(button == true) then
-    givenValue = tonumber(self.UI.getValue(id)) + value
-  elseif(button == false) then
-    givenValue = tonumber(value)
-  end
+  givenValue = tonumber(self.UI.getValue(id)) + value
   if(CheckPlayer(playerColor)) then
 	  if(ExceptionIdCharacteristic(id) and CheckCharacteristic(givenValue, value)) then
       self.UI.setValue(id, givenValue)

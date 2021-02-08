@@ -96,6 +96,7 @@
 						<Option>обычная</Option>
 						<Option>боевая</Option>
 						<Option>мирная</Option>
+						<Option>пустая</Option>
 					</Dropdown>
 				</Cell>
 			</Row>

@@ -184,7 +184,6 @@ function SetValue(id, input)
   ChangeInputValue(id, input)
   UpdateSave()
 end
-
 function CheckIndex(index, type)
 	if(index:find(type) ~= nil) then
     return true

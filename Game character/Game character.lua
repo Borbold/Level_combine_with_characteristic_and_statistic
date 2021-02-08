@@ -116,22 +116,24 @@ function AddNewField()
   if(#allCharacteristics > 0) then
     for index,char in pairs(allCharacteristics) do
       local textChar = CreateNameForCharacteristic(char)
-      if(#textChar > longestLine) then
-        longestLine = #textChar
-      end
+      if(textChar) then
+        if(#textChar > longestLine) then
+          longestLine = #textChar
+        end
 
-      local locColor = "#ffffff"
-      local typeChar = char.UI.getAttribute("selectionType", "text")
-      if(typeChar ~= "обычная") then
-        locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or locColor
-      end
+        local locColor = "#ffffff"
+        local typeChar = char.UI.getAttribute("selectionType", "text")
+        if(typeChar ~= "обычная") then
+          locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or locColor
+        end
 
-      newCharacteristic = newCharacteristic ..
-      "<Row preferredHeight='50'>\n" ..
-      " <Cell>\n" ..
-      "   <Text id='tChar"..index.."' class='forCharacteristic' color='"..locColor.."' text='"..textChar.."'/>\n" ..
-      " </Cell>\n" ..
-      "</Row>\n"
+        newCharacteristic = newCharacteristic ..
+        "<Row preferredHeight='50'>\n" ..
+        " <Cell>\n" ..
+        "   <Text id='tChar"..index.."' class='forCharacteristic' color='"..locColor.."' text='"..textChar.."'/>\n" ..
+        " </Cell>\n" ..
+        "</Row>\n"
+      end
     end
   end
 
@@ -182,11 +184,13 @@ function AddNewField()
   EnlargeWidthPanelChar(longestLine)
 end
 
-function CreateNameForCharacteristic(char)
-  local name = char.UI.getAttribute("name", "text")
-  local charact = char.UI.getValue("textCharacteristic")
-  local bonusChar = char.UI.getValue("textCharacteristicBonus")
-  return name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+function CreateNameForCharacteristic(charac)
+  local name = charac.UI.getAttribute("name", "text")
+  local charact = charac.UI.getValue("textCharacteristic")
+  local bonusChar = charac.UI.getValue("textCharacteristicBonus")
+  if(name and charact and bonusChar) then
+    return name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+  end
 end
 
 function EnlargeHeightPanelStat(countStatisticIndex)
