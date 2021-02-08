@@ -1,6 +1,7 @@
 ﻿function UpdateSave()
   self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (statisticName or ""))
   local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
+    ["pureMaxCurrentStatisticValue"] = pureMaxCurrentStatisticValue,
     ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic
   }
@@ -23,6 +24,7 @@ function CreateGlobalVariable()
   }
   progressBarColor, statisticName = "", ""
   currentStatisticValue, maximumStatisticValue = 0, 0
+  pureMaxCurrentStatisticValue = 0
   lockChange = false
   ConnectedCharacteristic = {}
   listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
@@ -31,6 +33,7 @@ end
 function Confer(loadedData)
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
   currentStatisticValue = loadedData.currentStatisticValue or 0
+  pureMaxCurrentStatisticValue = loadedData.pureMaxCurrentStatisticValue or 0
   maximumStatisticValue = loadedData.maximumStatisticValue or 0
   gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
   idForGameCharacter = loadedData.idForGameCharacter or 0
@@ -112,6 +115,7 @@ function InputChange(player, input, idInput)
   if(idInput == "inputValue") then
 	  ChangeStatistics(player.color, input)
   elseif(idInput == "inputMaxValue") then
+    pureMaxCurrentStatisticValue = tonumber(input)
     ChangeMaximumStatisticValue(input)
   elseif(idInput == "inputName") then
     ChangeName(input)
@@ -170,6 +174,12 @@ function Round(num, idp)
   return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
 
+function ResetStatistic()
+  currentStatisticValue, maximumStatisticValue = 0, 0
+  pureMaxCurrentStatisticValue = 0
+  ConnectedCharacteristic = {}
+end
+
 function RecalculationBonusPoints(params)
   local isConnect = false
   for i = 1, #ConnectedCharacteristic do
@@ -194,15 +204,19 @@ function RecalculationBonusPoints(params)
   local locMaxChar = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
-	    locMaxChar = locMaxChar + p.LBN + (p.CPM*p.VC) + (p.LM*p.LN)
+      local locVC = p.CPM
+      local locLN = p.LM*p.LN
+	    locMaxChar = locMaxChar + pureMaxCurrentStatisticValue + p.LBN + locVC + locLN
     end
   end
   ChangeMaximumStatisticValue(math.ceil(locMaxChar))
 end
 function ChangeMaximumStatisticValue(value)
-  value = (value ~= "" and tonumber(value) > 0 and value) or maximumStatisticValue
-  maximumStatisticValue = tonumber(value)
-  currentStatisticValue = (maximumStatisticValue < tonumber(currentStatisticValue) and maximumStatisticValue) or currentStatisticValue
+  value = (tonumber(value) > 0 and value) or 1
+  value = (value ~= "" and value) or maximumStatisticValue
+  value = tonumber(value) currentStatisticValue = tonumber(currentStatisticValue)
+  currentStatisticValue = (value < currentStatisticValue and value) or currentStatisticValue
+  maximumStatisticValue = value
   UpdateValue()
 end
 

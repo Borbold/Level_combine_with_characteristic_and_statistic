@@ -124,7 +124,7 @@ function AddNewField()
         local locColor = "#ffffff"
         local typeChar = char.UI.getAttribute("selectionType", "text")
         if(typeChar ~= "обычная") then
-          locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or locColor
+          locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or (typeChar == "пустая" and "#808080") or locColor
         end
 
         newCharacteristic = newCharacteristic ..

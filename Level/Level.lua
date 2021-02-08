@@ -14,7 +14,7 @@ function UpdateSave(levelUP)
   ChecLevelPass(levelUP)
   self.setName(Player[DenoteSth()].steam_name or DenoteSth())
   local dataToSave = { ["savedExp"] = exp, ["savedLastLevel"] = level, ["nextLevelExperience"] = nextLevelExperience,
-    ["allFeatureGUID"] = allFeatureGUID,
+    ["allFeatureGUID"] = allFeatureGUID, ["allStatisticGUID"] = allStatisticGUID,
     ["startCharacteristic"] = startCharacteristic,
     ["characteristicPerLevel"] = characteristicPerLevel,
     ["levelPass"] = levelPass, ["localLevelPass"] = localLevelPass,
@@ -68,7 +68,7 @@ function CreateGlobalVariables()
   }
   RetraceValues()
   lockDistributionCharacteristic = false
-  allFeatureGUID = {} allFeatureObject = {}
+  allFeatureGUID, allStatisticGUID, allFeatureObject = {}, {}, {}
   listCharacteristicPerLevel = CreateNewVariable("PL", {})
   nextLevelExperience = {} rangeValues = {50, 100, 150, 200}
   usual = "обычная" combat = "боевая" peace = "мирная"
@@ -83,6 +83,7 @@ function Confer(savedData)
   localLevelPass = loadedData.localLevelPass or CreateNewVariable("LP", 1)
   listCharacteristicPerLevel = loadedData.listCharacteristicPerLevel or CreateNewVariable("PL", {})
   allFeatureGUID = loadedData.allFeatureGUID or {}
+  allStatisticGUID = loadedData.allStatisticGUID or {}
   LBN = loadedData.LBN or 0
   SetObjectFeature()
   exp = loadedData.savedExp or 0
@@ -374,11 +375,12 @@ function ResetLevel(player)
     listCharacteristicPerLevel[allIndex["PLP"]] = {}
     EnableFeatureChange("reset")
     ResetCharacteristic()
+    ResetStatistic()
     UpdateExperience() UpdateSave()
     for _,value in pairs(allIndex) do
-        if(CheckIndex(value, "start")) then
-            self.UI.setAttribute(value, "interactable", true)
-        end
+      if(CheckIndex(value, "start")) then
+        self.UI.setAttribute(value, "interactable", true)
+      end
     end
     Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 5)
     Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 5)
@@ -396,16 +398,16 @@ function RetraceValues()
 end
 
 function EnableFeatureChange(type, levelUP)
-    levelUP = (exp == 0 and level == 1) or levelUP
-    local list = GetFeatureListCheckType(type)
-    if((list == nil or levelUP == false) and type ~= "reset") then return end
+  levelUP = (exp == 0 and level == 1) or levelUP
+  local list = GetFeatureListCheckType(type)
+  if((list == nil or levelUP == false) and type ~= "reset") then return end
 
-    self.UI.setAttribute("closeDistributionCharacteristic", "interactable", true)
-    self.UI.setAttribute("closeDistributionCharacteristic", "color", "Green")
-	for _,feature in pairs(list) do
-	    feature.UI.setAttribute("buttonMinus", "visibility", "")
-        feature.UI.setAttribute("buttonPlus", "visibility", "")
-    end
+  self.UI.setAttribute("closeDistributionCharacteristic", "interactable", true)
+  self.UI.setAttribute("closeDistributionCharacteristic", "color", "Green")
+  for _,feature in pairs(list) do
+	  feature.UI.setAttribute("buttonMinus", "visibility", "")
+    feature.UI.setAttribute("buttonPlus", "visibility", "")
+  end
 end
 
 function GetFeatureListCheckType(type)
@@ -423,9 +425,23 @@ function GetFeatureListCheckType(type)
 end
 
 function ResetCharacteristic()
-	for k,feature in pairs(allFeatureObject) do
-    if(feature == nil) then broadcastToAll("Есть удаленная характеристика. Переподключите их и сбросте уровень") end
-	  feature.call("ResetCharacteristic")
+	for _,feature in pairs(allFeatureObject) do
+    if(feature == nil) then
+      broadcastToAll("Есть удаленная характеристика. Переподключите их и сбросте уровень")
+    else
+	    feature.call("ResetCharacteristic")
+    end
+  end
+end
+
+function ResetStatistic()
+	for _,stat in pairs(allStatisticGUID) do
+    local statObj = getObjectFromGUID(stat)
+    if(statObj == nil) then
+      broadcastToAll("Есть удаленная статистика. Переподключите их и сбросте уровень")
+    else
+	    statObj.call("ResetStatistic")
+    end
   end
 end
 
@@ -470,8 +486,8 @@ function WriteMessagePlayerToColor(message)
 end
 
 function Connect()
-  allFeatureGUID = {}
-  local gameCharacter local allStatisticGUID = {}
+  allFeatureGUID, allStatisticGUID = {}, {}
+  local gameCharacter
   for _,object in pairs(getAllObjects()) do
     if(object.getColorTint() == self.getColorTint()) then
       if(string.match(object.getGMNotes(), "Характеристика")) then
