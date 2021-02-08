@@ -5,7 +5,7 @@
     ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
-    ["idForGameCharacter"] = idForGameCharacter
+    ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -26,7 +26,8 @@ function CreateGlobalVariables()
     ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
   }
   GUIDLevelIndex = "" characteristicName = ""
-  minCharacteristic, characteristic, characteristicBonus = 0, 0, 0
+  minCharacteristic, characteristic = 0, 0
+  characteristicBonus, pureCharacteristicBonus = 0, 0
   levelBonusN, levelNumber = 0, 1
   Wait.frames(PerformParameterCheck, 5)
 end
@@ -49,6 +50,7 @@ function Confer(loadedData)
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
   characteristicBonus = loadedData.characteristicBonus or 0
+  pureCharacteristicBonus = loadedData.pureCharacteristicBonus or 0
   countField = loadedData.countField or 1
   dataHeight = loadedData.dataHeight or 510
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
@@ -65,13 +67,14 @@ end
 function FunctionCall()
 	Wait.frames(RebuildAssets, 10)
   Wait.frames(AddNewFieldForConnection, 13)
+  Wait.frames(|| ChangeColorText(0), 15)
 end
 
 function onLoad(savedData)
   CreateGlobalVariables()
   if(savedData ~= "") then
     local loadedData = JSON.decode(savedData)
-    Wait.Frames(|| Confer(loadedData), 8)
+    Wait.frames(|| Confer(loadedData), 8)
   end
   FunctionCall()
 end
@@ -116,9 +119,9 @@ function EnlargeHeightPanel(count)
     --220 название и выбор + текст
     --preferredHeight=90 cellSpacing=10
     dataHeight = 220 + count * 90 + count * 10
-    Wait.Frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
+    Wait.frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
   else
-    Wait.Frames(|| self.UI.setAttribute("panelTable", "height", 160), 5)
+    Wait.frames(|| self.UI.setAttribute("panelTable", "height", 160), 5)
   end
   Wait.frames(SetUIValue, 10)
 end
@@ -167,8 +170,17 @@ function ChangeCharacteristicInGameCharacter()
   end
 end
 
-function ChangeCharacteristicBonusText(_, input)
-  self.UI.setAttribute("textCharacteristicBonus", "text", input)
+function ChangeColorText(value)
+  local id = "textCharacteristicBonus"
+  pureCharacteristicBonus = pureCharacteristicBonus + value
+  if(pureCharacteristicBonus > 0) then
+    self.UI.setAttribute(id, "color", "Green")
+  elseif(pureCharacteristicBonus < 0) then
+    self.UI.setAttribute(id, "color", "Red")
+  else
+    self.UI.setAttribute(id, "color", "White")
+  end
+  UpdateSave()
 end
 
 function Plus(player, id)
@@ -190,10 +202,11 @@ function ChangeCharacteristic(playerColor, id, value, button)
       characteristic = givenValue
     elseif(ExceptionIdBonus(id)) then
       self.UI.setValue(id, givenValue)
+      Wait.frames(|| ChangeColorText(value), 3)
       characteristicBonus = givenValue
     end
     EnableCharacteristic("NotChangeHeight", value, button)
-    Wait.Frames(ChangeCharacteristicInGameCharacter, 3)
+    Wait.frames(ChangeCharacteristicInGameCharacter, 3)
   end
 end
 function CheckCharacteristic(givenValue, value)
@@ -308,7 +321,8 @@ function CheckPlayerOrGM(playerColor)
 end
 
 function ResetCharacteristic()
-  minCharacteristic, characteristic, characteristicBonus = 0, 0, 0
+  minCharacteristic, characteristic, characteristicBonus = 0, 0
+  characteristicBonus, pureCharacteristicBonus = 0, 0
   levelNumber, inputCPM, inputLM = 1, 0, 0
   inputGUID, inputCPM, inputLM = {}, {}, {}
   countField = 1
