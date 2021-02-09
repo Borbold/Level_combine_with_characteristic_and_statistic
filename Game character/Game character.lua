@@ -112,7 +112,7 @@ function AddNewField()
   local strVis = "Black|"..DenoteSth()
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newCharacteristic, longestLine = "", 15
+  local newCharacteristic, longestLine = "", 30
   if(#allCharacteristics > 0) then
     for index,char in pairs(allCharacteristics) do
       local textChar = CreateNameForCharacteristic(char)
@@ -209,11 +209,9 @@ function EnlargeHeightPanelChar(countCharacteristicIndex)
   end
 end
 function EnlargeWidthPanelChar(lengthText)
-  local locDifference = lengthText - 15
+  local locDifference = lengthText - 30
   local locWidth = self.UI.getAttribute("TLPanelChar", "width")
-  for i = 1, locDifference do
-    locWidth = locWidth + i + (i - 1)
-  end
+  if(locDifference > 0) then locWidth = locWidth + locDifference*1.5 end
   Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth), 5)
   Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
 end
