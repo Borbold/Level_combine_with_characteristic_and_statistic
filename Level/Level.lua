@@ -250,12 +250,12 @@ function ChangeValueExperience(player, input, idInput)
 end
 
 function PanelTool()
-    self.UI.hide("panelToolFeature")
-    if(self.UI.getAttribute("panelTool", "active") == "false") then
-        self.UI.show("panelTool")
-    else
-        self.UI.hide("panelTool")
-    end
+  self.UI.hide("panelToolFeature")
+  if(self.UI.getAttribute("panelTool", "active") == "false") then
+    self.UI.show("panelTool")
+  else
+    self.UI.hide("panelTool")
+  end
 end
 
 function SumMx(expectedValue)
