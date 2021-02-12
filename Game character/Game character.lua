@@ -127,12 +127,13 @@ function AddNewField()
           locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or (typeChar == "пустая" and "#808080") or locColor
         end
 
-        newCharacteristic = newCharacteristic ..
-        "<Row preferredHeight='50'>\n" ..
-        " <Cell>\n" ..
-        "   <Text id='tChar"..index.."' class='forCharacteristic' color='"..locColor.."' text='"..textChar.."'/>\n" ..
-        " </Cell>\n" ..
-        "</Row>\n"
+        newCharacteristic = newCharacteristic .. [[
+          <Row preferredHeight='50'>
+            <Cell>
+              <Text id='tChar]]..index..[[' class='forCharacteristic' color=']]..locColor..[[' text=']]..textChar..[['/>
+            </Cell>
+          </Row>
+        ]]
       end
     end
   end
