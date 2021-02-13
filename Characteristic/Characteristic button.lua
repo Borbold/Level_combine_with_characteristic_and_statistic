@@ -72,12 +72,14 @@ function FunctionCall()
 end
 
 function onLoad(savedData)
-  CreateGlobalVariables()
-  if(savedData ~= "") then
-    local loadedData = JSON.decode(savedData)
-    Wait.frames(|| Confer(loadedData), 8)
-  end
-  FunctionCall()
+  Wait.Frames(function()
+    CreateGlobalVariables()
+    if(savedData ~= "") then
+      local loadedData = JSON.decode(savedData)
+      Wait.frames(|| Confer(loadedData), 8)
+    end
+    FunctionCall()
+  end, 30)
 end
 
 function AddNewFieldForConnection()

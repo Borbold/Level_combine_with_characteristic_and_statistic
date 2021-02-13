@@ -150,12 +150,14 @@ function SetTextCharacteristic(idStart, idPerLevel, idLevelPass)
 end
 
 function onLoad(savedData)
-  CreateGlobalVariables()
-  if(savedData != "") then
-    Confer(savedData)
-  end
-  FunctionCall()
-  Wait.Frames(SetInteracteble, 3)
+  Wait.Frames(function()
+    CreateGlobalVariables()
+    if(savedData != "") then
+      Confer(savedData)
+    end
+    FunctionCall()
+    Wait.Frames(SetInteracteble, 3)
+  end, 70)
 end
 
 function SetInteracteble()
