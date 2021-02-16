@@ -491,18 +491,20 @@ function Connect()
   allFeatureGUID, allStatisticGUID = {}, {}
   local gameCharacter
   for _,object in pairs(getAllObjects()) do
-    if(object.getColorTint() == self.getColorTint()) then
-      if(string.match(object.getGMNotes(), "Характеристика")) then
-	      allFeatureGUID[#allFeatureGUID + 1] = object.getGUID()
-        broadcastToAll(object.getName() .. " добавлена к уровню")
-      end
-      if(string.match(object.getGMNotes(), "Статистика")) then
-	      allStatisticGUID[#allStatisticGUID + 1] = object.getGUID()
-        broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
-      end
-      if(string.match(object.getGMNotes(), "Игровой персонаж")) then
-	      gameCharacter = object
-        broadcastToAll(object.getGMNotes() .. " существует")
+    if(object) then
+      if(object.getColorTint() == self.getColorTint()) then
+        if(string.match(object.getGMNotes(), "Характеристика")) then
+	        allFeatureGUID[#allFeatureGUID + 1] = object.getGUID()
+          broadcastToAll(object.getName() .. " добавлена к уровню")
+        end
+        if(string.match(object.getGMNotes(), "Статистика")) then
+	        allStatisticGUID[#allStatisticGUID + 1] = object.getGUID()
+          broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
+        end
+        if(string.match(object.getGMNotes(), "Игровой персонаж")) then
+	        gameCharacter = object
+          broadcastToAll(object.getGMNotes() .. " существует")
+        end
       end
     end
   end
@@ -524,8 +526,10 @@ function SetObjectFeature()
   end
 end
 function SetLBNValue()
-  for _,feature in pairs(allFeatureObject) do
-    feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+  for i,feature in pairs(allFeatureObject) do
+    if(getObjectFromGUID(allFeatureGUID[i])) then
+      feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
+    end
   end
 end
 
