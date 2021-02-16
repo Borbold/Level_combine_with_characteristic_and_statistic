@@ -214,7 +214,7 @@ end
 function EnlargeWidthPanelChar(lengthText)
   local locDifference = lengthText - 30
   local locWidth = self.UI.getAttribute("TLPanelChar", "width")
-  if(locDifference > 0) then locWidth = locWidth + locDifference*1.5 end
+  if(locDifference > 0) then locWidth = locWidth + locDifference*5 end
   Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth), 5)
   Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
 end
