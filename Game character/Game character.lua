@@ -159,19 +159,37 @@ function AddNewField()
     for index,itemGUID in pairs(inventoryObj.call("GetAllObjectGUID")) do
       local itemObj = getObjectFromGUID(itemGUID)
       if(itemObj) then
-        local textItem = itemObj.getName()
-        countItem = countItem + 1
-        if(#textItem > longestLineInventory) then
-          longestLineInventory = #textItem
-        end
+        if(itemObj.type ~= "Bag") then
+          local textItem = itemObj.getName()
+          countItem = countItem + 1
+          if(#textItem > longestLineInventory) then
+            longestLineInventory = #textItem
+          end
 
-        newThings = newThings .. [[
-          <Row preferredHeight='50'>
-            <Cell>
-              <Text id='tItem]]..index..[[' class='forInventory' color='#ffffff' text=']]..textItem..[['/>
-            </Cell>
-          </Row>
-        ]]
+          newThings = newThings .. [[
+            <Row preferredHeight='50'>
+              <Cell>
+                <Text id='tItem]]..index..[[' class='forInventory' color='#ffffff' text=']]..textItem..[['/>
+              </Cell>
+            </Row>
+          ]]
+        else
+          for i,itemBag in pairs(itemObj.getObjects()) do
+            local textItem = itemBag.name
+            countItem = countItem + 1
+            if(#textItem > longestLineInventory) then
+              longestLineInventory = #textItem
+            end
+
+            newThings = newThings .. [[
+              <Row preferredHeight='50'>
+                <Cell>
+                  <Text id='tItem]]..(i + index)..[[' class='forInventory' color='#ffffff' text=']]..textItem..[['/>
+                </Cell>
+              </Row>
+            ]]
+          end
+        end
       end
     end
   end
@@ -252,9 +270,12 @@ function EnlargeHeightPanelChar(countCharacteristicIndex)
   end
 end
 function EnlargeWidthPanelChar(lengthText)
-  local locDifference = lengthText - 30
-  local locWidth = self.UI.getAttribute("TLPanelChar", "width")
-  if(locDifference > 0) then locWidth = locWidth + (locDifference/2)*25 end
+  lengthText = lengthText - 30
+  if(not charWidth) then
+    charWidth = self.UI.getAttribute("TLPanelChar", "width")
+  end
+  local locWidth = charWidth
+  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
   Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 5)
   Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
 end
@@ -268,9 +289,12 @@ function EnlargeHeightPanelInventory(countItem)
   end
 end
 function EnlargeWidthPanelInventory(lengthText)
-  local locDifference = lengthText - 30
-  local locWidth = self.UI.getAttribute("TLPanelInven", "width")
-  if(locDifference > 0) then locWidth = locWidth + (locDifference/2)*25 end
+  lengthText = lengthText - 30
+  if(not invWidth) then
+    invWidth = self.UI.getAttribute("TLPanelInven", "width")
+  end
+  local locWidth = invWidth
+  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
   Wait.Frames(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - 3), 5)
   Wait.Frames(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 5)
 end
