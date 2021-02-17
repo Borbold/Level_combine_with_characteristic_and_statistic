@@ -23,7 +23,8 @@ function CreateGlobalVariables()
     ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
     ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
     ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
-    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
+    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61},
+    ["Black"] = {r = 0.25, g = 0.25, b = 0.25}
   }
   GUIDLevelIndex, characteristicName = "", ""
   minCharacteristic, characteristic = 0, 0
@@ -480,7 +481,7 @@ function SetGameCharacter(parametrs)
 end
 
 function DenoteSth()
-	local color = ""
+	local color = "Black"
   for iColor,_ in pairs(colorPlayer) do
     if(CheckColor(iColor)) then
 	    color = iColor

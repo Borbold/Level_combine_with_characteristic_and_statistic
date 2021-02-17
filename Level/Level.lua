@@ -64,7 +64,8 @@ function CreateGlobalVariables()
     ["Brown"] = {r = 0.44, g = 0.23, b = 0.09},
     ["Purple"] = {r = 0.63, g = 0.12, b = 0.94},
     ["Pink"] = {r = 0.96, g = 0.44, b = 0.81},
-    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61}
+    ["Teal"] = {r = 0.13, g = 0.69, b = 0.61},
+    ["Black"] = {r = 0.25, g = 0.25, b = 0.25}
   }
   RetraceValues()
   lockDistributionCharacteristic = false
@@ -288,12 +289,12 @@ function InputChangeExperience(player, input)
 end
 
 function AllowChange()
-    local featureDistribution = string.lower(self.UI.getAttribute("closeDistributionCharacteristic", "interactable"))
+  local featureDistribution = string.lower(self.UI.getAttribute("closeDistributionCharacteristic", "interactable"))
 	if((#allFeatureObject > 0 and featureDistribution == "false") or #allFeatureObject == 0) then
-        return true
-    end
-    broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " не закончил(а) распределение характеристик")
-    return false
+    return true
+  end
+  broadcastToAll((Player[DenoteSth()].steam_name or DenoteSth()) .. " не закончил(а) распределение характеристик")
+  return false
 end
 
 function UpdateExperience()
@@ -600,7 +601,7 @@ function ChangeMaxLevel(player, input)
 end
 
 function DenoteSth()
-	local color = ""
+	local color = "Black"
   for iColor,_ in pairs(colorPlayer) do
     if(CheckColor(iColor)) then
 	    color = iColor
