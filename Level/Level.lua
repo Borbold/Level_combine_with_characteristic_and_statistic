@@ -489,31 +489,34 @@ end
 
 function Connect()
   allFeatureGUID, allStatisticGUID = {}, {}
-  local gameCharacter
+  local gameCharacter, gameInventoryGUID
   for _,object in pairs(getAllObjects()) do
     if(object) then
       if(object.getColorTint() == self.getColorTint()) then
-        if(string.match(object.getGMNotes(), "Характеристика")) then
+        local GMNotesObj = object.getGMNotes()
+        if(string.match(GMNotesObj, "Характеристика")) then
 	        allFeatureGUID[#allFeatureGUID + 1] = object.getGUID()
           broadcastToAll(object.getName() .. " добавлена к уровню")
-        end
-        if(string.match(object.getGMNotes(), "Статистика")) then
+        elseif(string.match(GMNotesObj, "Статистика")) then
 	        allStatisticGUID[#allStatisticGUID + 1] = object.getGUID()
           broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
-        end
-        if(string.match(object.getGMNotes(), "Игровой персонаж")) then
+        elseif(string.match(GMNotesObj, "Игровой персонаж")) then
 	        gameCharacter = object
-          broadcastToAll(object.getGMNotes() .. " существует")
+          broadcastToAll(GMNotesObj .. " существует")
+        elseif(GMNotesObj:match("GameEquipment")) then
+	        gameInventoryGUID = object.getGUID()
+          broadcastToAll(GMNotesObj .. " существует")
         end
       end
     end
   end
   if(#allFeatureGUID == 0) then broadcastToAll("Характеристики не были найдены/добавлены на стол") end
+  if(#allStatisticGUID == 0) then broadcastToAll("Статистика не была найдена/добавлена на стол") end
   SetObjectFeature()
   SetLBNValue()
   UpdateSave()
   if(gameCharacter and (allStatisticGUID or allFeatureGUID)) then
-    SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
+    SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID)
   end
 end
 function SetObjectFeature()
@@ -533,13 +536,14 @@ function SetLBNValue()
   end
 end
 
-function SetGUIDInGameCharacter(gameCharacter, allStatisticGUID, allFeatureGUID)
-  local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID}
+function SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID)
+  local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID, gameInventoryGUID = gameInventoryGUID}
 	gameCharacter.call("SetGUID", params)
-  SetObjectsStatistics(gameCharacter, allStatisticGUID)
-  SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
+  SetObjectsStatistics(gameCharacter)
+  SetObjectsCharacteristics(gameCharacter)
+  SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
 end
-function SetObjectsStatistics(gameCharacter, allStatisticGUID)
+function SetObjectsStatistics(gameCharacter)
   local parametrs = {
     gameChar = gameCharacter,
     id = 1
@@ -550,15 +554,22 @@ function SetObjectsStatistics(gameCharacter, allStatisticGUID)
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
 end
-function SetObjectsCharacteristics(gameCharacter, allFeatureGUID)
+function SetObjectsCharacteristics(gameCharacter)
   local parametrs = {
     gameChar = gameCharacter,
     id = 1
   }
   for index,charac in pairs(allFeatureGUID) do
     parametrs.id = index
-    --Задать Игровому персонажу
 	  getObjectFromGUID(charac).call("SetGameCharacter", parametrs)
+  end
+end
+function SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
+  if(gameInventoryGUID) then
+    local params = {
+      gameChar = gameCharacter.getGUID()
+    }
+	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", params)
   end
 end
 

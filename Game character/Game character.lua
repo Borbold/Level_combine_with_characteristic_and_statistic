@@ -1,6 +1,7 @@
 ﻿function UpdateSave()
   local dataToSave = {
-    ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID
+    ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID,
+    ["gameInventoryGUID"] = gameInventoryGUID
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -32,6 +33,7 @@ function Confer(savedData)
     local loadedData = JSON.decode(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
+    gameInventoryGUID = loadedData.gameInventoryGUID or nil
     SetStatisticObjects()
     Wait.Frames(SetCharacteristicObjects, 13)
     Wait.Frames(CreateFields, 15)
@@ -41,9 +43,10 @@ end
 function SetGUID(params)
   SetStatistic(params.statisticsGUID)
   SetCharacteristic(params.characteristicsGUID)
+  gameInventoryGUID = params.gameInventoryGUID
 
   Wait.Frames(CreateFields, 3)
-  UpdateSave()
+  Wait.Frames(UpdateSave, 5)
 end
 function SetStatistic(statisticsGUID)
   if(statisticsGUID) then
@@ -150,6 +153,38 @@ function AddNewField()
 
   allXml = startXml .. newCharacteristic .. endXml
   ----------------------------------------------------------------------------------------------------------
+  local newThings, longestLineInventory = "", 30
+  local inventoryObj = getObjectFromGUID(gameInventoryGUID)
+  if(inventoryObj) then
+    for index,itemGUID in pairs(inventoryObj.call("GetAllObjectGUID")) do
+      local itemObj = getObjectFromGUID(itemGUID)
+      local textItem = itemObj.getName()
+      if(textItem) then
+        if(#textItem > longestLineInventory) then
+          longestLineInventory = #textItem
+        end
+
+        newThings = newThings .. [[
+          <Row preferredHeight='50'>
+            <Cell>
+              <Text id='tItem]]..index..[[' class='forInventory' color='#ffffff' text=']]..textItem..[['/>
+            </Cell>
+          </Row>
+        ]]
+      end
+    end
+  end
+
+  searchString = "<NewRowI />"
+  searchStringLength = #searchString
+
+  local indexEndFirstThings = allXml:find(searchString)
+
+  startXml = allXml:sub(1, indexEndFirstThings + searchStringLength)
+  endXml = allXml:sub(indexEndFirstThings + searchStringLength)
+
+  allXml = startXml .. newThings .. endXml
+  ----------------------------------------------------------------------------------------------------------
   local newStatistic = ""
   if(#allStatistics > 0) then
     for statisticIndex = 1, #allStatisticsGUID do
@@ -185,6 +220,7 @@ function AddNewField()
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
   EnlargeWidthPanelChar(longestLine)
+  EnlargeWidthPanelInventory(longestLineInventory)
 end
 
 function CreateNameForCharacteristic(charac)
@@ -214,9 +250,16 @@ end
 function EnlargeWidthPanelChar(lengthText)
   local locDifference = lengthText - 30
   local locWidth = self.UI.getAttribute("TLPanelChar", "width")
-  if(locDifference > 0) then locWidth = locWidth + locDifference*25 end
-  Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth), 5)
+  if(locDifference > 0) then locWidth = locWidth + (locDifference/2)*25 end
+  Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 5)
   Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
+end
+function EnlargeWidthPanelInventory(lengthText)
+  local locDifference = lengthText - 30
+  local locWidth = self.UI.getAttribute("TLPanelInven", "width")
+  if(locDifference > 0) then locWidth = locWidth + (locDifference/2)*25 end
+  Wait.Frames(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - 3), 5)
+  Wait.Frames(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 5)
 end
 
 function ChangeCharacteristic(id)
@@ -294,12 +337,14 @@ end
 
 function RebuildAssets()
   local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
+  local rootIn = 'https://img2.freepng.ru/20180418/hlw/kisspng-computer-icons-adventure-hotel-luggage-5ad725017cc0f8.903043971524049153511.jpg'
   local assets = {
     {name = 'uiGear', url = root .. 'gear.png'},
     {name = 'uiClose', url = root .. 'close.png'},
     {name = 'uiPlus', url = root .. 'plus.png'},
     {name = 'uiMinus', url = root .. 'minus.png'},
-    {name = 'uiBars', url = root .. 'bars.png'}
+    {name = 'uiBars', url = root .. 'bars.png'},
+    {name = 'uiInventory', url = rootIn}
   }
   self.UI.setCustomAssets(assets)
 end
