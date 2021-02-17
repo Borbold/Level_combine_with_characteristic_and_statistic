@@ -153,13 +153,14 @@ function AddNewField()
 
   allXml = startXml .. newCharacteristic .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newThings, longestLineInventory = "", 30
+  local newThings, longestLineInventory, countItem = "", 30, 0
   local inventoryObj = getObjectFromGUID(gameInventoryGUID)
   if(inventoryObj) then
     for index,itemGUID in pairs(inventoryObj.call("GetAllObjectGUID")) do
       local itemObj = getObjectFromGUID(itemGUID)
-      local textItem = itemObj.getName()
-      if(textItem) then
+      if(itemObj) then
+        local textItem = itemObj.getName()
+        countItem = countItem + 1
         if(#textItem > longestLineInventory) then
           longestLineInventory = #textItem
         end
@@ -174,7 +175,7 @@ function AddNewField()
       end
     end
   end
-
+  
   searchString = "<NewRowI />"
   searchStringLength = #searchString
 
@@ -218,8 +219,11 @@ function AddNewField()
   startXml = startXml .. newStatistic .. endXml
   self.UI.setXml(startXml)
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
+
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
   EnlargeWidthPanelChar(longestLine)
+  
+  EnlargeHeightPanelInventory(countItem)
   EnlargeWidthPanelInventory(longestLineInventory)
 end
 
@@ -253,6 +257,15 @@ function EnlargeWidthPanelChar(lengthText)
   if(locDifference > 0) then locWidth = locWidth + (locDifference/2)*25 end
   Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 5)
   Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
+end
+
+function EnlargeHeightPanelInventory(countItem)
+  if(countItem > 3) then
+    --preferredHeight=50 cellSpacing=5
+    countItem = countItem + 1
+    local newHeightPanel = countItem * 50 + countItem * 5
+    Wait.Frames(|| self.UI.setAttribute("TLPanelInven", "height", newHeightPanel), 5)
+  end
 end
 function EnlargeWidthPanelInventory(lengthText)
   local locDifference = lengthText - 30
