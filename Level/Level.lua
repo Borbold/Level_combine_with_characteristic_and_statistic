@@ -503,7 +503,7 @@ function Connect()
           broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
         elseif(string.match(GMNotesObj, "Игровой персонаж")) then
 	        gameCharacter = object
-          broadcastToAll(GMNotesObj .. " существует")
+          broadcastToAll("Игровой персонаж существует")
         elseif(GMNotesObj:match("GameEquipment")) then
 	        gameInventoryGUID = object.getGUID()
           broadcastToAll(GMNotesObj .. " существует")
@@ -542,7 +542,7 @@ function SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID)
 	gameCharacter.call("SetGUID", params)
   SetObjectsStatistics(gameCharacter)
   SetObjectsCharacteristics(gameCharacter)
-  SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
+  SetObjectsInventory(gameCharacter, gameInventoryGUID)
 end
 function SetObjectsStatistics(gameCharacter)
   local parametrs = {
@@ -562,10 +562,15 @@ function SetObjectsCharacteristics(gameCharacter)
   }
   for index,charac in pairs(allFeatureGUID) do
     parametrs.id = index
-	  getObjectFromGUID(charac).call("SetGameCharacter", parametrs)
+    local charObj = getObjectFromGUID(charac)
+	  charObj.call("SetGameCharacter", parametrs)
+    Wait.Frames(|| RecheckConnectedDataInLevel(charObj), 10)
   end
 end
-function SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
+function RecheckConnectedDataInLevel(charObj)
+  charObj.call("RecheckConnectedData")
+end
+function SetObjectsInventory(gameCharacter, gameInventoryGUID)
   if(gameInventoryGUID) then
     local params = {
       gameChar = gameCharacter.getGUID()

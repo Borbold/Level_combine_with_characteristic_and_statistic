@@ -183,6 +183,10 @@ function ResetStatistic()
   ConnectedCharacteristic = {}
 end
 
+function ResetConnectedCharacteristic()
+  ConnectedCharacteristic = {}
+end
+
 function RecalculationBonusPoints(params)
   local isConnect = false
   for i = 1, #ConnectedCharacteristic do

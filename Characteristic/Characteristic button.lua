@@ -5,7 +5,8 @@
     ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
-    ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus
+    ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
+    ["inputObjectName"] = inputObjectName
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -63,6 +64,8 @@ function Confer(loadedData)
   levelNumber = loadedData.levelNumber or 1
   levelBonusN = loadedData.levelBonusN or 0
   inputGUID, inputCPM, inputLM = loadedData.inputGUID or {}, loadedData.inputCPM or {}, loadedData.inputLM or {}
+  -- Запомнил имя плашки (Сила/Здоровье/т.д.) чтобы при копипасте не повторять формулы
+  inputObjectName = loadedData.inputObjectName or {}
   originalXml = self.UI.getXml()
 end
 
@@ -325,6 +328,7 @@ function ResetCharacteristic()
   characteristicBonus, pureCharacteristicBonus = 0, 0
   levelNumber, inputCPM, inputLM = 1, 0, 0
   inputGUID, inputCPM, inputLM = {}, {}, {}
+  inputObjectName = {}
   countField = 1
   self.UI.setValue("textCharacteristic", 0)
   self.UI.setValue("textCharacteristicBonus", 0)
@@ -332,14 +336,17 @@ function ResetCharacteristic()
   EnableCharacteristic("Reset")
   Wait.frames(AddNewFieldForConnection, 13)
 end
+
 function EnableCharacteristic(check, value, button)
-  for i,_ in ipairs(inputGUID) do
-    local inputObj = getObjectFromGUID(inputGUID[i])
-    if(inputObj ~= nil) then
+  for i,guid in ipairs(inputGUID) do
+    local inputObj = getObjectFromGUID(guid)
+    if(inputObj ~= nil and inputObj.getColorTint() == self.getColorTint()) then
       params = { CPM = RecalculationEquals(i) or 0, LM = inputLM[i] or 0,
                  LN = levelNumber or 0,
                  LBN = levelBonusN or 0, GUID = self.getGUID() }
 	    inputObj.call("RecalculationBonusPoints", params)
+    elseif(inputObj.getColorTint() ~= self.getColorTint()) then
+      broadcastToAll("Вы произвели замену цвета. Произведите переподключение", "Red")
     else
       if(inputGUID[i] and check ~= "Reset") then
         broadcastToAll("Плашки с таким GUID нету", "Red")
@@ -398,8 +405,13 @@ function EditInput(player, input, id)
   local number = tonumber(id:sub(index + 1))
 	if(id:match("GUID")) then
     inputGUID[number] = input
+    local tableNameObj = {}
+    for S in getObjectFromGUID(input).getName():gmatch("%S+") do
+      table.insert(tableNameObj, S)
+    end
+    inputObjectName[number] = tableNameObj[2]
   elseif(id:match("CPM")) then
-    local equals = RecalculationEquals(number, input)
+    RecalculationEquals(number, input)
   elseif(id:match("LM")) then
     inputLM[number] = tonumber(input) or 0
   end
@@ -437,34 +449,36 @@ function RecalculationEquals(id, input)
     return equals
   else
     input = inputCPM[id]
-    local equals = (characteristic or 0) + (characteristicBonus or 0)
-    local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
-    for S in input:gmatch("%S+") do
-      for sign, found in pairs(signFound) do
-        if(sign == "+" and found) then
-          equals = equals + S
-          signFound[sign] = false
-          break
-        elseif(sign == "-" and found) then
-          equals = equals - S
-          signFound[sign] = false
-          break
-        elseif(sign == "*" and found) then
-          equals = equals * S
-          signFound[sign] = false
-          break
-        elseif(sign == "/" and found) then
-          equals = equals / S
-          signFound[sign] = false
-          break
+    if(input) then
+      local equals = (characteristic or 0) + (characteristicBonus or 0)
+      local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
+      for S in input:gmatch("%S+") do
+        for sign, found in pairs(signFound) do
+          if(sign == "+" and found) then
+            equals = equals + S
+            signFound[sign] = false
+            break
+          elseif(sign == "-" and found) then
+            equals = equals - S
+            signFound[sign] = false
+            break
+          elseif(sign == "*" and found) then
+            equals = equals * S
+            signFound[sign] = false
+            break
+          elseif(sign == "/" and found) then
+            equals = equals / S
+            signFound[sign] = false
+            break
+          end
+        end
+
+        if(S == "+" or S == "-" or S == "*" or S == "/") then
+          signFound[S] = true
         end
       end
-
-      if(S == "+" or S == "-" or S == "*" or S == "/") then
-        signFound[S] = true
-      end
+      return equals
     end
-    return equals
   end
 end
 
@@ -478,6 +492,21 @@ function SetGameCharacter(parametrs)
 	gameCharacter = parametrs.gameChar
   idForGameCharacter = parametrs.id
   UpdateSave()
+end
+
+function RecheckConnectedData()
+  for _,obj in pairs(getAllObjects()) do
+    for i,saveName in ipairs(inputObjectName) do
+      if(obj.getName():find(saveName) and obj.getColorTint() == self.getColorTint()) then
+        inputGUID[i] = obj.getGUID()
+        obj.call("ResetConnectedCharacteristic")
+      end
+    end
+  end
+end
+
+function ResetConnectedCharacteristic()
+  ConnectedCharacteristic = {}
 end
 
 function DenoteSth()
