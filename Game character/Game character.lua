@@ -115,7 +115,21 @@ function AddNewField()
   local startXml = allXml:sub(1, indexVisibility + searchStringLength)
   local endXml = allXml:sub(indexVisibility + searchStringLength + 1)--+1 нужен для того чтобы убрать лишний "
 
-  local strVis = "Black|"..DenoteSth()
+  local colorCanSee = ""
+  if(self.getGMNotes():match("color_can_see:")) then
+    local isFlag = false
+    for S in self.getGMNotes():gmatch("%S+") do
+      if(isFlag) then
+        colorCanSee = "|"..S
+        break
+      end
+      if(S == "color_can_see:") then
+        isFlag = true
+      end
+    end
+  end
+
+  local strVis = "Black|"..DenoteSth()..colorCanSee
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
   local newCharacteristic, longestLine = "", 30
