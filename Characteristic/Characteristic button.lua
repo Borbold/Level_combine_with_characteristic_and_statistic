@@ -494,8 +494,9 @@ function SetGameCharacter(parametrs)
   UpdateSave()
 end
 
-function RecheckConnectedData()
-  for _,obj in pairs(getAllObjects()) do
+function RecheckConnectedData(param)
+  for _,objGUID in pairs(param.allStripsGUID) do
+    local obj = getObjectFromGUID(objGUID)
     for i,saveName in ipairs(inputObjectName) do
       if(obj.getName():find(saveName) and obj.getColorTint() == self.getColorTint()) then
         inputGUID[i] = obj.getGUID()

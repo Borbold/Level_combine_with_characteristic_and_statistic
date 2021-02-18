@@ -568,14 +568,18 @@ function SetObjectsCharacteristics(gameCharacter)
   end
 end
 function RecheckConnectedDataInLevel(charObj)
-  charObj.call("RecheckConnectedData")
+  local allStrips = {}
+  for _,guidF in ipairs(allFeatureGUID) do
+    table.insert(allStrips, guidF)
+  end
+  for _,guidS in ipairs(allStatisticGUID) do
+    table.insert(allStrips, guidS)
+  end
+  charObj.call("RecheckConnectedData", {allStripsGUID = allStrips})
 end
 function SetObjectsInventory(gameCharacter, gameInventoryGUID)
   if(gameInventoryGUID) then
-    local params = {
-      gameChar = gameCharacter.getGUID()
-    }
-	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", params)
+	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", {gameChar = gameCharacter.getGUID()})
   end
 end
 
