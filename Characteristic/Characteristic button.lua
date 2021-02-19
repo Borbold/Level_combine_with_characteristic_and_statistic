@@ -367,7 +367,6 @@ function RecalculationBonusPoints(params)
   
   characteristicBonus = 0
   for _,p in pairs(ConnectedCharacteristic) do
-    print(p.GUID)
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
