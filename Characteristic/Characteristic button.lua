@@ -403,6 +403,10 @@ end
 function RecalculationEquals(id, input)
   if(input) then
     inputCPM[id] = input
+  else
+    input = inputCPM[id]
+  end
+  if(input) then
     local equals = (characteristic or 0) + (characteristicBonus or 0)
     local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
     for S in input:gmatch("%S+") do
@@ -431,38 +435,6 @@ function RecalculationEquals(id, input)
       end
     end
     return equals
-  else
-    input = inputCPM[id]
-    if(input) then
-      local equals = (characteristic or 0) + (characteristicBonus or 0)
-      local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
-      for S in input:gmatch("%S+") do
-        for sign, found in pairs(signFound) do
-          if(sign == "+" and found) then
-            equals = equals + S
-            signFound[sign] = false
-            break
-          elseif(sign == "-" and found) then
-            equals = equals - S
-            signFound[sign] = false
-            break
-          elseif(sign == "*" and found) then
-            equals = equals * S
-            signFound[sign] = false
-            break
-          elseif(sign == "/" and found) then
-            equals = equals / S
-            signFound[sign] = false
-            break
-          end
-        end
-
-        if(S == "+" or S == "-" or S == "*" or S == "/") then
-          signFound[S] = true
-        end
-      end
-      return equals
-    end
   end
 end
 

@@ -188,25 +188,7 @@ function ResetConnectedCharacteristic()
 end
 
 function RecalculationBonusPoints(params)
-  local isConnect = false
-  for i = 1, #ConnectedCharacteristic do
-    if(ConnectedCharacteristic[i].GUID == params.GUID) then
-      isConnect = true
-      if(getObjectFromGUID(params.GUID) == nil) then
-        ConnectedCharacteristic[i] = nil
-      end
-    end
-  end
-  
-  if(isConnect == false) then
-    ConnectedCharacteristic[#ConnectedCharacteristic + 1] = params
-  else
-    for index,par in pairs(ConnectedCharacteristic) do
-	    if(par.GUID == params.GUID) then
-        ConnectedCharacteristic[index] = params
-      end
-    end
-  end
+  ConnectedCharacteristic[tostring(params.GUID)] = params
   
   local locCorrentVal = 0
   for _,p in pairs(ConnectedCharacteristic) do
