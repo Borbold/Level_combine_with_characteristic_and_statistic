@@ -391,7 +391,8 @@ function RecalculationBonusPoints(params)
       characteristicBonus = characteristicBonus + pureCharacteristicBonus + locVC + locLN
     end
   end
-	self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
+  characteristicBonus = Round(characteristicBonus)
+	self.UI.setValue("textCharacteristicBonus", characteristicBonus)
   UpdateSave()
 end
 

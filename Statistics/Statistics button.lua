@@ -208,15 +208,15 @@ function RecalculationBonusPoints(params)
     end
   end
   
-  local locMaxChar = 0
+  local locCorrentVal = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-	    locMaxChar = locMaxChar + pureMaxCurrentStatisticValue + p.LBN + locVC + locLN
+	    locCorrentVal = locCorrentVal + pureMaxCurrentStatisticValue + p.LBN + locVC + locLN
     end
   end
-  ChangeMaximumStatisticValue(math.ceil(locMaxChar))
+  ChangeMaximumStatisticValue(math.ceil(locCorrentVal))
 end
 function ChangeMaximumStatisticValue(value)
   value = (tonumber(value) > 0 and value) or 1
