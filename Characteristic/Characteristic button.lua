@@ -328,6 +328,7 @@ function ResetCharacteristic()
   characteristicBonus, pureCharacteristicBonus = 0, 0
   levelNumber, inputCPM, inputLM = 1, 0, 0
   inputGUID, inputCPM, inputLM = {}, {}, {}
+  ConnectedCharacteristic = {}
   inputObjectName = {}
   countField = 1
   self.UI.setValue("textCharacteristic", 0)
@@ -347,10 +348,9 @@ function EnableCharacteristic(check, value, button)
 	    inputObj.call("RecalculationBonusPoints", params)
     elseif(inputObj.getColorTint() ~= self.getColorTint()) then
       broadcastToAll("Вы произвели замену цвета. Произведите переподключение", "Red")
-    else
-      if(inputGUID[i] and check ~= "Reset") then
-        broadcastToAll("Плашки с таким GUID нету", "Red")
-      end
+    elseif(inputObj and check ~= "Reset") then
+      broadcastToAll("Плашки с таким "..guid.." GUID нету", "Red")
+      guid = nil
     end
   end
   
@@ -363,28 +363,11 @@ function EnableCharacteristic(check, value, button)
   UpdateSave()
 end
 function RecalculationBonusPoints(params)
-  local isConnect = false
-  for i = 1, #ConnectedCharacteristic do
-    if(ConnectedCharacteristic[i].GUID == params.GUID) then
-      isConnect = true
-      if(getObjectFromGUID(params.GUID) == nil) then
-        ConnectedCharacteristic[i] = nil
-      end
-    end
-  end
-  
-  if(isConnect == false) then
-    ConnectedCharacteristic[#ConnectedCharacteristic + 1] = params
-  else
-    for index,par in pairs(ConnectedCharacteristic) do
-	    if(par.GUID == params.GUID) then
-        ConnectedCharacteristic[index] = params
-      end
-    end
-  end
+  ConnectedCharacteristic[tostring(params.GUID)] = params
   
   characteristicBonus = 0
   for _,p in pairs(ConnectedCharacteristic) do
+    print(p.GUID)
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
@@ -501,7 +484,7 @@ function RecheckConnectedData(param)
     local obj = getObjectFromGUID(objGUID)
     for i,saveName in ipairs(inputObjectName) do
       if(obj.getName():find(saveName) and obj.getColorTint() == self.getColorTint()) then
-        inputGUID[i] = obj.getGUID()
+        inputGUID[i] = objGUID
         obj.call("ResetConnectedCharacteristic")
       end
     end

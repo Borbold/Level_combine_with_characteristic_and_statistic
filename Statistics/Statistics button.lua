@@ -35,7 +35,7 @@ function Confer(loadedData)
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
   currentStatisticValue = loadedData.currentStatisticValue or 0
   pureMaxCurrentStatisticValue = loadedData.pureMaxCurrentStatisticValue or 0
-  maximumStatisticValue = loadedData.maximumStatisticValue or 0
+  maximumStatisticValue = loadedData.maximumStatisticValue or 1
   gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
@@ -178,7 +178,7 @@ function Round(num, idp)
 end
 
 function ResetStatistic()
-  currentStatisticValue, maximumStatisticValue = 0, 0
+  currentStatisticValue, maximumStatisticValue = 0, 1
   pureMaxCurrentStatisticValue = 0
   ConnectedCharacteristic = {}
 end
