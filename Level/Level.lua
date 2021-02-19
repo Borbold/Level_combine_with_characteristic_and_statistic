@@ -496,17 +496,17 @@ function Connect()
       if(object.getColorTint() == self.getColorTint()) then
         local GMNotesObj = object.getGMNotes()
         if(string.match(GMNotesObj, "Характеристика")) then
-	        allFeatureGUID[#allFeatureGUID + 1] = object.getGUID()
+	        table.insert(allFeatureGUID, object.getGUID())
           broadcastToAll(object.getName() .. " добавлена к уровню")
         elseif(string.match(GMNotesObj, "Статистика")) then
-	        allStatisticGUID[#allStatisticGUID + 1] = object.getGUID()
+	        table.insert(allStatisticGUID, object.getGUID())
           broadcastToAll(object.getName() .. " добавлена к существующему персонажу")
         elseif(string.match(GMNotesObj, "Игровой персонаж")) then
 	        gameCharacter = object
           broadcastToAll("Игровой персонаж существует")
         elseif(GMNotesObj:match("GameEquipment")) then
 	        gameInventoryGUID = object.getGUID()
-          broadcastToAll(GMNotesObj .. " существует")
+          broadcastToAll("Игровой инвентарь существует")
         end
       end
     end
@@ -555,7 +555,7 @@ function SetObjectsStatistics(gameCharacter)
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
 end
-function SetObjectsCharacteristics(gameCharacter)
+function SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
   local parametrs = {
     gameChar = gameCharacter,
     id = 1
@@ -579,7 +579,7 @@ function RecheckConnectedDataInLevel(charObj)
 end
 function SetObjectsInventory(gameCharacter, gameInventoryGUID)
   if(gameInventoryGUID) then
-	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", {gameChar = gameCharacter.getGUID()})
+	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", {charGUID = gameCharacter.getGUID(), allFeatGUID = allFeatureGUID})
   end
 end
 

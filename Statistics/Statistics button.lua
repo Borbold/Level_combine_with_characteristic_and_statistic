@@ -139,7 +139,7 @@ function ChangeStatistics(playerColor, value)
       if(currentStatisticValue < 0) then currentStatisticValue = 0 end
       if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
       UpdateValue()
-      Wait.time(ChangeStatisticInGameCharacter, 0.2)
+      Wait.time(ChangeStatisticInGameCharacter, 0.1)
     end
   end
 end

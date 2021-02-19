@@ -6,7 +6,7 @@
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
     ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
-    ["inputObjectName"] = inputObjectName
+    ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -67,6 +67,7 @@ function Confer(loadedData)
   -- Запомнил имя плашки (Сила/Здоровье/т.д.) чтобы при копипасте не повторять формулы
   inputObjectName = loadedData.inputObjectName or {}
   originalXml = self.UI.getXml()
+  gameInventoryGUID = loadedData.gameInventoryGUID or nil
 end
 
 function FunctionCall()
@@ -136,7 +137,6 @@ end
 function ChangeName(player, input)
 	characteristicName = input or ""
   SetUIValue()
-  UpdateSave()
 end
 function SetUIValue()
   self.UI.setAttribute("name", "text", characteristicName)
@@ -148,6 +148,7 @@ function SetUIValue()
     self.UI.setAttribute("CPM_"..i.."", "text", inputCPM[i])
     self.UI.setAttribute("LM_"..i.."", "text", inputLM[i])
   end
+  Wait.time(UpdateSave, 0.1)
 end
 
 function PanelTool()
@@ -205,11 +206,11 @@ function ChangeCharacteristic(playerColor, id, value, button)
       characteristic = givenValue
     elseif(ExceptionIdBonus(id)) then
       self.UI.setValue(id, givenValue)
-      Wait.time(|| ChangeColorText(value), 0.2)
+      Wait.time(|| ChangeColorText(value), 0.1)
       characteristicBonus = givenValue
     end
     EnableCharacteristic("NotChangeHeight", value, button)
-    Wait.time(ChangeCharacteristicInGameCharacter, 0.2)
+    Wait.time(ChangeCharacteristicInGameCharacter, 0.1)
   end
 end
 function CheckCharacteristic(givenValue, value)
@@ -339,10 +340,10 @@ function ResetCharacteristic()
 end
 
 function EnableCharacteristic(check, value, button)
-  for i,guid in ipairs(inputGUID) do
+  for i,guid in pairs(inputGUID) do
     local inputObj = getObjectFromGUID(guid)
     if(inputObj ~= nil and inputObj.getColorTint() == self.getColorTint()) then
-      params = { CPM = RecalculationEquals(i) or 0, LM = inputLM[i] or 0,
+      params = { CPM = RecalculationEquals(guid) or 0, LM = inputLM[i] or 0,
                  LN = levelNumber or 0,
                  LBN = levelBonusN or 0, GUID = self.getGUID() }
 	    inputObj.call("RecalculationBonusPoints", params)
@@ -395,16 +396,18 @@ function EditInput(player, input, id)
     end
     inputObjectName[number] = tableNameObj[2]
   elseif(id:match("CPM")) then
-    RecalculationEquals(number, input)
+    if(inputGUID[number]) then
+      RecalculationEquals(inputGUID[number], input)
+    end
   elseif(id:match("LM")) then
     inputLM[number] = tonumber(input) or 0
   end
 end
-function RecalculationEquals(id, input)
-  if(input) then
-    inputCPM[id] = input
-  else
-    input = inputCPM[id]
+function RecalculationEquals(guid, input)
+  if(input and guid) then
+    inputCPM[guid] = input
+  elseif(guid) then
+    input = inputCPM[guid]
   end
   if(input) then
     local equals = (characteristic or 0) + (characteristicBonus or 0)
@@ -436,6 +439,12 @@ function RecalculationEquals(id, input)
     end
     return equals
   end
+end
+
+function RecalculationValueInInventory(param)
+  local params = {GUID = param.guid, CPM = RecalculationEquals(nil, param.input) or 0,
+    LM = 0, LN = 0 }
+  RecalculationBonusPoints(params)
 end
 
 function RecalculationLevelFromStatisticBonusPoint(LBN)
