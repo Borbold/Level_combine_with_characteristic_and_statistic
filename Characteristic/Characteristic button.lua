@@ -383,11 +383,12 @@ function RecalculationBonusPoints(params)
     end
   end
   
+  characteristicBonus = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-      characteristicBonus = pureCharacteristicBonus + locVC + locLN
+      characteristicBonus = characteristicBonus + pureCharacteristicBonus + locVC + locLN
     end
   end
 	self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
