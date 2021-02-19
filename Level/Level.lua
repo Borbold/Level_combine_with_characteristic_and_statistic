@@ -103,8 +103,8 @@ function CreateNewVariable(type, val)
 end
 
 function FunctionCall()
-  Wait.Frames(RebuildAssets, 15)
-  Wait.Frames(UpdateExperience, 20)
+  Wait.time(RebuildAssets, 0.3)
+  Wait.time(UpdateExperience, 0.5)
   SetCharacteristic()
 end
 
@@ -115,12 +115,12 @@ function SetCharacteristic()
   end
 
   for index,value in pairs(allIndex) do
-    Wait.Frames(|| ChangeInputValue(index, value), 5)
+    Wait.time(|| ChangeInputValue(index, value), 0.2)
   end
   
-  Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 20)
-  Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 20)
-  Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 20)
+  Wait.time(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 0.8)
+  Wait.time(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 0.8)
+  Wait.time(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 0.8)
 end
 
 function ChangeInputValue(id, value)
@@ -151,14 +151,14 @@ function SetTextCharacteristic(idStart, idPerLevel, idLevelPass)
 end
 
 function onLoad(savedData)
-  Wait.Frames(function()
+  Wait.time(function()
     CreateGlobalVariables()
     if(savedData != "") then
       Confer(savedData)
     end
     FunctionCall()
-    Wait.Frames(SetInteracteble, 3)
-  end, 70)
+    Wait.time(SetInteracteble, 0.2)
+  end, 1)
 end
 
 function SetInteracteble()
@@ -385,9 +385,9 @@ function ResetLevel(player)
         self.UI.setAttribute(value, "interactable", true)
       end
     end
-    Wait.Frames(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 5)
-    Wait.Frames(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 5)
-    Wait.Frames(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 5)
+    Wait.time(|| SetTextCharacteristic(allIndex["SU"], allIndex["PLU"], allIndex["LPU"]), 0.3)
+    Wait.time(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 0.3)
+    Wait.time(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 0.3)
   else
       WriteMessagePlayerToColor("Вы не ГМ, вам нельзя обнулять уровни!")
   end
@@ -564,7 +564,7 @@ function SetObjectsCharacteristics(gameCharacter)
     parametrs.id = index
     local charObj = getObjectFromGUID(charac)
 	  charObj.call("SetGameCharacter", parametrs)
-    Wait.Frames(|| RecheckConnectedDataInLevel(charObj), 10)
+    Wait.time(|| RecheckConnectedDataInLevel(charObj), 0.3)
   end
 end
 function RecheckConnectedDataInLevel(charObj)

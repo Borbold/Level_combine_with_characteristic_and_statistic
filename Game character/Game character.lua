@@ -8,7 +8,7 @@
 end
 
 function onLoad(savedData)
-  Wait.Frames(function()
+  Wait.time(function()
     colorPlayer = {
       ["White"] = {r = 1, g = 1, b = 1},
       ["Red"] = {r = 0.86, g = 0.1, b = 0.09},
@@ -22,8 +22,8 @@ function onLoad(savedData)
       ["Teal"] = {r = 0.13, g = 0.69, b = 0.61},
       ["Black"] = {r = 0.25, g = 0.25, b = 0.25}
     }
-    Wait.Frames(|| Confer(savedData), 10)
-  end, 50)
+    Wait.time(|| Confer(savedData), 0.3)
+  end, 1)
 end
 
 function Confer(savedData)
@@ -36,8 +36,8 @@ function Confer(savedData)
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     gameInventoryGUID = loadedData.gameInventoryGUID or nil
     SetStatisticObjects()
-    Wait.Frames(SetCharacteristicObjects, 13)
-    Wait.Frames(CreateFields, 15)
+    Wait.time(SetCharacteristicObjects, 0.3)
+    Wait.time(CreateFields, 0.5)
   end
 end
 
@@ -46,8 +46,8 @@ function SetGUID(params)
   SetCharacteristic(params.characteristicsGUID)
   gameInventoryGUID = params.gameInventoryGUID
 
-  Wait.Frames(CreateFields, 3)
-  Wait.Frames(UpdateSave, 5)
+  Wait.time(CreateFields, 0.2)
+  Wait.time(UpdateSave, 0.4)
 end
 function SetStatistic(statisticsGUID)
   if(statisticsGUID) then
@@ -101,7 +101,7 @@ function CreateFields()
   self.UI.setXml(originalXml)
   AddNewField()
   for i = 1, #allStatisticsGUID do
-    Wait.Frames(|| ChangeStatistic(i), 10)
+    Wait.time(|| ChangeStatistic(i), 0.2)
   end
 end
 function AddNewField()
@@ -273,7 +273,7 @@ function EnlargeHeightPanelStat(countStatisticIndex)
   if(countStatisticIndex > 4) then
     --preferredHeight=50 cellSpacing=5
     local newHeightPanel = countStatisticIndex * 50 + countStatisticIndex * 5
-    Wait.Frames(|| self.UI.setAttribute("TLPanelStat", "height", newHeightPanel), 5)
+    Wait.time(|| self.UI.setAttribute("TLPanelStat", "height", newHeightPanel), 0.2)
   end
 end
 
@@ -281,7 +281,7 @@ function EnlargeHeightPanelChar(countCharacteristicIndex)
   if(countCharacteristicIndex > 4) then
     --preferredHeight=50 cellSpacing=5
     local newHeightPanel = countCharacteristicIndex * 50 + countCharacteristicIndex * 5
-    Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "height", newHeightPanel), 5)
+    Wait.time(|| self.UI.setAttribute("TLPanelChar", "height", newHeightPanel), 0.2)
   end
 end
 function EnlargeWidthPanelChar(lengthText)
@@ -291,8 +291,8 @@ function EnlargeWidthPanelChar(lengthText)
   end
   local locWidth = charWidth
   if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.Frames(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 5)
-  Wait.Frames(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 5)
+  Wait.time(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 0.2)
+  Wait.time(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 0.2)
 end
 
 function EnlargeHeightPanelInventory(countItem)
@@ -300,7 +300,7 @@ function EnlargeHeightPanelInventory(countItem)
     --preferredHeight=50 cellSpacing=5
     countItem = countItem + 1
     local newHeightPanel = countItem * 50 + countItem * 5
-    Wait.Frames(|| self.UI.setAttribute("TLPanelInven", "height", newHeightPanel), 5)
+    Wait.time(|| self.UI.setAttribute("TLPanelInven", "height", newHeightPanel), 0.2)
   end
 end
 function EnlargeWidthPanelInventory(lengthText)
@@ -310,8 +310,8 @@ function EnlargeWidthPanelInventory(lengthText)
   end
   local locWidth = invWidth
   if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.Frames(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - 3), 5)
-  Wait.Frames(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 5)
+  Wait.time(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - 3), 0.2)
+  Wait.time(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 0.2)
 end
 
 function ChangeCharacteristic(id)
@@ -328,7 +328,7 @@ function Minus(player, val)
   val = tonumber(val)
   if(allStatistics[val]) then
 	  allStatistics[val].call("Minus", player)
-    Wait.Frames(|| ChangeStatistic(val), 2)
+    Wait.time(|| ChangeStatistic(val), 0.2)
   else
     broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
@@ -337,7 +337,7 @@ function Plus(player, val)
   val = tonumber(val)
   if(allStatistics[val]) then
 	  allStatistics[val].call("Plus", player)
-    Wait.Frames(|| ChangeStatistic(val), 2)
+    Wait.time(|| ChangeStatistic(val), 0.2)
   else
     broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end

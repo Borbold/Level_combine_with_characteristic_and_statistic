@@ -46,12 +46,12 @@ end
 function onLoad(savedData)
   self.setGMNotes("Статистика")
   CreateGlobalVariable()
-  Wait.Frames(RebuildAssets, 5)
+  Wait.time(RebuildAssets, 0.2)
   if(savedData != "") then
     local loadedData = JSON.decode(savedData)
     Confer(loadedData)
   end
-  Wait.Frames(UpdateValue, 8)
+  Wait.time(UpdateValue, 0.3)
 end
 
 function HideUI()
@@ -139,7 +139,7 @@ function ChangeStatistics(playerColor, value)
       if(currentStatisticValue < 0) then currentStatisticValue = 0 end
       if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
       UpdateValue()
-      Wait.Frames(ChangeStatisticInGameCharacter, 3)
+      Wait.time(ChangeStatisticInGameCharacter, 0.2)
     end
   end
 end

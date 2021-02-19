@@ -31,7 +31,7 @@ function CreateGlobalVariables()
   minCharacteristic, characteristic = 0, 0
   characteristicBonus, pureCharacteristicBonus = 0, 0
   levelBonusN, levelNumber = 0, 1
-  Wait.frames(PerformParameterCheck, 5)
+  Wait.time(PerformParameterCheck, 0.2)
 end
 
 function PerformParameterCheck()
@@ -70,20 +70,20 @@ function Confer(loadedData)
 end
 
 function FunctionCall()
-	Wait.frames(RebuildAssets, 10)
-  Wait.frames(AddNewFieldForConnection, 13)
-  Wait.frames(|| ChangeColorText(0), 15)
+	Wait.time(RebuildAssets, 0.3)
+  Wait.time(AddNewFieldForConnection, 0.4)
+  Wait.time(|| ChangeColorText(0), 0.5)
 end
 
 function onLoad(savedData)
-  Wait.Frames(function()
+  Wait.time(function()
     CreateGlobalVariables()
     if(savedData ~= "") then
       local loadedData = JSON.decode(savedData)
-      Wait.frames(|| Confer(loadedData), 8)
+      Wait.time(|| Confer(loadedData), 0.2)
     end
     FunctionCall()
-  end, 30)
+  end, 0.8)
 end
 
 function AddNewFieldForConnection()
@@ -126,11 +126,11 @@ function EnlargeHeightPanel(count)
     --220 название и выбор + текст
     --preferredHeight=90 cellSpacing=10
     dataHeight = 220 + count * 90 + count * 10
-    Wait.frames(|| self.UI.setAttribute("panelTable", "height", dataHeight), 5)
+    Wait.time(|| self.UI.setAttribute("panelTable", "height", dataHeight), 0.2)
   else
-    Wait.frames(|| self.UI.setAttribute("panelTable", "height", 160), 5)
+    Wait.time(|| self.UI.setAttribute("panelTable", "height", 160), 0.2)
   end
-  Wait.frames(SetUIValue, 10)
+  Wait.time(SetUIValue, 0.4)
 end
 
 function ChangeName(player, input)
@@ -205,11 +205,11 @@ function ChangeCharacteristic(playerColor, id, value, button)
       characteristic = givenValue
     elseif(ExceptionIdBonus(id)) then
       self.UI.setValue(id, givenValue)
-      Wait.frames(|| ChangeColorText(value), 3)
+      Wait.time(|| ChangeColorText(value), 0.2)
       characteristicBonus = givenValue
     end
     EnableCharacteristic("NotChangeHeight", value, button)
-    Wait.frames(ChangeCharacteristicInGameCharacter, 3)
+    Wait.time(ChangeCharacteristicInGameCharacter, 0.2)
   end
 end
 function CheckCharacteristic(givenValue, value)
@@ -334,7 +334,7 @@ function ResetCharacteristic()
   self.UI.setValue("textCharacteristicBonus", 0)
   ShowUI("textCharacteristic") ShowUI("textCharacteristicBonus")
   EnableCharacteristic("Reset")
-  Wait.frames(AddNewFieldForConnection, 13)
+  Wait.time(AddNewFieldForConnection, 0.5)
 end
 
 function EnableCharacteristic(check, value, button)
