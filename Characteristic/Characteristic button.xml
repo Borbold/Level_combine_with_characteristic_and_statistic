@@ -88,7 +88,7 @@
 			<Row preferredHeight='90'>
 				<Cell columnSpan='2'>
 					<InputField id='inputName' onEndEdit='ChangeName' placeholder='Название'
-						fontSize='60' characterValidation='Name' />
+						fontSize='60' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<Dropdown id='selectionType' onValueChanged='DropdownChange' fontSize='55' height='70' itemHeight='80'

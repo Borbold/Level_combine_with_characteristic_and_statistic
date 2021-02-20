@@ -58,7 +58,7 @@
 				fontSize='60' characterValidation='Integer' />
 			<HorizontalLayout height='80' width='800' spacing='80'>
 				<InputField id='inputName' onEndEdit='InputChange' placeholder='Название'
-					fontSize='60' characterValidation='Name' />
+					fontSize='60' />
 				<InputField id='inputColor' onEndEdit='InputChange' placeholder="Цвет:#..."
 					fontSize='60' characterLimit='6' characterValidation='Alphanumeric' />
 			</HorizontalLayout>
