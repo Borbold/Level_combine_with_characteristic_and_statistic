@@ -157,8 +157,8 @@ function onLoad(savedData)
       Confer(savedData)
     end
     FunctionCall()
-    Wait.time(SetInteracteble, 0.2)
-  end, 1)
+    Wait.time(SetInteracteble, 0.5)
+  end, 1.5)
 end
 
 function SetInteracteble()

@@ -71,9 +71,9 @@ function Confer(loadedData)
 end
 
 function FunctionCall()
-	Wait.time(RebuildAssets, 0.3)
-  Wait.time(AddNewFieldForConnection, 0.4)
-  Wait.time(|| ChangeColorText(0), 0.5)
+	Wait.time(RebuildAssets, 0.5)
+  Wait.time(AddNewFieldForConnection, 0.6)
+  Wait.time(|| ChangeColorText(0), 0.7)
 end
 
 function onLoad(savedData)

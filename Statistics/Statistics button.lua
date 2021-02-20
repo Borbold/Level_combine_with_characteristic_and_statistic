@@ -51,8 +51,8 @@ function onLoad(savedData)
     local loadedData = JSON.decode(savedData)
     Confer(loadedData)
   end
-  Wait.time(UpdateValue, 0.3)
-  Wait.time(ChangeUI, 0.5)
+  Wait.time(UpdateValue, 0.5)
+  Wait.time(ChangeUI, 0.7)
 end
 
 function ChangeUI()
