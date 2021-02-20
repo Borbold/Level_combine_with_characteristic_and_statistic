@@ -31,7 +31,7 @@ function CreateGlobalVariables()
   minCharacteristic, characteristic = 0, 0
   characteristicBonus, pureCharacteristicBonus = 0, 0
   levelBonusN, levelNumber = 0, 1
-  Wait.time(PerformParameterCheck, 0.2)
+  Wait.time(PerformParameterCheck, 0.5)
 end
 
 function PerformParameterCheck()
@@ -120,7 +120,7 @@ function AddNewFieldForConnection()
 
   startXml = startXml .. newFields .. endXml
   self.UI.setXml(startXml)
-  EnlargeHeightPanel(countField)
+  Wait.time(|| EnlargeHeightPanel(countField), 0.1)
 end
 function EnlargeHeightPanel(count)
   if(CheckGMNot(usual)) then
@@ -139,13 +139,14 @@ function ChangeName(player, input)
   SetUIValue()
 end
 function SetUIValue()
+  self.UI.setAttribute("inputName", "text", characteristicName)
   self.UI.setAttribute("name", "text", characteristicName)
 	self.UI.setValue("textCharacteristic", characteristic)
   self.UI.setValue("textCharacteristicBonus", characteristicBonus)
   self.UI.setValue("GUIDLevel", GUIDLevelIndex)
   for i = 1, #inputGUID do
     self.UI.setAttribute("GUID_"..i.."", "text", inputGUID[i])
-    self.UI.setAttribute("CPM_"..i.."", "text", inputCPM[i])
+    self.UI.setAttribute("CPM_"..i.."", "text", inputCPM[inputGUID[i]])
     self.UI.setAttribute("LM_"..i.."", "text", inputLM[i])
   end
   Wait.time(UpdateSave, 0.1)

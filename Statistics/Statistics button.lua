@@ -52,6 +52,11 @@ function onLoad(savedData)
     Confer(loadedData)
   end
   Wait.time(UpdateValue, 0.3)
+  Wait.time(ChangeUI, 0.5)
+end
+
+function ChangeUI()
+  self.UI.setAttribute("inputColor", "text", progressBarColor)
 end
 
 function HideUI()
@@ -102,7 +107,7 @@ function UpdateValue()
 	self.UI.setAttribute("bar", "percentage", per)
   self.UI.setValue("textBar", strPer)
   self.UI.setAttribute("name", "text", statisticName)
-  self.UI.setAttribute("bar", "fillImageColor", progressBarColor)
+  self.UI.setAttribute("bar", "fillImageColor", "#"..progressBarColor)
   UpdateSave()
 end
 
@@ -114,11 +119,13 @@ end
 
 function InputChange(player, input, idInput)
   if(idInput == "inputValue") then
+    input = (input ~= "" and input) or 0
 	  ChangeStatistics(player.color, input)
   elseif(idInput == "inputMaxValue") then
+    input = (input ~= "" and input) or 0
     pureMaxCurrentStatisticValue = tonumber(input)
     ChangeMaximumStatisticValue(input)
-  elseif(idInput == "inputName") then
+  elseif(idInput == "inputName" and input ~= "") then
     ChangeName(input)
   elseif(idInput == "inputColor") then
     ChangeProgressBarColor(input)
@@ -217,11 +224,11 @@ function ChangeName(value)
 end
 
 function ChangeProgressBarColor(value)
-  value = value or ""
-  if(value == "" or value:len() < 6) then value = progressBarColor end
-  progressBarColor = value
-  if(string.match(progressBarColor, "#") == nil) then progressBarColor = "#" .. progressBarColor end
-  self.UI.setAttribute("bar", "fillImageColor", progressBarColor)
+  if(value ~= "" and value:len() == 6) then
+    progressBarColor = value
+    self.UI.setAttribute("bar", "fillImageColor", "#"..value)
+    UpdateSave()
+  end
 end
 --Игровой персонаж
 function SetGameCharacter(parametrs)
