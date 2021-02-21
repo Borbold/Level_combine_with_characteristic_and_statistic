@@ -358,7 +358,7 @@ function EnableCharacteristic(check)
 end
 function RecalculationBonusPoints(params)
   ConnectedCharacteristic[tostring(params.GUID)] = params
-  
+
   local locCharBonus = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
@@ -368,7 +368,6 @@ function RecalculationBonusPoints(params)
     end
   end
   ChangeCharacteristic("Black", "textCharacteristicBonus", locCharBonus)
-  UpdateSave()
 end
 
 function NewLevel()
@@ -381,16 +380,12 @@ function EditInput(player, input, id)
   local index = id:find("_")
   local number = tonumber(id:sub(index + 1))
 	if(id:match("GUID")) then
-    inputGUID[number] = input
-    local countWord, word = 1, ""
-    for S in getObjectFromGUID(input).getName():gmatch("%S+") do
-      if(countWord == 2) then
-        word = word .. " " .. S
-      end
-      countWord = 2
+    if(input ~= "") then
+      inputGUID[number] = input
+      local nameObj = getObjectFromGUID(input).getName()
+      print("Была добавлена " .. nameObj)
+      inputObjectName[number] = nameObj
     end
-    print("Была добавлена " .. word)
-    inputObjectName[number] = word
   elseif(id:match("CPM")) then
     if(inputGUID[number]) then
       RecalculationEquals(inputGUID[number], input)
@@ -459,19 +454,31 @@ function RecheckConnectedData(param)
   for _,objGUID in pairs(param.allStripsGUID) do
     local obj = getObjectFromGUID(objGUID)
     for i,saveName in ipairs(inputObjectName) do
-      if(obj.getName():find(saveName) and obj.getColorTint() == self.getColorTint()) then
+      if(obj.getName() == saveName and obj.getColorTint() == self.getColorTint()) then
         inputLM[i] = inputLM[i]
         inputCPM[objGUID] = inputCPM[inputGUID[i]]
         inputGUID[i] = objGUID
-        obj.call("ResetConnectedCharacteristic")
+        local param = {
+          currentGUID = self.getGUID(),
+          LM = inputLM[i] or 0, LN = levelNumber or 0,
+          CPM = RecalculationEquals(objGUID) or 0, LBN = levelBonusN or 0
+        }
+        Wait.time(function() obj.call("ResetConnectedCharacteristic", param) end, 0.3)
       end
     end
   end
   Wait.time(SetUIValue, 0.5)
 end
 
-function ResetConnectedCharacteristic()
-  ConnectedCharacteristic = {}
+function ResetConnectedCharacteristic(param)
+  for guid,_ in pairs(ConnectedCharacteristic) do
+    local objConnect = getObjectFromGUID(guid)
+    if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
+      ConnectedCharacteristic[guid] = nil
+    end
+  end
+  ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM}
+  UpdateSave()
 end
 
 function DenoteSth()

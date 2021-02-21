@@ -198,8 +198,15 @@ function ResetStatistic()
   ConnectedCharacteristic = {}
 end
 
-function ResetConnectedCharacteristic()
-  ConnectedCharacteristic = {}
+function ResetConnectedCharacteristic(param)
+  for guid,_ in pairs(ConnectedCharacteristic) do
+    local objConnect = getObjectFromGUID(guid)
+    if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
+      ConnectedCharacteristic[guid] = nil
+    end
+  end
+  ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM, param.LBN}
+  UpdateSave()
 end
 
 function RecalculationBonusPoints(params)
