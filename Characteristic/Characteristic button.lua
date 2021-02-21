@@ -136,8 +136,8 @@ end
 function SetUIValue()
   self.UI.setAttribute("inputName", "text", characteristicName)
   self.UI.setAttribute("name", "text", characteristicName)
-	self.UI.setValue("textCharacteristic", characteristic)
-  self.UI.setValue("textCharacteristicBonus", characteristicBonus)
+	self.UI.setValue("textCharacteristic", Round(characteristic))
+  self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
   self.UI.setValue("GUIDLevel", GUIDLevelIndex)
   for i = 1, #inputGUID do
     self.UI.setAttribute("GUID_"..i.."", "text", inputGUID[i])
