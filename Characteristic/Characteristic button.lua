@@ -71,7 +71,7 @@ end
 
 function FunctionCall()
 	Wait.time(RebuildAssets, 0.7)
-  Wait.time(|| ChangeColorText(0), 0.8)
+  Wait.time(ChangeColorText, 0.8)
   Wait.time(AddNewFieldForConnection, 0.9)
 end
 
@@ -467,6 +467,7 @@ function RecheckConnectedData(param)
       end
     end
   end
+  UpdateSave()
 end
 
 function ResetConnectedCharacteristic()
