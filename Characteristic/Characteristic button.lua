@@ -344,7 +344,7 @@ function EnableCharacteristic(check, value, button)
     end
   end
   
-  if(CheckGMNot(usual) and (not check or check ~= "NotChangeHeight")) then
+  if(not check or check ~= "NotChangeHeight") then
     if(check ~= "Reset" and #inputGUID >= countField) then
       countField = countField + 1
     end
