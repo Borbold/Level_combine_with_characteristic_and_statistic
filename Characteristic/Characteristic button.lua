@@ -123,14 +123,10 @@ function AddNewFieldForConnection()
   Wait.time(|| EnlargeHeightPanel(countField), 0.1)
 end
 function EnlargeHeightPanel(count)
-  if(CheckGMNot(usual)) then
-    --220 название и выбор + текст
-    --preferredHeight=90 cellSpacing=10
-    dataHeight = 220 + count * 90 + count * 10
-    Wait.time(|| self.UI.setAttribute("panelTable", "height", dataHeight), 0.2)
-  else
-    Wait.time(|| self.UI.setAttribute("panelTable", "height", 160), 0.2)
-  end
+  --220 название и выбор + текст
+  --preferredHeight=90 cellSpacing=10
+  dataHeight = 220 + count * 90 + count * 10
+  Wait.time(|| self.UI.setAttribute("panelTable", "height", dataHeight), 0.2)
   Wait.time(SetUIValue, 0.4)
 end
 
@@ -301,14 +297,7 @@ end
 function DropdownChange(player, option)
   self.setGMNotes("Характеристика " .. option)
   self.UI.setAttribute("selectionType", "text", option)
-  CheckOption(option)
-end
-function CheckOption(option)
-  if(option == usual) then
-    self.UI.setAttribute("panelTable", "height", dataHeight)
-  else
-    self.UI.setAttribute("panelTable", "height", 160)
-  end
+  self.UI.setAttribute("panelTable", "height", dataHeight)
 end
 
 function CheckPlayer(playerColor)
