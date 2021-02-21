@@ -42,7 +42,6 @@ function PerformParameterCheck()
     if(CheckGMNot(combat)) then locType = 1
     elseif(CheckGMNot(peace)) then locType = 2
     else locType = 3 end
-    CheckOption(locType)
     self.UI.setAttribute("selectionType", "value", locType)
     self.UI.setAttribute("selectionType", "text", locTypeText)
   end
