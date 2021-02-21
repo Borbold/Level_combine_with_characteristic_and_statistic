@@ -64,7 +64,6 @@ function HideUI()
     self.UI.hide(listIdUI[i])
   end
 end
-
 function ShowUI()
   for i = 1, #listIdUI do
     self.UI.show(listIdUI[i])
@@ -122,14 +121,23 @@ function InputChange(player, input, idInput)
     input = (input ~= "" and input) or 0
 	  ChangeStatistics(player.color, input)
   elseif(idInput == "inputMaxValue") then
-    input = (input ~= "" and input) or 0
+    input = input ~= "" and tonumber(input)
     pureMaxCurrentStatisticValue = tonumber(input)
-    ChangeMaximumStatisticValue(input)
+    ChangeMaximumStatisticValue(0)
   elseif(idInput == "inputName" and input ~= "") then
     ChangeName(input)
   elseif(idInput == "inputColor") then
     ChangeProgressBarColor(input)
   end
+end
+function ChangeMaximumStatisticValue(value)
+  value = value ~= "" and tonumber(value)
+  currentStatisticValue = tonumber(currentStatisticValue)
+
+  currentStatisticValue = (value < currentStatisticValue and value > 0 and value) or currentStatisticValue
+  maximumStatisticValue = (value + pureMaxCurrentStatisticValue > 0 and (value + pureMaxCurrentStatisticValue)) or 1
+  UpdateValue()
+  Wait.time(ChangeStatisticInGameCharacter, 0.25)
 end
 
 function Minus(player)
@@ -146,7 +154,7 @@ function ChangeStatistics(playerColor, value)
       if(currentStatisticValue < 0) then currentStatisticValue = 0 end
       if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
       UpdateValue()
-      Wait.time(ChangeStatisticInGameCharacter, 0.1)
+      Wait.time(ChangeStatisticInGameCharacter, 0.25)
     end
   end
 end
@@ -202,18 +210,10 @@ function RecalculationBonusPoints(params)
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-	    locCorrentVal = locCorrentVal + pureMaxCurrentStatisticValue + p.LBN + locVC + locLN
+	    locCorrentVal = locCorrentVal + p.LBN + locVC + locLN
     end
   end
-  ChangeMaximumStatisticValue(math.ceil(locCorrentVal))
-end
-function ChangeMaximumStatisticValue(value)
-  value = (tonumber(value) > 0 and value) or 1
-  value = (value ~= "" and value) or maximumStatisticValue
-  value = tonumber(value) currentStatisticValue = tonumber(currentStatisticValue)
-  currentStatisticValue = (value < currentStatisticValue and value) or currentStatisticValue
-  maximumStatisticValue = value
-  UpdateValue()
+  ChangeMaximumStatisticValue(locCorrentVal)
 end
 
 function ChangeName(value)

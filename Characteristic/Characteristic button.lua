@@ -174,9 +174,8 @@ function ChangeCharacteristicInGameCharacter()
   end
 end
 
-function ChangeColorText(value)
+function ChangeColorText()
   local id = "textCharacteristicBonus"
-  pureCharacteristicBonus = pureCharacteristicBonus + value
   if(pureCharacteristicBonus > 0) then
     self.UI.setAttribute(id, "color", "Green")
   elseif(pureCharacteristicBonus < 0) then
@@ -193,7 +192,7 @@ end
 function Minus(player, id)
   ChangeCharacteristic(player.color, id, -1, true)
 end
-function ChangeCharacteristic(playerColor, id, value, button)
+function ChangeCharacteristic(playerColor, id, value, changeOurselves)
   local givenValue = 0
   givenValue = tonumber(self.UI.getValue(id)) + value
   if(CheckPlayer(playerColor)) then
@@ -201,11 +200,16 @@ function ChangeCharacteristic(playerColor, id, value, button)
       self.UI.setValue(id, givenValue)
       characteristic = givenValue
     elseif(ExceptionIdBonus(id)) then
-      self.UI.setValue(id, givenValue)
-      Wait.time(|| ChangeColorText(value), 0.1)
-      characteristicBonus = givenValue
+      if(changeOurselves) then
+        pureCharacteristicBonus = pureCharacteristicBonus + value
+        characteristicBonus = givenValue
+      else
+        characteristicBonus = value
+      end
+      self.UI.setValue(id, characteristicBonus)
+      Wait.time(|| ChangeColorText(), 0.1)
     end
-    EnableCharacteristic("NotChangeHeight", value, button)
+    EnableCharacteristic("NotChangeHeight")
     Wait.time(ChangeCharacteristicInGameCharacter, 0.1)
   end
 end
@@ -328,7 +332,7 @@ function ResetCharacteristic()
   Wait.time(AddNewFieldForConnection, 0.5)
 end
 
-function EnableCharacteristic(check, value, button)
+function EnableCharacteristic(check)
   for i,guid in pairs(inputGUID) do
     local inputObj = getObjectFromGUID(guid)
     if(inputObj ~= nil and inputObj.getColorTint() == self.getColorTint()) then
@@ -355,16 +359,15 @@ end
 function RecalculationBonusPoints(params)
   ConnectedCharacteristic[tostring(params.GUID)] = params
   
-  characteristicBonus = 0
+  local locCharBonus = 0
   for _,p in pairs(ConnectedCharacteristic) do
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-      characteristicBonus = characteristicBonus + pureCharacteristicBonus + locVC + locLN
+      locCharBonus = locCharBonus + locVC + locLN
     end
   end
-  characteristicBonus = Round(characteristicBonus)
-	self.UI.setValue("textCharacteristicBonus", characteristicBonus)
+  ChangeCharacteristic("Black", "textCharacteristicBonus", locCharBonus)
   UpdateSave()
 end
 
