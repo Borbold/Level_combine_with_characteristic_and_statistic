@@ -71,9 +71,9 @@ function Confer(loadedData)
 end
 
 function FunctionCall()
-	Wait.time(RebuildAssets, 0.5)
-  Wait.time(AddNewFieldForConnection, 0.6)
-  Wait.time(|| ChangeColorText(0), 0.7)
+	Wait.time(RebuildAssets, 0.7)
+  Wait.time(AddNewFieldForConnection, 0.8)
+  Wait.time(|| ChangeColorText(0), 0.9)
 end
 
 function onLoad(savedData)
@@ -81,10 +81,10 @@ function onLoad(savedData)
     CreateGlobalVariables()
     if(savedData ~= "") then
       local loadedData = JSON.decode(savedData)
-      Wait.time(|| Confer(loadedData), 0.2)
+      Wait.time(|| Confer(loadedData), 0.6)
     end
     FunctionCall()
-  end, 0.8)
+  end, 1.5)
 end
 
 function AddNewFieldForConnection()

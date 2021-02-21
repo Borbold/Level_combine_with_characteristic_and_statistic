@@ -46,8 +46,8 @@ function SetGUID(params)
   SetCharacteristic(params.characteristicsGUID)
   gameInventoryGUID = params.gameInventoryGUID
 
-  Wait.time(CreateFields, 0.2)
-  Wait.time(UpdateSave, 0.4)
+  Wait.time(CreateFields, 0.6)
+  Wait.time(UpdateSave, 0.7)
 end
 function SetStatistic(statisticsGUID)
   if(statisticsGUID) then
@@ -291,7 +291,7 @@ function EnlargeWidthPanelChar(lengthText)
   end
   local locWidth = charWidth
   if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.time(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - 3), 0.2)
+  Wait.time(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - lengthText), 0.2)
   Wait.time(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 0.2)
 end
 
@@ -310,7 +310,7 @@ function EnlargeWidthPanelInventory(lengthText)
   end
   local locWidth = invWidth
   if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.time(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - 3), 0.2)
+  Wait.time(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - lengthText), 0.2)
   Wait.time(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 0.2)
 end
 
