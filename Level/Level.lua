@@ -564,7 +564,7 @@ function SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
     parametrs.id = index
     local charObj = getObjectFromGUID(charac)
 	  charObj.call("SetGameCharacter", parametrs)
-    Wait.time(|| RecheckConnectedDataInLevel(charObj), 0.3)
+    Wait.time(|| RecheckConnectedDataInLevel(charObj), 1.6)
   end
 end
 function RecheckConnectedDataInLevel(charObj)

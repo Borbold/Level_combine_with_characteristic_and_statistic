@@ -71,8 +71,8 @@ end
 
 function FunctionCall()
 	Wait.time(RebuildAssets, 0.7)
-  Wait.time(AddNewFieldForConnection, 0.8)
-  Wait.time(|| ChangeColorText(0), 0.9)
+  Wait.time(|| ChangeColorText(0), 0.8)
+  Wait.time(AddNewFieldForConnection, 0.9)
 end
 
 function onLoad(savedData)
@@ -136,8 +136,8 @@ end
 function SetUIValue()
   self.UI.setAttribute("inputName", "text", characteristicName)
   self.UI.setAttribute("name", "text", characteristicName)
-	self.UI.setValue("textCharacteristic", Round(characteristic))
-  self.UI.setValue("textCharacteristicBonus", Round(characteristicBonus))
+	self.UI.setValue("textCharacteristic", characteristic)
+  self.UI.setValue("textCharacteristicBonus", characteristicBonus)
   self.UI.setValue("GUIDLevel", GUIDLevelIndex)
   for i = 1, #inputGUID do
     self.UI.setAttribute("GUID_"..i.."", "text", inputGUID[i])
@@ -382,11 +382,15 @@ function EditInput(player, input, id)
   local number = tonumber(id:sub(index + 1))
 	if(id:match("GUID")) then
     inputGUID[number] = input
-    local tableNameObj = {}
+    local countWord, word = 1, ""
     for S in getObjectFromGUID(input).getName():gmatch("%S+") do
-      table.insert(tableNameObj, S)
+      if(countWord == 2) then
+        word = word .. " " .. S
+      end
+      countWord = 2
     end
-    inputObjectName[number] = tableNameObj[2]
+    print("Была добавлена " .. word)
+    inputObjectName[number] = word
   elseif(id:match("CPM")) then
     if(inputGUID[number]) then
       RecalculationEquals(inputGUID[number], input)
