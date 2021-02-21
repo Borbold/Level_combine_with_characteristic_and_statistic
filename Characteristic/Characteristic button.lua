@@ -460,6 +460,8 @@ function RecheckConnectedData(param)
     local obj = getObjectFromGUID(objGUID)
     for i,saveName in ipairs(inputObjectName) do
       if(obj.getName():find(saveName) and obj.getColorTint() == self.getColorTint()) then
+        inputLM[i] = inputLM[i]
+        inputCPM[objGUID] = inputCPM[inputGUID[i]]
         inputGUID[i] = objGUID
         obj.call("ResetConnectedCharacteristic")
       end
