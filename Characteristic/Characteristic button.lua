@@ -467,7 +467,7 @@ function RecheckConnectedData(param)
       end
     end
   end
-  UpdateSave()
+  Wait.time(SetUIValue, 0.5)
 end
 
 function ResetConnectedCharacteristic()
