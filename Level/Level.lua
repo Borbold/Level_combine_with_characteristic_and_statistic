@@ -86,7 +86,6 @@ function Confer(savedData)
   allFeatureGUID = loadedData.allFeatureGUID or {}
   allStatisticGUID = loadedData.allStatisticGUID or {}
   LBN = loadedData.LBN or 0
-  SetObjectFeature()
   exp = loadedData.savedExp or 0
   level = loadedData.savedLastLevel or 1
   if(loadedData.nextLevelExperience ~= nil) then nextLevelExperience = loadedData.nextLevelExperience
@@ -158,7 +157,7 @@ function onLoad(savedData)
     end
     FunctionCall()
     Wait.time(SetInteracteble, 0.5)
-  end, 1.5)
+  end, 1.4)
 end
 
 function SetInteracteble()
@@ -524,7 +523,7 @@ function SetObjectFeature()
   for id,guid in pairs(allFeatureGUID) do
     local obj = getObjectFromGUID(guid)
     if(obj ~= nil) then
-      obj.UI.setValue("GUIDLevel", self.getGUID())
+      obj.call("SetGUIDLevel", self.getGUID())
       allFeatureObject[id] = obj
     end
   end

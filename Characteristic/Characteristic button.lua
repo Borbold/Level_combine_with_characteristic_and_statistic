@@ -1,7 +1,7 @@
 ﻿function UpdateSave()
   self.setName((Player[DenoteSth()].steam_name or DenoteSth()) .. ": " .. (characteristicName or ""))
   local dataToSave = { ["characteristic"] = characteristic, ["characteristicBonus"] = characteristicBonus,
-    ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = self.UI.getValue("GUIDLevel"),
+    ["minCharacteristic"] = minCharacteristic, ["GUIDLevelIndex"] = GUIDLevelIndex,
     ["levelNumber"] = levelNumber, ["inputGUID"] = inputGUID, ["inputCPM"] = inputCPM, ["inputLM"] = inputLM,
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
@@ -145,6 +145,11 @@ function SetUIValue()
     self.UI.setAttribute("LM_"..i.."", "text", inputLM[i])
   end
   Wait.time(UpdateSave, 0.1)
+end
+
+function SetGUIDLevel(guid)
+  GUIDLevelIndex = guid
+  UpdateSave()
 end
 
 function PanelTool()
