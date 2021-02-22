@@ -472,13 +472,15 @@ function RecheckConnectedData(param)
 end
 
 function ResetConnectedCharacteristic(param)
-  for guid,connectGUID in pairs(ConnectedCharacteristic) do
+  ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM}
+  local countGUID = 0
+  for guid,_ in pairs(ConnectedCharacteristic) do
+    countGUID = countGUID + 1
     local objConnect = getObjectFromGUID(guid)
     if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
-      connectGUID = nil
+      ConnectedCharacteristic[guid] = nil
     end
   end
-  ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM}
   Wait.time(|| UpdateSave, 0.1)
 end
 
