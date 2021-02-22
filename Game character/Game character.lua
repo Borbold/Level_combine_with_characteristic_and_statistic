@@ -101,7 +101,7 @@ function CreateFields()
   self.UI.setXml(originalXml)
   AddNewField()
   for i = 1, #allStatisticsGUID do
-    Wait.time(|| ChangeStatistic(i), 0.2)
+    Wait.time(|| ChangeStatistic(i), 1.2)
   end
 end
 function AddNewField()
@@ -328,7 +328,7 @@ function Minus(player, val)
   val = tonumber(val)
   if(allStatistics[val]) then
 	  allStatistics[val].call("Minus", player)
-    Wait.time(|| ChangeStatistic(val), 0.2)
+    Wait.time(|| ChangeStatistic(val), 0.1)
   else
     broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
@@ -337,7 +337,7 @@ function Plus(player, val)
   val = tonumber(val)
   if(allStatistics[val]) then
 	  allStatistics[val].call("Plus", player)
-    Wait.time(|| ChangeStatistic(val), 0.2)
+    Wait.time(|| ChangeStatistic(val), 0.1)
   else
     broadcastToAll("Вы удалили эту статистику. Произведите переподключение")
   end
