@@ -199,14 +199,14 @@ function ResetStatistic()
 end
 
 function ResetConnectedCharacteristic(param)
-  for guid,_ in pairs(ConnectedCharacteristic) do
+  for guid,connectGUID in pairs(ConnectedCharacteristic) do
     local objConnect = getObjectFromGUID(guid)
     if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
-      ConnectedCharacteristic[guid] = nil
+      connectGUID = nil
     end
   end
   ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM, param.LBN}
-  UpdateSave()
+  Wait.time(|| UpdateSave, 0.1)
 end
 
 function RecalculationBonusPoints(params)

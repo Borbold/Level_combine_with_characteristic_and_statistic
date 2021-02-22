@@ -454,7 +454,8 @@ function RecheckConnectedData(param)
   for _,objGUID in pairs(param.allStripsGUID) do
     local obj = getObjectFromGUID(objGUID)
     for i,saveName in ipairs(inputObjectName) do
-      if(obj.getName() == saveName and obj.getColorTint() == self.getColorTint()) then
+      if(obj.getName():sub(obj.getName():find(":") + 1) == saveName:sub(saveName:find(":") + 1)
+         and obj.getColorTint() == self.getColorTint()) then
         inputLM[i] = inputLM[i]
         inputCPM[objGUID] = inputCPM[inputGUID[i]]
         inputGUID[i] = objGUID
@@ -471,14 +472,14 @@ function RecheckConnectedData(param)
 end
 
 function ResetConnectedCharacteristic(param)
-  for guid,_ in pairs(ConnectedCharacteristic) do
+  for guid,connectGUID in pairs(ConnectedCharacteristic) do
     local objConnect = getObjectFromGUID(guid)
     if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
-      ConnectedCharacteristic[guid] = nil
+      connectGUID = nil
     end
   end
   ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM}
-  UpdateSave()
+  Wait.time(|| UpdateSave, 0.1)
 end
 
 function DenoteSth()
