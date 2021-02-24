@@ -1,0 +1,15 @@
+<Defaults>
+	<Text class='bestFit' color='#ffffff' fontStyle='Bold' outline='#000000' outlineSize='1 1'
+		resizeTextForBestFit='True' resizeTextMaxSize='50'/>
+	<InputField class='hiddenInput' height='75' width='80' fontSize='50'
+		color='#ffffff00' textColor='ffffff00' visibility='Black'/>
+	<Button class='hiddenButton' height='75' width='50'
+		color='#ffffff00' textColor='ffffff00' visibility='Black'/>
+</Defaults>
+
+<Panel height='850' width='400' position='-620 800 -65' rotation='0 0 180'>
+	<Text id='weight' class='bestFit' alignment='MiddleRight' text='текущий/максимальный' />
+	<InputField id='inputMaxWeight' class='hiddenInput' onValueChanged='InputChangeWeight' onEndEdit='ReturnOriginal'
+		characterValidation='Decimal' offsetXY='175 0' text='50'/>
+	<Button class='hiddenButton' offsetXY='0 0' onClick='Reset' />
+</Panel>
