@@ -277,6 +277,14 @@ function HideUI(id)
 	self.UI.setAttribute(id, "visibility", "Black")
 end
 
+function ShowOrHideMainPanel(show)
+  if(show) then
+    self.UI.show("basicCharacteristic")
+  else
+    self.UI.hide("basicCharacteristic")
+  end
+end
+
 function ExceptionIdCharacteristic(id)
 	if(id == "textCharacteristic") then
     return true

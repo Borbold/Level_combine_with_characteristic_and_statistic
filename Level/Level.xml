@@ -37,9 +37,7 @@
 		<Row>
 			<ProgressBar id='bar' height='85' width='1600' color='#00000025' fillImageColor='#8b00ff'
 				percentage='0' showPercentageText='false' />
-			<Text id='textBar' color='#ffffff' fontSize='50' fontStyle='Bold' outline='#000000' outlineSize='1 1'>
-			0/0
-			</Text>
+			<Text id='textBar' color='#ffffff' fontSize='50' fontStyle='Bold' outline='#000000' outlineSize='1 1' text='0/0' />
 		</Row>
 	</TableLayout>
 </Panel>
@@ -55,9 +53,12 @@
 					<Text text='Максимальный уровень'
 						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#6600ff'/>
 				</Cell>
-				<Cell columnSpan='4'>
+				<Cell columnSpan='3'>
 					<Text text='Изменить изначальное значение опыта'
 						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#9966cc'/>
+				</Cell>
+				<Cell columnSpan='1'>
+					<Button image='uiMinus' height='35' width='35' onClick='ShowOrHideUIConnectedStrips'/>
 				</Cell>
 			</Row>
 			<Row>

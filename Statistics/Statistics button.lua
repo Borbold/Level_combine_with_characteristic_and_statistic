@@ -3,7 +3,7 @@
   local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
     ["pureMaxCurrentStatisticValue"] = pureMaxCurrentStatisticValue,
     ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
-    ["ConnectedCharacteristic"] = ConnectedCharacteristic
+    ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["lockChange"] = lockChange
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -26,7 +26,7 @@ function CreateGlobalVariable()
   progressBarColor, statisticName = "", ""
   currentStatisticValue, maximumStatisticValue = 0, 0
   pureMaxCurrentStatisticValue = 0
-  lockChange = false
+  lockChange = true
   ConnectedCharacteristic = {}
   listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
 end
@@ -39,6 +39,7 @@ function Confer(loadedData)
   gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
+  lockChange = loadedData.lockChange or true
   local indexString = string.find(self.getName(), ":")
   statisticName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
 end
@@ -57,6 +58,7 @@ end
 
 function ChangeUI()
   self.UI.setAttribute("inputColor", "text", progressBarColor)
+  ChangeMeaningLock("Black", _, _, _, true)
 end
 
 function HideUI()
@@ -70,17 +72,26 @@ function ShowUI()
   end
 end
 
-function ChangeMeaningLock(player)
-  if(player.color == "Black") then
+function ShowOrHideMainPanel(show)
+  if(show) then
+    self.UI.show("basicStatistic")
+  else
+    self.UI.hide("basicStatistic")
+  end
+end
+
+function ChangeMeaningLock(player, _, _, _, isLoad)
+  if((player.color or player) == "Black") then
     if(lockChange == false) then
-      lockChange = true
+      if(not isLoad) then lockChange = true end
       ChangeTextButton("changeLock", "Разблокировать")
       HideUI()
     else
-      lockChange = false
+      if(not isLoad) then lockChange = false end
       ChangeTextButton("changeLock", "Заблокировать")
       ShowUI()
     end
+    UpdateSave()
   else
     broadcastToAll("[b]" .. player.steam_name .. "[/b]" .. " только ГМ-у дозволена данная функция", "Red")
   end

@@ -11,7 +11,7 @@
 		text='Подключить' color='green' />
 </Defaults>
 
-<Panel position='0 0 -21'>
+<Panel id='basicCharacteristic' position='0 0 -21'>
 	<TableLayout cellBackgroundColor='1 1 1 0' cellSpacing='10'
 		height='190' width='1600'>
 		<Row>

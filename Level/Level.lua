@@ -19,7 +19,7 @@ function UpdateSave(levelUP)
     ["characteristicPerLevel"] = characteristicPerLevel,
     ["levelPass"] = levelPass, ["localLevelPass"] = localLevelPass,
     ["listCharacteristicPerLevel"] = listCharacteristicPerLevel,
-    ["maxLevel"] = maxLevel, ["LBN"] = LBN
+    ["maxLevel"] = maxLevel, ["LBN"] = LBN, ["showUIPanel"] = showUIPanel
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -71,6 +71,7 @@ function CreateGlobalVariables()
   lockDistributionCharacteristic = false
   allFeatureGUID, allStatisticGUID, allFeatureObject = {}, {}, {}
   listCharacteristicPerLevel = CreateNewVariable("PL", {})
+  showUIPanel = true
   nextLevelExperience = {} rangeValues = {50, 100, 150, 200}
   usual = "обычная" combat = "боевая" peace = "мирная"
 end
@@ -88,6 +89,7 @@ function Confer(savedData)
   LBN = loadedData.LBN or 0
   exp = loadedData.savedExp or 0
   level = loadedData.savedLastLevel or 1
+  showUIPanel = loadedData.showUIPanel or true
   if(loadedData.nextLevelExperience ~= nil) then nextLevelExperience = loadedData.nextLevelExperience
   else CreateLevelsExperience() end
 end
@@ -157,6 +159,7 @@ function onLoad(savedData)
     end
     FunctionCall()
     Wait.time(SetInteracteble, 0.5)
+    Wait.time(|| ShowOrHideUIConnectedStrips(_, _, _, _, true), 0.75)
   end, 1.4)
 end
 
@@ -388,7 +391,7 @@ function ResetLevel(player)
     Wait.time(|| SetTextCharacteristic(allIndex["SC"], allIndex["PLC"], allIndex["LPC"]), 0.3)
     Wait.time(|| SetTextCharacteristic(allIndex["SP"], allIndex["PLP"], allIndex["LPP"]), 0.3)
   else
-      WriteMessagePlayerToColor("Вы не ГМ, вам нельзя обнулять уровни!")
+    WriteMessagePlayerToColor("Вы не ГМ, вам нельзя обнулять уровни!")
   end
 end
 
@@ -473,17 +476,17 @@ function SetMinCharacteristic()
 end
 
 function DisableFeatureChange()
-    self.UI.setAttribute("closeDistributionCharacteristic", "interactable", false)
-    self.UI.setAttribute("closeDistributionCharacteristic", "color", "Red")
+  self.UI.setAttribute("closeDistributionCharacteristic", "interactable", false)
+  self.UI.setAttribute("closeDistributionCharacteristic", "color", "Red")
 	for _,feature in pairs(allFeatureObject) do
-	    feature.UI.setAttribute("buttonMinus", "visibility", "Black")
-        feature.UI.setAttribute("buttonPlus", "visibility", "Black")
-    end
+	  feature.UI.setAttribute("buttonMinus", "visibility", "Black")
+    feature.UI.setAttribute("buttonPlus", "visibility", "Black")
+  end
 end
 
 function WriteMessagePlayerToColor(message)
   if(Player[DenoteSth()].steam_name ~= nil) then
-      printToColor(message, DenoteSth())
+    printToColor(message, DenoteSth())
   end
 end
 
@@ -636,10 +639,26 @@ function Round(num, idp)
   return tonumber(string.format("%." .. (idp or 0) .. "f", num))
 end
 
+function ShowOrHideUIConnectedStrips(_, _, _, _, isLoad)
+  if(not isLoad) then showUIPanel = not showUIPanel end
+  for i,v in ipairs(allStatisticGUID) do
+    if(getObjectFromGUID(v)) then
+      getObjectFromGUID(v).call("ShowOrHideMainPanel", showUIPanel)
+    end
+  end
+  for i,v in ipairs(allFeatureGUID) do
+    if(getObjectFromGUID(v)) then
+      getObjectFromGUID(v).call("ShowOrHideMainPanel", showUIPanel)
+    end
+  end
+  UpdateSave()
+end
+
 function RebuildAssets()
   local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
   local assets = {
-    {name = 'uiGear', url = root .. 'gear.png'}
+    {name = 'uiGear', url = root .. 'gear.png'},
+    {name = 'uiMinus', url = root .. 'minus.png'}
   }
   self.UI.setCustomAssets(assets)
 end

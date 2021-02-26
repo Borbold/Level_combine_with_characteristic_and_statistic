@@ -6,7 +6,7 @@
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50' text='?'/>
 </Defaults>
 
-<Panel position='0 0 -21' rotation='0 0 180'>
+<Panel id='basicStatistic' position='0 0 -21' rotation='0 0 180'>
 	<TableLayout cellBackgroundColor='1 1 1 0' height='190' width='1600' cellSpacing='5'
 			columnWidths='75 0 75'>
 		<Row>
