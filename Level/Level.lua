@@ -89,7 +89,7 @@ function Confer(savedData)
   LBN = loadedData.LBN or 0
   exp = loadedData.savedExp or 0
   level = loadedData.savedLastLevel or 1
-  showUIPanel = loadedData.showUIPanel or true
+  showUIPanel = loadedData.showUIPanel
   if(loadedData.nextLevelExperience ~= nil) then nextLevelExperience = loadedData.nextLevelExperience
   else CreateLevelsExperience() end
 end
@@ -159,7 +159,7 @@ function onLoad(savedData)
     end
     FunctionCall()
     Wait.time(SetInteracteble, 0.5)
-    Wait.time(|| ShowOrHideUIConnectedStrips(_, _, _, _, true), 0.75)
+    Wait.time(|| ShowOrHideUIConnectedStrips(_, _, _, _, true), 2)
   end, 1.4)
 end
 

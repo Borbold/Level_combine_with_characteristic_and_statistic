@@ -414,7 +414,7 @@ function RecalculationEquals(guid, input)
     input = inputCPM[guid]
   end
   if(input) then
-    local equals = (characteristic or 0) + (characteristicBonus or 0)
+    local equals = 0
     local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
     for S in input:gmatch("%S+") do
       for sign, found in pairs(signFound) do

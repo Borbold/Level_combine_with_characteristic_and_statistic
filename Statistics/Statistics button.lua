@@ -36,7 +36,7 @@ function Confer(loadedData)
   currentStatisticValue = loadedData.currentStatisticValue or 0
   pureMaxCurrentStatisticValue = loadedData.pureMaxCurrentStatisticValue or 0
   maximumStatisticValue = loadedData.maximumStatisticValue or 1
-  gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
+  gameCharacterGUID = loadedData.gameCharacterGUID
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
   lockChange = loadedData.lockChange or true
@@ -122,6 +122,7 @@ function UpdateValue()
 end
 
 function ChangeStatisticInGameCharacter()
+  local gameCharacter = getObjectFromGUID(gameCharacterGUID)
 	if(gameCharacter ~= nil) then
     gameCharacter.call("ChangeStatistic", idForGameCharacter)
   end
@@ -148,7 +149,7 @@ function ChangeMaximumStatisticValue(value)
   currentStatisticValue = (value < currentStatisticValue and value > 0 and value) or currentStatisticValue
   maximumStatisticValue = (value + pureMaxCurrentStatisticValue > 0 and (value + pureMaxCurrentStatisticValue)) or 1
   UpdateValue()
-  Wait.time(ChangeStatisticInGameCharacter, 0.25)
+  Wait.time(ChangeStatisticInGameCharacter, 0.05)
 end
 
 function Minus(player)
@@ -159,14 +160,12 @@ function Plus(player)
 end
 function ChangeStatistics(playerColor, value)
   if(CheckPlayer(playerColor)) then
-    if(lockChange == false) then
-      if(value and value == "") then value = 0 end
-      currentStatisticValue = currentStatisticValue + tonumber(value)
-      if(currentStatisticValue < 0) then currentStatisticValue = 0 end
-      if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
-      UpdateValue()
-      Wait.time(ChangeStatisticInGameCharacter, 0.25)
-    end
+    if(value and value == "") then value = 0 end
+    currentStatisticValue = currentStatisticValue + tonumber(value)
+    if(currentStatisticValue < 0) then currentStatisticValue = 0 end
+    if(tonumber(maximumStatisticValue) < tonumber(currentStatisticValue)) then currentStatisticValue = maximumStatisticValue end
+    UpdateValue()
+    Wait.time(ChangeStatisticInGameCharacter, 0.05)
   end
 end
 function CheckPlayer(playerColor)
@@ -241,6 +240,7 @@ function ChangeName(value)
   if(value == "") then value = statisticName end
   statisticName = value
   self.UI.setAttribute("name", "text", statisticName)
+  UpdateSave()
 end
 
 function ChangeProgressBarColor(value)
@@ -253,7 +253,6 @@ end
 --Игровой персонаж
 function SetGameCharacter(parametrs)
   gameCharacterGUID = parametrs.gameChar.getGUID()
-	gameCharacter = parametrs.gameChar
   idForGameCharacter = parametrs.id
   UpdateSave()
 end
