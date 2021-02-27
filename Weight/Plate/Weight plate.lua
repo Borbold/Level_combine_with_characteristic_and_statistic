@@ -8,6 +8,7 @@
 end
 
 function onLoad(savedData)
+  replacementTable = {["(+"] = "(-", ["(-"] = "(+", ["(/"] = "(*", ["(*"] = "(/", ["-"] = "+", ["/"] = "*", ["*"] = "/"}
   allObjectGUID = {}
   currentWeight, maxWeight = 0, 20
   if(savedData != "") then
@@ -67,12 +68,16 @@ function onCollisionExit(obj)
       end
     end
     WeightCalculation()
-    CreateTimerForRecreate(nil, obj.collision_object.getGUID())
+    local newDescription = ""
+    for S in obj.collision_object.getDescription():gmatch("%S+") do
+      newDescription = newDescription .. (replacementTable[S] or S) .. " "
+    end
+    CreateTimerForRecreate(newDescription, obj.collision_object.getGUID())
   end
 end
 
 function CreateTimerForRecreate(itemDesc, guidItem)
-  Wait.time(|| FeatureRecalculation(itemDesc, guidItem), 0.05)
+  Wait.time(|| FeatureRecalculation(itemDesc, guidItem), 0.1)
 
   local locIdentifier = "RecreatePanel"..self.getGUID()
   Timer.destroy(locIdentifier)
@@ -96,15 +101,11 @@ function FeatureRecalculation(itemDesc, guidItem)
       table.insert(tableName, S)
     end
 
-    if(not itemDesc) then
-      local param = {guid = guidItem, input = nil}
-      charObj.call("RecalculationValueInInventory", param)
-    elseif(tableName[2] and itemDesc:find(tableName[2])) then
+    if(tableName[2] and itemDesc:find(tableName[2])) then
       local findCharac = itemDesc:find(tableName[2])
       local clipping = itemDesc:sub(findCharac)
       clipping = clipping:sub(0, clipping:find(")"))
-      local param = {guid = guidItem, input = clipping:match("%((.+)%)")}
-      charObj.call("RecalculationValueInInventory", param)
+      charObj.call("RecalculationValueInInventory", {input = clipping:match("%((.+)%)")})
     end
   end
 end

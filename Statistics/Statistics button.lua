@@ -206,6 +206,7 @@ function ResetStatistic()
   currentStatisticValue, maximumStatisticValue = 0, 1
   pureMaxCurrentStatisticValue = 0
   ConnectedCharacteristic = {}
+  UpdateValue()
 end
 
 function ResetConnectedCharacteristic(param)

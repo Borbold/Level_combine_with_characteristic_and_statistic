@@ -106,7 +106,8 @@ end
 function FunctionCall()
   Wait.time(RebuildAssets, 0.3)
   Wait.time(UpdateExperience, 0.5)
-  SetCharacteristic()
+  Wait.time(SetObjectFeature, 0.65)
+  Wait.time(SetCharacteristic, 0.7)
 end
 
 function SetCharacteristic()

@@ -6,7 +6,7 @@
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
     ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
-    ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID
+    ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID, ["characteristicName"] = characteristicName
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -58,8 +58,7 @@ function Confer(loadedData)
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
   gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
   idForGameCharacter = loadedData.idForGameCharacter or 0
-  local indexString = string.find(self.getName(), ":")
-  characteristicName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
+  characteristicName = loadedData.characteristicName or ""
   levelNumber = loadedData.levelNumber or 1
   levelBonusN = loadedData.levelBonusN or 0
   inputGUID, inputCPM, inputLM = loadedData.inputGUID or {}, loadedData.inputCPM or {}, loadedData.inputLM or {}
@@ -71,8 +70,8 @@ end
 
 function FunctionCall()
 	Wait.time(RebuildAssets, 0.7)
-  Wait.time(ChangeColorText, 0.8)
-  Wait.time(AddNewFieldForConnection, 0.9)
+  Wait.time(AddNewFieldForConnection, 1.2)
+  Wait.time(ChangeColorText, 1.35)
 end
 
 function onLoad(savedData)
@@ -188,14 +187,13 @@ function ChangeColorText()
   else
     self.UI.setAttribute(id, "color", "White")
   end
-  UpdateSave()
 end
 
 function Plus(player, id)
-  ChangeCharacteristic(player.color, id, 1, true)
+  ChangeCharacteristic(player.color, id, 1, "button")
 end
 function Minus(player, id)
-  ChangeCharacteristic(player.color, id, -1, true)
+  ChangeCharacteristic(player.color, id, -1, "button")
 end
 function ChangeCharacteristic(playerColor, id, value, changeOurselves)
   local givenValue = 0
@@ -205,7 +203,7 @@ function ChangeCharacteristic(playerColor, id, value, changeOurselves)
       self.UI.setValue(id, givenValue)
       characteristic = givenValue
     elseif(ExceptionIdBonus(id)) then
-      if(changeOurselves) then
+      if(changeOurselves == "button") then
         pureCharacteristicBonus = pureCharacteristicBonus + value
         characteristicBonus = givenValue
       else
@@ -214,7 +212,7 @@ function ChangeCharacteristic(playerColor, id, value, changeOurselves)
       self.UI.setValue(id, characteristicBonus)
       Wait.time(|| ChangeColorText(), 0.1)
     end
-    EnableCharacteristic("NotChangeHeight")
+    Wait.time(|| EnableCharacteristic("NotChangeHeight"), 0.1)
     Wait.time(ChangeCharacteristicInGameCharacter, 0.1)
   end
 end
@@ -407,14 +405,14 @@ function EditInput(player, input, id)
     inputLM[number] = tonumber(input) or 0
   end
 end
-function RecalculationEquals(guid, input)
+function RecalculationEquals(guid, input, dontUse)
   if(input and guid) then
     inputCPM[guid] = input
   elseif(guid) then
     input = inputCPM[guid]
   end
   if(input) then
-    local equals = 0
+    local equals = (not dontUse and characteristic) + characteristicBonus
     local signFound = {["+"] = false, ["-"] = false, ["*"] = false, ["/"] = false}
     for S in input:gmatch("%S+") do
       for sign, found in pairs(signFound) do
@@ -443,12 +441,11 @@ function RecalculationEquals(guid, input)
     end
     return equals
   end
+  return 0
 end
 
 function RecalculationValueInInventory(param)
-  local params = {GUID = param.guid, CPM = RecalculationEquals(nil, param.input) or 0,
-    LM = 0, LN = 0 }
-  RecalculationBonusPoints(params)
+  ChangeCharacteristic("Black", "textCharacteristicBonus", RecalculationEquals(nil, param.input), true)
 end
 
 function RecalculationLevelFromStatisticBonusPoint(LBN)

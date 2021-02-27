@@ -22,7 +22,7 @@ function onLoad(savedData)
       ["Teal"] = {r = 0.13, g = 0.69, b = 0.61},
       ["Black"] = {r = 0.25, g = 0.25, b = 0.25}
     }
-    Wait.time(|| Confer(savedData), 0.7)
+    Wait.time(|| Confer(savedData), 1)
   end, 2)
 end
 
