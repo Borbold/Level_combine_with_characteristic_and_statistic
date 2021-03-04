@@ -343,6 +343,7 @@ function Plus(player, val)
   end
 end
 function ChangeStatistic(id)
+  id = tonumber(id)
   if(allStatistics[id]) then
     self.UI.setAttribute("bar"..id, "color", allStatistics[id].UI.getAttribute("bar", "color"))
     self.UI.setAttribute("bar"..id, "fillImageColor", allStatistics[id].UI.getAttribute("bar", "fillImageColor"))

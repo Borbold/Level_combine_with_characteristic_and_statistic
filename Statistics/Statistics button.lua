@@ -36,7 +36,7 @@ function Confer(loadedData)
   currentStatisticValue = loadedData.currentStatisticValue or 0
   pureMaxCurrentStatisticValue = loadedData.pureMaxCurrentStatisticValue or 0
   maximumStatisticValue = loadedData.maximumStatisticValue or 1
-  gameCharacterGUID = loadedData.gameCharacterGUID
+  gameCharacterGUID = loadedData.gameCharacterGUID or ""
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
   lockChange = loadedData.lockChange or true
@@ -209,17 +209,15 @@ function ResetStatistic()
   UpdateValue()
 end
 
-function ResetConnectedCharacteristic(param)
-  ConnectedCharacteristic[tostring(param.currentGUID)] = {LM = param.LM, LN = param.LN, CPM = param.CPM, param.LBN}
-  local countGUID = 0
+function ResetConnectedCharacteristic(params)
+  ConnectedCharacteristic[tostring(params.currentGUID)] = params
   for guid,_ in pairs(ConnectedCharacteristic) do
-    countGUID = countGUID + 1
     local objConnect = getObjectFromGUID(guid)
     if(not objConnect or objConnect.getColorTint() ~= self.getColorTint()) then
-      ConnectedCharacteristic[guid] = nil
+      ConnectedCharacteristic[tostring(guid)] = nil
     end
   end
-  Wait.time(|| UpdateSave, 0.1)
+  Wait.time(UpdateSave, 0.1)
 end
 
 function RecalculationBonusPoints(params)
