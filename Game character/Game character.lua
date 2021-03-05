@@ -1,7 +1,7 @@
 ﻿function UpdateSave()
   local dataToSave = {
     ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID,
-    ["gameInventoryGUID"] = gameInventoryGUID
+    ["gameInventoryGUID"] = gameInventoryGUID, ["showCharacteristic"] = showCharacteristic
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -29,12 +29,14 @@ end
 function Confer(savedData)
   originalXml = self.UI.getXml()
   allCharacteristics, allStatistics = {}, {}
+  showCharacteristic = {}
   RebuildAssets()
   if(savedData ~= "") then
     local loadedData = JSON.decode(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     gameInventoryGUID = loadedData.gameInventoryGUID or nil
+    showCharacteristic = loadedData.showCharacteristic or {}
     SetStatisticObjects()
     Wait.time(SetCharacteristicObjects, 0.3)
     Wait.time(CreateFields, 0.5)
@@ -90,9 +92,20 @@ function SetCharacteristicObjects()
     local characObj = getObjectFromGUID(characteristicGUID)
     if(characObj ~= nil) then
 	    allCharacteristics[k] = characObj
+      if(not showCharacteristic[k]) then
+        showCharacteristic[k] = "True"
+      end
     else
       broadcastToAll("Одна или несколько характеристик были удалены. Произведите переподключение")
       return
+    end
+  end
+end
+
+function ChangeShowCharacteristic(params)
+  for index,characteristicGUID in ipairs(allCharacteristicsGUID) do
+    if(characteristicGUID == params.guid) then
+      showCharacteristic[index] = params.value
     end
   end
 end
@@ -135,25 +148,27 @@ function AddNewField()
   local newCharacteristic, longestLine = "", 30
   if(#allCharacteristics > 0) then
     for index,char in pairs(allCharacteristics) do
-      local textChar = CreateNameForCharacteristic(char)
-      if(textChar) then
-        if(#textChar > longestLine) then
-          longestLine = #textChar
-        end
+      if(showCharacteristic[index] == "True") then
+        local textChar = CreateNameForCharacteristic(char)
+        if(textChar) then
+          if(#textChar > longestLine) then
+            longestLine = #textChar
+          end
 
-        local locColor = "#ffffff"
-        local typeChar = char.UI.getAttribute("selectionType", "text")
-        if(typeChar ~= "обычная") then
-          locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or (typeChar == "пустая" and "#808080") or locColor
-        end
+          local locColor = "#ffffff"
+          local typeChar = char.UI.getAttribute("selectionType", "text")
+          if(typeChar ~= "обычная") then
+            locColor = (typeChar == "боевая" and "#ff0000") or (typeChar == "мирная" and "#00ff00") or (typeChar == "пустая" and "#808080") or locColor
+          end
 
-        newCharacteristic = newCharacteristic .. [[
-          <Row preferredHeight='50'>
-            <Cell>
-              <Text id='tChar]]..index..[[' class='forCharacteristic' color=']]..locColor..[[' text=']]..textChar..[['/>
-            </Cell>
-          </Row>
-        ]]
+          newCharacteristic = newCharacteristic .. [[
+            <Row preferredHeight='50'>
+              <Cell>
+                <Text id='tChar]]..index..[[' class='forCharacteristic' color=']]..locColor..[[' text=']]..textChar..[['/>
+              </Cell>
+            </Row>
+          ]]
+        end
       end
     end
   end
@@ -258,6 +273,7 @@ function AddNewField()
   
   EnlargeHeightPanelInventory(countItem)
   EnlargeWidthPanelInventory(longestLineInventory)
+  Wait.time(UpdateSave, 0.1)
 end
 
 function CreateNameForCharacteristic(charac)
@@ -400,4 +416,12 @@ function RebuildAssets()
     {name = 'uiInventory', url = rootIn}
   }
   self.UI.setCustomAssets(assets)
+end
+
+function ChageHeight(_, value)
+  if(value == "") then return end
+  value = tonumber(value)
+  if(value < 0) then return end
+  value = (-1)*value
+  self.UI.setAttribute("mainPanel", "position", "0 0 "..value)
 end

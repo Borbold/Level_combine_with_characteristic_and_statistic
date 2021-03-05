@@ -6,7 +6,8 @@
     ["levelBonusN"] = levelBonusN, ["countField"] = countField, ["dataHeight"] = dataHeight,
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
     ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
-    ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID, ["characteristicName"] = characteristicName
+    ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID, ["characteristicName"] = characteristicName,
+    ["showCharacteristic"] = showCharacteristic
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -56,7 +57,7 @@ function Confer(loadedData)
   countField = loadedData.countField or 1
   dataHeight = loadedData.dataHeight or 510
   ConnectedCharacteristic = loadedData.ConnectedCharacteristic or {}
-  gameCharacter = getObjectFromGUID(loadedData.gameCharacterGUID) or nil
+  gameCharacterGUID = loadedData.gameCharacterGUID or nil
   idForGameCharacter = loadedData.idForGameCharacter or 0
   characteristicName = loadedData.characteristicName or ""
   levelNumber = loadedData.levelNumber or 1
@@ -66,6 +67,7 @@ function Confer(loadedData)
   inputObjectName = loadedData.inputObjectName or {}
   originalXml = self.UI.getXml()
   gameInventoryGUID = loadedData.gameInventoryGUID or nil
+  showCharacteristic = loadedData.showCharacteristic or "True"
 end
 
 function FunctionCall()
@@ -137,7 +139,7 @@ function SetUIValue()
   self.UI.setAttribute("name", "text", characteristicName)
 	self.UI.setValue("textCharacteristic", characteristic)
   self.UI.setValue("textCharacteristicBonus", characteristicBonus)
-  self.UI.setValue("GUIDLevel", GUIDLevelIndex)
+  self.UI.setAttribute("toggleCharacteristic", "isOn", showCharacteristic)
   for i = 1, #inputGUID do
     self.UI.setAttribute("GUID_"..i.."", "text", inputGUID[i])
     self.UI.setAttribute("CPM_"..i.."", "text", inputCPM[inputGUID[i]])
@@ -173,8 +175,8 @@ function ActivateUI(id)
 end
 
 function ChangeCharacteristicInGameCharacter()
-	if(gameCharacter ~= nil) then
-    gameCharacter.call("ChangeCharacteristic", idForGameCharacter)
+	if(gameCharacterGUID) then
+    getObjectFromGUID(gameCharacterGUID).call("ChangeCharacteristic", idForGameCharacter)
   end
 end
 
@@ -217,7 +219,7 @@ function ChangeCharacteristic(playerColor, id, value, changeOurselves)
   end
 end
 function CheckCharacteristic(givenValue, value)
-  local objectLevel = getObjectFromGUID(self.UI.getValue("GUIDLevel"))
+  local objectLevel = getObjectFromGUID(GUIDLevelIndex)
   if(ExceptionObject(objectLevel) == false) then
     print("Характеристике не задан Уровень")
     return false
@@ -305,6 +307,35 @@ end
 function WriteMessagePlayerToColor(message)
   if(Player[DenoteSth()].steam_name ~= nil) then
     printToColor(message, DenoteSth())
+  end
+end
+
+function DoNotShowCharacteristic(player, value)
+  showCharacteristic = value
+  if(value == "True") then
+    print("Характеристика будет видна")
+  else
+    print("Характеристика не будет видна")
+  end
+  
+  if(gameCharacterGUID) then
+    getObjectFromGUID(gameCharacterGUID).call("ChangeShowCharacteristic", {guid = self.getGUID(), value = value})
+  end
+
+  local locIdentifier = "RecreatePanel_ForCharacter" .. DenoteSth()
+  Timer.destroy(locIdentifier)
+  Timer.create({
+    identifier     = locIdentifier,
+    function_name  = "RecreatePanel",
+    delay          = 2,
+    repetitions    = 1
+  })
+  Wait.time(UpdateSave, 0.1)
+end
+function RecreatePanel()
+  if(gameCharacterGUID) then
+    -- Пересоздать панель
+    getObjectFromGUID(gameCharacterGUID).call("CreateFields")
   end
 end
 
@@ -455,7 +486,6 @@ end
 --Игровой персонаж
 function SetGameCharacter(parametrs)
   gameCharacterGUID = parametrs.gameChar.getGUID()
-	gameCharacter = parametrs.gameChar
   idForGameCharacter = parametrs.id
   UpdateSave()
 end
