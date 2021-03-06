@@ -1,7 +1,8 @@
 ﻿function UpdateSave()
   local dataToSave = {
     ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID,
-    ["gameInventoryGUID"] = gameInventoryGUID, ["showCharacteristic"] = showCharacteristic
+    ["gameInventoryGUID"] = gameInventoryGUID, ["showCharacteristic"] = showCharacteristic,
+    ["saveHeightUI"] = saveHeightUI
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -37,9 +38,13 @@ function Confer(savedData)
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
     gameInventoryGUID = loadedData.gameInventoryGUID or nil
     showCharacteristic = loadedData.showCharacteristic or {}
-    SetStatisticObjects()
+    saveHeightUI = loadedData.saveHeightUI
+    Wait.time(SetStatisticObjects, 0.1)
     Wait.time(SetCharacteristicObjects, 0.3)
-    Wait.time(CreateFields, 0.5)
+    Wait.time(CreateFields, 0.7)
+    if(saveHeightUI) then
+      Wait.time(function() self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI) end, 0.75)
+    end
   end
 end
 
@@ -266,6 +271,9 @@ function AddNewField()
 
   startXml = startXml .. newStatistic .. endXml
   self.UI.setXml(startXml)
+  if(saveHeightUI) then
+    Wait.time(function() self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI) end, 0.05)
+  end
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
 
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
@@ -281,7 +289,7 @@ function CreateNameForCharacteristic(charac)
   local charact = charac.UI.getValue("textCharacteristic")
   local bonusChar = charac.UI.getValue("textCharacteristicBonus")
   if(name and charact and bonusChar) then
-    return name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+    return name .. ": ох=" .. charact .. ",обх=" .. bonusChar
   end
 end
 
@@ -335,7 +343,7 @@ function ChangeCharacteristic(id)
     local name = allCharacteristics[id].UI.getAttribute("name", "text")
     local charact = allCharacteristics[id].UI.getValue("textCharacteristic")
     local bonusChar = allCharacteristics[id].UI.getValue("textCharacteristicBonus")
-    local textChar = name .. ": ОХ=" .. charact .. ",ОБХ=" .. bonusChar
+    local textChar = name .. ": ох=" .. charact .. ",обх=" .. bonusChar
     self.UI.setAttribute("tChar"..id, "text", textChar)
   end
 end
@@ -422,6 +430,7 @@ function ChageHeight(_, value)
   if(value == "") then return end
   value = tonumber(value)
   if(value < 0) then return end
-  value = (-1)*value
-  self.UI.setAttribute("mainPanel", "position", "0 0 "..value)
+  saveHeightUI = (-1)*value
+  self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI)
+  UpdateSave()
 end

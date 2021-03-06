@@ -26,7 +26,7 @@
 				<Row>
 					<Cell>
 						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'
-							text='ОХ' />
+							text='ох' />
 					</Cell>
 					<Cell>
 						<Button id='buttonMinus' class='basicButton' image='uiMinus'
@@ -47,7 +47,7 @@
 					<!-- Сверху очки характеристик, снизу бонус -->
 					<Cell>
 						<Text color='#000000' resizeTextForBestFit='True' resizeTextMaxSize='80'
-							text='ОБХ' />
+							text='обх' />
 					</Cell>
 					<Cell>
 						<Button id='buttonMinusBonus' class='basicButton' image='uiMinus'
@@ -83,7 +83,7 @@
 			<Row preferredHeight='60'>
 				<Cell columnSpan='4'>
 					<Text class='bestFit'>
-					Выберите тип характеристики
+					выберите тип характеристики
 					</Text>
 				</Cell>
 			</Row>
@@ -106,17 +106,17 @@
 				<Row preferredHeight='60'>
 					<Cell>
 						<Text class='bestFit'>
-						Установите GUID необходимой плашки
+						установите GUID необходимой плашки
 						</Text>
 					</Cell>
 					<Cell>
 						<Text class='bestFit'>
-						Напишите формулу для перерасчета значений
+						напишите формулу для перерасчета значений
 						</Text>
 					</Cell>
 					<Cell>
 						<Text class='bestFit'>
-						Установите множитель за каждый Уровень
+						установите множитель за каждый Уровень
 						</Text>
 					</Cell>
 				</Row>

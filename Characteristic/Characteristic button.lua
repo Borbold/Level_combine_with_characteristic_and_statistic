@@ -7,7 +7,7 @@
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
     ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
     ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID, ["characteristicName"] = characteristicName,
-    ["showCharacteristic"] = showCharacteristic
+    ["showCharacteristic"] = showCharacteristic, ["saveXml"] = self.UI.getXml()
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -49,6 +49,7 @@ function PerformParameterCheck()
 end
 
 function Confer(loadedData)
+  saveXml = loadedData.saveXml
   GUIDLevelIndex = loadedData.GUIDLevelIndex or ""
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
@@ -71,9 +72,14 @@ function Confer(loadedData)
 end
 
 function FunctionCall()
-	Wait.time(RebuildAssets, 0.7)
-  Wait.time(AddNewFieldForConnection, 1.2)
-  Wait.time(ChangeColorText, 1.35)
+  Wait.time(RebuildAssets, 0.05)
+  if(not saveXml) then
+    Wait.time(AddNewFieldForConnection, 0.55)
+  else
+    Wait.time(function() self.UI.setXml(saveXml) end, 0.55)
+    Wait.time(SetUIValue, 0.60)
+  end
+  Wait.time(ChangeColorText, 0.60)
 end
 
 function onLoad(savedData)
@@ -83,7 +89,7 @@ function onLoad(savedData)
       local loadedData = JSON.decode(savedData)
       Wait.time(|| Confer(loadedData), 0.6)
     end
-    FunctionCall()
+    Wait.time(FunctionCall, 0.65)
   end, 1.5)
 end
 
