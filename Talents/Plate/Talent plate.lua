@@ -1,5 +1,5 @@
 ﻿function UpdateSave()
-  local dataToSave = { ["maxWeight"] = maxWeight,
+  local dataToSave = {
     ["allObjectGUID"] = allObjectGUID, ["gameCharacterGUID"] = gameCharacterGUID,
     ["allFeatureGUID"] = allFeatureGUID
   }
@@ -10,10 +10,9 @@ end
 function onLoad(savedData)
   replacementTable = {["(+"] = "(-", ["(-"] = "(+", ["(/"] = "(*", ["(*"] = "(/", ["-"] = "+", ["/"] = "*", ["*"] = "/"}
   allObjectGUID = {}
-  currentWeight, maxWeight = 0, 20
+  creatingUI = true
   if(savedData != "") then
     local loadedData = JSON.decode(savedData)
-    maxWeight = loadedData.maxWeight or 20
     allObjectGUID = loadedData.allObjectGUID or {}
     gameCharacterGUID = loadedData.gameCharacterGUID or nil
     allFeatureGUID = loadedData.allFeatureGUID or nil
@@ -37,14 +36,14 @@ function onCollisionEnter(obj)
     broadcastToAll("Добавте таланту название!")
     return
   end
-  if(currentWeight and obj.collision_object.getName() ~= "") then
+  if(creatingUI and obj.collision_object.getName() ~= "") then
     table.insert(allObjectGUID, obj.collision_object.getGUID())
     CreateTimerForRecreate(obj.collision_object.getDescription(), obj.collision_object.getGUID())
   end
 end
 
 function onCollisionExit(obj)
-  if(currentWeight and obj.collision_object.getName() ~= "") then
+  if(creatingUI and obj.collision_object.getName() ~= "") then
     local locGUID = obj.collision_object.getGUID()
     for i,v in ipairs(allObjectGUID) do
       if(v == locGUID) then
@@ -77,6 +76,7 @@ function RecreatePanel()
     -- Пересоздать панель
     getObjectFromGUID(gameCharacterGUID).call("CreateFields")
   end
+  UpdateSave()
 end
 function FeatureRecalculation(itemDesc, guidItem)
   for i,charObj in ipairs(allFeatureObj) do
