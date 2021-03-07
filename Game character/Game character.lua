@@ -2,7 +2,7 @@
   local dataToSave = {
     ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID,
     ["gameInventoryGUID"] = gameInventoryGUID, ["showCharacteristic"] = showCharacteristic,
-    ["saveHeightUI"] = saveHeightUI
+    ["saveHeightUI"] = saveHeightUI, ["gameTalentsGUID"] = gameTalentsGUID
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -36,7 +36,8 @@ function Confer(savedData)
     local loadedData = JSON.decode(savedData)
     allStatisticsGUID = loadedData.allStatisticsGUID or {}
     allCharacteristicsGUID = loadedData.allCharacteristicsGUID or {}
-    gameInventoryGUID = loadedData.gameInventoryGUID or nil
+    gameInventoryGUID = loadedData.gameInventoryGUID
+    gameTalentsGUID = loadedData.gameTalentsGUID
     showCharacteristic = loadedData.showCharacteristic or {}
     saveHeightUI = loadedData.saveHeightUI
     Wait.time(SetStatisticObjects, 0.1)
@@ -52,6 +53,7 @@ function SetGUID(params)
   SetStatistic(params.statisticsGUID)
   SetCharacteristic(params.characteristicsGUID)
   gameInventoryGUID = params.gameInventoryGUID
+  gameTalentsGUID = params.gameTalentsGUID
 
   Wait.time(CreateFields, 0.6)
   Wait.time(UpdateSave, 0.7)
@@ -239,6 +241,39 @@ function AddNewField()
 
   allXml = startXml .. newThings .. endXml
   ----------------------------------------------------------------------------------------------------------
+  local newTalent, longestLineTalent, countTalent = "", 30, 0
+  local talentObj = getObjectFromGUID(gameTalentsGUID)
+  if(talentObj) then
+    for index,talentGUID in pairs(talentObj.call("GetAllObjectGUID")) do
+      local itemObj = getObjectFromGUID(talentGUID)
+      if(itemObj) then
+        local textTalent = itemObj.getName()
+        countTalent = countTalent + 1
+        if(#textTalent > longestLineTalent) then
+          longestLineTalent = #textTalent
+        end
+
+        newTalent = newTalent .. [[
+          <Row preferredHeight='50'>
+            <Cell>
+              <Text id='tItem]]..index..[[' class='forInventory' color='#ffffff' text=']]..textTalent..[['/>
+            </Cell>
+          </Row>
+        ]]
+      end
+    end
+  end
+  
+  searchString = "<NewRowT />"
+  searchStringLength = #searchString
+
+  local indexEndFirstThings = allXml:find(searchString)
+
+  startXml = allXml:sub(1, indexEndFirstThings + searchStringLength)
+  endXml = allXml:sub(indexEndFirstThings + searchStringLength)
+
+  allXml = startXml .. newTalent .. endXml
+  ----------------------------------------------------------------------------------------------------------
   local newStatistic = ""
   if(#allStatistics > 0) then
     for statisticIndex = 1, #allStatisticsGUID do
@@ -281,6 +316,9 @@ function AddNewField()
   
   EnlargeHeightPanelInventory(countItem)
   EnlargeWidthPanelInventory(longestLineInventory)
+
+  EnlargeHeightPanelTalent(countTalent)
+  EnlargeWidthPanelTalent(longestLineTalent)
   Wait.time(UpdateSave, 0.1)
 end
 
@@ -336,6 +374,25 @@ function EnlargeWidthPanelInventory(lengthText)
   if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
   Wait.time(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - lengthText), 0.2)
   Wait.time(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 0.2)
+end
+
+function EnlargeHeightPanelTalent(countTalent)
+  if(countTalent > 3) then
+    --preferredHeight=50 cellSpacing=5
+    countTalent = countTalent + 1
+    local newHeightPanel = countTalent * 50 + countTalent * 5
+    Wait.time(|| self.UI.setAttribute("TLPanelTalent", "height", newHeightPanel), 0.2)
+  end
+end
+function EnlargeWidthPanelTalent(lengthText)
+  lengthText = lengthText - 30
+  if(not invWidth) then
+    invWidth = self.UI.getAttribute("TLPanelTalent", "width")
+  end
+  local locWidth = invWidth
+  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
+  Wait.time(|| self.UI.setAttribute("TLPanelTalent", "width", locWidth - lengthText), 0.2)
+  Wait.time(|| self.UI.setAttribute("talentPanel", "width", locWidth), 0.2)
 end
 
 function ChangeCharacteristic(id)
@@ -415,13 +472,15 @@ end
 function RebuildAssets()
   local root = 'https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/'
   local rootIn = 'https://img2.freepng.ru/20180418/hlw/kisspng-computer-icons-adventure-hotel-luggage-5ad725017cc0f8.903043971524049153511.jpg'
+  local rootB = 'https://img2.freepng.ru/20180320/tze/kisspng-artist-s-book-scalable-vector-graphics-clip-art-gray-books-cliparts-5ab10db5d03c32.1930740015215528218529.jpg'
   local assets = {
     {name = 'uiGear', url = root .. 'gear.png'},
     {name = 'uiClose', url = root .. 'close.png'},
     {name = 'uiPlus', url = root .. 'plus.png'},
     {name = 'uiMinus', url = root .. 'minus.png'},
     {name = 'uiBars', url = root .. 'bars.png'},
-    {name = 'uiInventory', url = rootIn}
+    {name = 'uiInventory', url = rootIn},
+    {name = 'uiBook', url = rootB}
   }
   self.UI.setCustomAssets(assets)
 end

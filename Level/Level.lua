@@ -493,7 +493,7 @@ end
 
 function Connect()
   allFeatureGUID, allStatisticGUID = {}, {}
-  local gameCharacter, gameInventoryGUID
+  local gameCharacter, gameInventoryGUID, gameTalentsGUID
   for _,object in pairs(getAllObjects()) do
     if(object) then
       if(object.getColorTint() == self.getColorTint()) then
@@ -510,6 +510,8 @@ function Connect()
         elseif(GMNotesObj:match("GameEquipment")) then
 	        gameInventoryGUID = object.getGUID()
           broadcastToAll("Игровой инвентарь существует")
+        elseif(GMNotesObj:match("GameTalents")) then
+	        gameTalentsGUID = object.getGUID()
         end
       end
     end
@@ -520,7 +522,7 @@ function Connect()
   SetLBNValue()
   UpdateSave()
   if(gameCharacter and (allStatisticGUID or allFeatureGUID)) then
-    SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID)
+    SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID, gameTalentsGUID)
   end
 end
 function SetObjectFeature()
@@ -540,12 +542,14 @@ function SetLBNValue()
   end
 end
 
-function SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID)
-  local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID, gameInventoryGUID = gameInventoryGUID}
+function SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID, gameTalentsGUID)
+  local params = {statisticsGUID = allStatisticGUID, characteristicsGUID = allFeatureGUID,
+                  gameInventoryGUID = gameInventoryGUID, gameTalentsGUID = gameTalentsGUID}
 	gameCharacter.call("SetGUID", params)
   SetObjectsStatistics(gameCharacter)
   SetObjectsCharacteristics(gameCharacter)
   SetObjectsInventory(gameCharacter, gameInventoryGUID)
+  SetObjectsTalents(gameCharacter, gameTalentsGUID)
 end
 function SetObjectsStatistics(gameCharacter)
   local parametrs = {
@@ -558,7 +562,7 @@ function SetObjectsStatistics(gameCharacter)
 	  getObjectFromGUID(stat).call("SetGameCharacter", parametrs)
   end
 end
-function SetObjectsCharacteristics(gameCharacter, gameInventoryGUID)
+function SetObjectsCharacteristics(gameCharacter)
   local parametrs = {
     gameChar = gameCharacter,
     id = 1
@@ -583,6 +587,11 @@ end
 function SetObjectsInventory(gameCharacter, gameInventoryGUID)
   if(gameInventoryGUID) then
 	  getObjectFromGUID(gameInventoryGUID).call("SetGameCharacter", {charGUID = gameCharacter.getGUID(), allFeatGUID = allFeatureGUID})
+  end
+end
+function SetObjectsTalents(gameCharacter, gameTalentsGUID)
+  if(gameTalentsGUID) then
+	  getObjectFromGUID(gameTalentsGUID).call("SetGameCharacter", {charGUID = gameCharacter.getGUID(), allFeatGUID = allFeatureGUID})
   end
 end
 

@@ -1,0 +1,8 @@
+<Defaults>
+	<Text class='bestFit' color='#ffffff' fontStyle='Bold' outline='#000000' outlineSize='1 1'
+		resizeTextForBestFit='True' resizeTextMaxSize='50'/>
+	<InputField class='hiddenInput' height='75' width='80' fontSize='50'
+		color='#ffffff00' textColor='ffffff00' visibility='Black'/>
+	<Button class='hiddenButton' height='75' width='50'
+		color='#ffffff00' textColor='ffffff00' visibility='Black'/>
+</Defaults>
