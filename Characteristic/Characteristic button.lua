@@ -7,7 +7,7 @@
     ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["gameCharacterGUID"] = gameCharacterGUID,
     ["idForGameCharacter"] = idForGameCharacter, ["pureCharacteristicBonus"] = pureCharacteristicBonus,
     ["inputObjectName"] = inputObjectName, ["gameInventoryGUID"] = gameInventoryGUID, ["characteristicName"] = characteristicName,
-    ["showCharacteristic"] = showCharacteristic, ["saveXml"] = self.UI.getXml()
+    ["showCharacteristic"] = showCharacteristic
   }
   savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -49,7 +49,6 @@ function PerformParameterCheck()
 end
 
 function Confer(loadedData)
-  saveXml = loadedData.saveXml
   GUIDLevelIndex = loadedData.GUIDLevelIndex or ""
   minCharacteristic = loadedData.minCharacteristic or 0
   characteristic = loadedData.characteristic or 0
@@ -73,13 +72,9 @@ end
 
 function FunctionCall()
   Wait.time(RebuildAssets, 0.05)
-  if(not saveXml) then
-    Wait.time(AddNewFieldForConnection, 0.55)
-  else
-    Wait.time(function() self.UI.setXml(saveXml) end, 0.55)
-    Wait.time(SetUIValue, 0.60)
-  end
-  Wait.time(ChangeColorText, 0.60)
+  Wait.time(AddNewFieldForConnection, 1)
+  Wait.time(SetUIValue, 1.5)
+  Wait.time(ChangeColorText, 1.55)
 end
 
 function onLoad(savedData)
