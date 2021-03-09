@@ -35,7 +35,7 @@
 		resizeTextForBestFit='true' resizeTextMaxSize='60' color='#00000000' textColor='#ffffff'/>
 	<VerticalScrollView id='dopStatisticPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout height='215' width='800' color='rgba(0,0,0,0.7)' cellSpacing='5'
+		<TableLayout id='TLPanelDopStat' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell columnSpan='3'>

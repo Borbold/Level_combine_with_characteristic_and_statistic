@@ -287,6 +287,7 @@ function AddNewField()
   allXml = startXml .. newTalent .. endXml
   ----------------------------------------------------------------------------------------------------------
   local newStatistic, newDopStatistic = "", ""
+  local countStat, countDopStat = 1, 1
   if(#allStatistics > 0) then
     for statisticIndex = 1, #allStatisticsGUID do
       if(statsAnotherWindow[statisticIndex] == "False") then
@@ -306,6 +307,7 @@ function AddNewField()
             </Cell>
           </Row>
         ]]
+        countStat = countStat + 1
       else
         newDopStatistic = newDopStatistic .. [[
           <Row preferredHeight='50'>
@@ -323,6 +325,7 @@ function AddNewField()
             </Cell>
           </Row>
         ]]
+        countDopStat = countDopStat + 1
       end
     end
   end
@@ -354,7 +357,8 @@ function AddNewField()
     Wait.time(function() self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI) end, 0.05)
   end
 
-  EnlargeHeightPanelStat(#allStatisticsGUID + 1)
+  EnlargeHeightPanelStat(countStat, "TLPanelStat")
+  EnlargeHeightPanelStat(countDopStat, "TLPanelDopStat")
 
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
   EnlargeWidthPanelChar(longestLine)
@@ -376,11 +380,11 @@ function CreateNameForCharacteristic(charac)
   end
 end
 
-function EnlargeHeightPanelStat(countStatisticIndex)
+function EnlargeHeightPanelStat(countStatisticIndex, id)
   if(countStatisticIndex > 4) then
     --preferredHeight=50 cellSpacing=5
     local newHeightPanel = countStatisticIndex * 50 + countStatisticIndex * 5
-    Wait.time(|| self.UI.setAttribute("TLPanelStat", "height", newHeightPanel), 0.2)
+    Wait.time(|| self.UI.setAttribute(id, "height", newHeightPanel), 0.2)
   end
 end
 
