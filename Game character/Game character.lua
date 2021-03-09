@@ -165,6 +165,7 @@ function AddNewField()
   allXml = startXml .. strVis .. endXml
   ----------------------------------------------------------------------------------------------------------
   local newCharacteristic, longestLine = "", 30
+  local countCharac = 1
   if(#allCharacteristics > 0) then
     for index,char in pairs(allCharacteristics) do
       if(showCharacteristic[index] == "True") then
@@ -187,6 +188,7 @@ function AddNewField()
               </Cell>
             </Row>
           ]]
+          countCharac = countCharac + 1
         end
       end
     end
@@ -202,7 +204,7 @@ function AddNewField()
 
   allXml = startXml .. newCharacteristic .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newThings, longestLineInventory, countItem = "", 30, 0
+  local newThings, longestLineInventory, countItem = "", 30, 1
   local inventoryObj = getObjectFromGUID(gameInventoryGUID)
   if(inventoryObj) then
     for index,itemGUID in pairs(inventoryObj.call("GetAllObjectGUID")) do
@@ -253,7 +255,7 @@ function AddNewField()
 
   allXml = startXml .. newThings .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newTalent, longestLineTalent, countTalent = "", 30, 0
+  local newTalent, longestLineTalent, countTalent = "", 30, 1
   local talentObj = getObjectFromGUID(gameTalentsGUID)
   if(talentObj) then
     for index,talentGUID in pairs(talentObj.call("GetAllObjectGUID")) do
@@ -357,17 +359,17 @@ function AddNewField()
     Wait.time(function() self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI) end, 0.05)
   end
 
-  EnlargeHeightPanelStat(countStat, "TLPanelStat")
-  EnlargeHeightPanelStat(countDopStat, "TLPanelDopStat")
+  EnlargeHeightPanel(countStat, "TLPanelStat")
+  EnlargeHeightPanel(countDopStat, "TLPanelDopStat")
 
-  EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
-  EnlargeWidthPanelChar(longestLine)
+  EnlargeHeightPanel(countCharac, "TLPanelChar")
+  EnlargeWidthPanel(longestLine, "characteristicPanel")
   
-  EnlargeHeightPanelInventory(countItem)
-  EnlargeWidthPanelInventory(longestLineInventory)
+  EnlargeHeightPanel(countItem, "TLPanelInven")
+  EnlargeWidthPanel(longestLineInventory, "inventoryPanel")
 
-  EnlargeHeightPanelTalent(countTalent)
-  EnlargeWidthPanelTalent(longestLineTalent)
+  EnlargeHeightPanel(countTalent, "TLPanelTalent")
+  EnlargeWidthPanel(longestLineTalent, "talentPanel")
   Wait.time(UpdateSave, 0.1)
 end
 
@@ -380,68 +382,20 @@ function CreateNameForCharacteristic(charac)
   end
 end
 
-function EnlargeHeightPanelStat(countStatisticIndex, id)
-  if(countStatisticIndex > 4) then
+function EnlargeHeightPanel(countIndex, id)
+  if(countIndex > 4) then
     --preferredHeight=50 cellSpacing=5
-    local newHeightPanel = countStatisticIndex * 50 + countStatisticIndex * 5
+    local newHeightPanel = countIndex * 50 + countIndex * 5
     Wait.time(|| self.UI.setAttribute(id, "height", newHeightPanel), 0.2)
   end
 end
-
-function EnlargeHeightPanelChar(countCharacteristicIndex)
-  if(countCharacteristicIndex > 4) then
-    --preferredHeight=50 cellSpacing=5
-    local newHeightPanel = countCharacteristicIndex * 50 + countCharacteristicIndex * 5
-    Wait.time(|| self.UI.setAttribute("TLPanelChar", "height", newHeightPanel), 0.2)
-  end
-end
-function EnlargeWidthPanelChar(lengthText)
+function EnlargeWidthPanel(lengthText, id)
   lengthText = lengthText - 30
-  if(not charWidth) then
-    charWidth = self.UI.getAttribute("TLPanelChar", "width")
+  if(not locWidth) then
+    locWidth = self.UI.getAttribute(id, "width")
   end
-  local locWidth = charWidth
-  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.time(|| self.UI.setAttribute("TLPanelChar", "width", locWidth - lengthText), 0.2)
-  Wait.time(|| self.UI.setAttribute("characteristicPanel", "width", locWidth), 0.2)
-end
-
-function EnlargeHeightPanelInventory(countItem)
-  if(countItem > 3) then
-    --preferredHeight=50 cellSpacing=5
-    countItem = countItem + 1
-    local newHeightPanel = countItem * 50 + countItem * 5
-    Wait.time(|| self.UI.setAttribute("TLPanelInven", "height", newHeightPanel), 0.2)
-  end
-end
-function EnlargeWidthPanelInventory(lengthText)
-  lengthText = lengthText - 30
-  if(not invWidth) then
-    invWidth = self.UI.getAttribute("TLPanelInven", "width")
-  end
-  local locWidth = invWidth
-  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.time(|| self.UI.setAttribute("TLPanelInven", "width", locWidth - lengthText), 0.2)
-  Wait.time(|| self.UI.setAttribute("inventoryPanel", "width", locWidth), 0.2)
-end
-
-function EnlargeHeightPanelTalent(countTalent)
-  if(countTalent > 3) then
-    --preferredHeight=50 cellSpacing=5
-    countTalent = countTalent + 1
-    local newHeightPanel = countTalent * 50 + countTalent * 5
-    Wait.time(|| self.UI.setAttribute("TLPanelTalent", "height", newHeightPanel), 0.2)
-  end
-end
-function EnlargeWidthPanelTalent(lengthText)
-  lengthText = lengthText - 30
-  if(not invWidth) then
-    invWidth = self.UI.getAttribute("TLPanelTalent", "width")
-  end
-  local locWidth = invWidth
-  if(lengthText > 0) then locWidth = locWidth + lengthText*10 end
-  Wait.time(|| self.UI.setAttribute("TLPanelTalent", "width", locWidth - lengthText), 0.2)
-  Wait.time(|| self.UI.setAttribute("talentPanel", "width", locWidth), 0.2)
+  if(lengthText > 0) then locWidth = locWidth + lengthText*5 end
+  Wait.time(|| self.UI.setAttribute(id, "width", locWidth), 0.2)
 end
 
 function ChangeCharacteristic(id)

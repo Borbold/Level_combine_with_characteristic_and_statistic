@@ -20,7 +20,7 @@
 		resizeTextForBestFit='true' resizeTextMaxSize='60' visibility='Black' colors='#FFFFFF22|#FFFFFF22|#C8C8C822'/>
 	<VerticalScrollView id='characteristicPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout id='TLPanelChar' height='215' width='800' color='rgba(0,0,0,0.7)' cellSpacing='5'
+		<TableLayout id='TLPanelChar' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
@@ -61,7 +61,7 @@
 	<Button image='uiInventory' offsetXY='-366 -135' onClick='ActiveDeactivePanel("inventoryPanel")' height='45' width='45'/>
 	<VerticalScrollView id='inventoryPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout id='TLPanelInven' height='215' width='800' color='rgba(0,0,0,0.7)' cellSpacing='5'
+		<TableLayout id='TLPanelInven' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
@@ -75,7 +75,7 @@
 	<Button image='uiBook' offsetXY='-315 -135' onClick='ActiveDeactivePanel("talentPanel")' height='45' width='45'/>
 	<VerticalScrollView id='talentPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout id='TLPanelTalent' height='215' width='800' color='rgba(0,0,0,0.7)' cellSpacing='5'
+		<TableLayout id='TLPanelTalent' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
