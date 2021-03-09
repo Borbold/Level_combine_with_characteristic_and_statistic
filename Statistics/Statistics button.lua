@@ -3,7 +3,7 @@
   local dataToSave = { ["currentStatisticValue"] = currentStatisticValue, ["maximumStatisticValue"] = maximumStatisticValue,
     ["pureMaxCurrentStatisticValue"] = pureMaxCurrentStatisticValue,
     ["progressBarColor"] = progressBarColor, ["gameCharacterGUID"] = gameCharacterGUID, ["idForGameCharacter"] = idForGameCharacter,
-    ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["lockChange"] = lockChange
+    ["ConnectedCharacteristic"] = ConnectedCharacteristic, ["lockChange"] = lockChange, ["changeViewStat"] = changeViewStat
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -40,6 +40,7 @@ function Confer(loadedData)
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
   lockChange = loadedData.lockChange or true
+  changeViewStat = loadedData.changeViewStat or "False"
   local indexString = string.find(self.getName(), ":")
   statisticName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
 end
@@ -57,6 +58,7 @@ function onLoad(savedData)
 end
 
 function ChangeUI()
+  self.UI.setAttribute("toggleStatistic", "isOn", changeViewStat)
   self.UI.setAttribute("inputColor", "text", progressBarColor)
   ChangeMeaningLock("Black", _, _, _, true)
 end
@@ -232,6 +234,30 @@ function RecalculationBonusPoints(params)
     end
   end
   ChangeMaximumStatisticValue(locCorrentVal)
+end
+
+function DoNotShowStat(player, value)
+  changeViewStat = value
+  
+  if(gameCharacterGUID) then
+    getObjectFromGUID(gameCharacterGUID).call("ChangeShowStatistic", {guid = self.getGUID(), value = value})
+  end
+
+  local locIdentifier = "RecreatePanel_ForStatistic" .. DenoteSth()
+  Timer.destroy(locIdentifier)
+  Timer.create({
+    identifier     = locIdentifier,
+    function_name  = "RecreatePanel",
+    delay          = 2,
+    repetitions    = 1
+  })
+  Wait.time(UpdateSave, 0.1)
+end
+function RecreatePanel()
+  if(gameCharacterGUID) then
+    -- Пересоздать панель
+    getObjectFromGUID(gameCharacterGUID).call("CreateFields")
+  end
 end
 
 function ChangeName(value)

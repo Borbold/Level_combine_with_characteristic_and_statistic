@@ -2,7 +2,7 @@
   local dataToSave = {
     ["allStatisticsGUID"] = allStatisticsGUID, ["allCharacteristicsGUID"] = allCharacteristicsGUID,
     ["gameInventoryGUID"] = gameInventoryGUID, ["showCharacteristic"] = showCharacteristic,
-    ["saveHeightUI"] = saveHeightUI, ["gameTalentsGUID"] = gameTalentsGUID
+    ["saveHeightUI"] = saveHeightUI, ["gameTalentsGUID"] = gameTalentsGUID, ["statsAnotherWindow"] = statsAnotherWindow
   }
   local savedData = JSON.encode(dataToSave)
   self.script_state = savedData
@@ -30,7 +30,7 @@ end
 function Confer(savedData)
   originalXml = self.UI.getXml()
   allCharacteristics, allStatistics = {}, {}
-  showCharacteristic = {}
+  showCharacteristic, statsAnotherWindow = {}, {}
   RebuildAssets()
   if(savedData ~= "") then
     local loadedData = JSON.decode(savedData)
@@ -39,6 +39,7 @@ function Confer(savedData)
     gameInventoryGUID = loadedData.gameInventoryGUID
     gameTalentsGUID = loadedData.gameTalentsGUID
     showCharacteristic = loadedData.showCharacteristic or {}
+    statsAnotherWindow = loadedData.statsAnotherWindow or {}
     saveHeightUI = loadedData.saveHeightUI
     Wait.time(SetStatisticObjects, 0.1)
     Wait.time(SetCharacteristicObjects, 0.3)
@@ -88,6 +89,9 @@ function SetStatisticObjects()
     local statObj = getObjectFromGUID(statisticGUID)
     if(statObj ~= nil) then
 	    allStatistics[k] = statObj
+      if(not statsAnotherWindow[k]) then
+        statsAnotherWindow[k] = "False"
+      end
     else
       broadcastToAll("Одна или несколько статистик были удалены. Произведите переподключение")
       return
@@ -113,6 +117,14 @@ function ChangeShowCharacteristic(params)
   for index,characteristicGUID in ipairs(allCharacteristicsGUID) do
     if(characteristicGUID == params.guid) then
       showCharacteristic[index] = params.value
+    end
+  end
+end
+
+function ChangeShowStatistic(params)
+  for index,statisticGUID in ipairs(allStatisticsGUID) do
+    if(statisticGUID == params.guid) then
+      statsAnotherWindow[index] = params.value
     end
   end
 end
@@ -274,26 +286,57 @@ function AddNewField()
 
   allXml = startXml .. newTalent .. endXml
   ----------------------------------------------------------------------------------------------------------
-  local newStatistic = ""
+  local newStatistic, newDopStatistic = "", ""
   if(#allStatistics > 0) then
     for statisticIndex = 1, #allStatisticsGUID do
-      newStatistic = newStatistic .. [[
-        <Row preferredHeight='50'>
-          <Cell>
-            <Button image='uiMinus' onClick='Minus(]]..statisticIndex..[[)'/>
-          </Cell>
-          <Cell>
-            <Panel>
-              <ProgressBar id='bar]]..statisticIndex..[[' class='classBar'/>
-              <Text id='textBar]]..statisticIndex..[[' class='textForBar'/>
-            </Panel>
-          </Cell>
-          <Cell>
-            <Button image='uiPlus' onClick='Plus(]]..statisticIndex..[[)'/>
-          </Cell>
-        </Row>
-      ]]
+      if(statsAnotherWindow[statisticIndex] == "False") then
+        newStatistic = newStatistic .. [[
+          <Row preferredHeight='50'>
+            <Cell>
+              <Button image='uiMinus' onClick='Minus(]]..statisticIndex..[[)'/>
+            </Cell>
+            <Cell>
+              <Panel>
+                <ProgressBar id='bar]]..statisticIndex..[[' class='classBar'/>
+                <Text id='textBar]]..statisticIndex..[[' class='textForBar'/>
+              </Panel>
+            </Cell>
+            <Cell>
+              <Button image='uiPlus' onClick='Plus(]]..statisticIndex..[[)'/>
+            </Cell>
+          </Row>
+        ]]
+      else
+        newDopStatistic = newDopStatistic .. [[
+          <Row preferredHeight='50'>
+            <Cell>
+              <Button image='uiMinus' onClick='Minus(]]..statisticIndex..[[)'/>
+            </Cell>
+            <Cell>
+              <Panel>
+                <ProgressBar id='bar]]..statisticIndex..[[' class='classBar'/>
+                <Text id='textBar]]..statisticIndex..[[' class='textForBar'/>
+              </Panel>
+            </Cell>
+            <Cell>
+              <Button image='uiPlus' onClick='Plus(]]..statisticIndex..[[)'/>
+            </Cell>
+          </Row>
+        ]]
+      end
     end
+  end
+
+  if(newDopStatistic ~= "") then
+    searchString = "<NewRowDS />"
+    searchStringLength = #searchString
+
+    local indexEndFirstThings = allXml:find(searchString)
+
+    startXml = allXml:sub(1, indexEndFirstThings + searchStringLength)
+    endXml = allXml:sub(indexEndFirstThings + searchStringLength)
+
+    allXml = startXml .. newDopStatistic .. endXml
   end
 
   searchString = "<NewRowS />"
@@ -306,9 +349,11 @@ function AddNewField()
 
   startXml = startXml .. newStatistic .. endXml
   self.UI.setXml(startXml)
+
   if(saveHeightUI) then
     Wait.time(function() self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI) end, 0.05)
   end
+
   EnlargeHeightPanelStat(#allStatisticsGUID + 1)
 
   EnlargeHeightPanelChar(#allCharacteristicsGUID + 1)
