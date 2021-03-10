@@ -51,7 +51,7 @@
 	<Button onClick='PanelTool' image='uiGear' height='75' width='70'
 		offsetXY='835 70' />
 	<Toggle id='toggleStatistic' onValueChanged='DoNotShowStat' toggleWidth='40' toggleHeight='40' isOn='false'
-		offsetXY='830 10' tooltip='Показать статистику в отдельном окошке' tooltipPosition='Right' />
+		offsetXY='830 10' tooltip='Показать статистику в отдельном окошке' tooltipPosition='Right' tooltipFontSize='35' />
 	<Panel id='panelTool' offsetXY='0 200' active='false'>
 		<InputField height='200' width='800' color='#000000' textColor='#ffffff00'
 			interactable='false' />

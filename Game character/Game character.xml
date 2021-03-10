@@ -13,11 +13,13 @@
 </Defaults>
 
 <Panel id='mainPanel' position='0 0 -350' rotation='-40 0 0' visibility=''>
-	<Button image='uiBars' offsetXY='363 -140' onClick='ActiveDeactivePanel("characteristicPanel")' height='75' width='75'/>
 	<InputField offsetXY='0 -140' height='60' width='150' placeholder='.'
 		interactable='false' visibility='Black' colors='#FFFFFF11'/>
 	<InputField offsetXY='0 -140' onEndEdit='ChageHeight' height='60' width='150' placeholder='Height' characterValidation='Integer'
 		resizeTextForBestFit='true' resizeTextMaxSize='60' visibility='Black' colors='#FFFFFF22|#FFFFFF22|#C8C8C822'/>
+	
+	<Button text='С' offsetXY='363 -140' onClick='ActiveDeactivePanel("characteristicPanel")' height='55' width='55'
+		resizeTextForBestFit='true' resizeTextMaxSize='60' color='#00000000' textColor='#ffffff'/>
 	<VerticalScrollView id='characteristicPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
 		<TableLayout id='TLPanelChar' height='215' color='rgba(0,0,0,0.7)' cellSpacing='5'
@@ -31,7 +33,7 @@
 		</TableLayout>
 	</VerticalScrollView>
 	
-	<Button text='S' offsetXY='300 -140' onClick='ActiveDeactivePanel("dopStatisticPanel")' height='55' width='55'
+	<Button text='S' offsetXY='315 -140' onClick='ActiveDeactivePanel("dopStatisticPanel")' height='55' width='55'
 		resizeTextForBestFit='true' resizeTextMaxSize='60' color='#00000000' textColor='#ffffff'/>
 	<VerticalScrollView id='dopStatisticPanel' height='215' width='800' active='false'
 		offsetXY='0 220' verticalScrollbarVisibility='AutoHideAndExpandViewport'>

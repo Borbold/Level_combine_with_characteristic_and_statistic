@@ -75,7 +75,7 @@
 	<Button onClick='PanelTool' image='uiGear' height='75' width='70'
 		offsetXY='835 70' />
 	<Toggle id='toggleCharacteristic' onValueChanged='DoNotShowCharacteristic' toggleWidth='40' toggleHeight='40' isOn='true'
-		offsetXY='830 10' tooltip='Показывать характеристику' tooltipPosition='Right' />
+		offsetXY='830 10' tooltip='Показывать характеристику' tooltipPosition='Right' tooltipFontSize='35' />
 	<VerticalScrollView id='panelTool' height='160' width='1600'
 		color='black' offsetXY='0 180' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
 		<TableLayout id='panelTable'  cellSpacing='10' height='510'
