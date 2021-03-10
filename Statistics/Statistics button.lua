@@ -54,7 +54,7 @@ function onLoad(savedData)
     Confer(loadedData)
   end
   Wait.time(UpdateValue, 0.5)
-  Wait.time(ChangeUI, 0.7)
+  Wait.time(ChangeUI, 1)
 end
 
 function ChangeUI()
