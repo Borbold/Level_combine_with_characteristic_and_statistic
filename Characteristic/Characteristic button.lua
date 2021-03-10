@@ -419,6 +419,12 @@ function NewLevel()
   UpdateSave()
 end
 
+function ChangeMinCharacteristic(value)
+  minCharacteristic = value
+  characteristic = value
+  SetUIValue()
+end
+
 function EditInput(player, input, id)
   local index = id:find("_")
   local number = tonumber(id:sub(index + 1))

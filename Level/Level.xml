@@ -47,7 +47,7 @@
 	</Button>
 	<VerticalScrollView id='panelTool' height='270' width='1600'
 		color='black' offsetXY='0 235' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
-		<TableLayout height='800' cellSpacing='5'>
+		<TableLayout height='850' cellSpacing='5'>
 			<Row>
 				<Cell columnSpan='2'>
 					<Text text='Максимальный уровень'
@@ -178,6 +178,21 @@
 						class='changeCharacteristic'>
 					1
 					</InputField>
+				</Cell>
+			</Row>
+			
+			<Row>
+				<Cell columnSpan='2'>
+					<InputField id='обычная' placeholder='Мин. ОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='60' characterValidation='Integer' />
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField id='боевая' placeholder='Мин. БОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='60' characterValidation='Integer' />
+				</Cell>
+				<Cell columnSpan='2'>
+					<InputField id='мирная' placeholder='Мин. МОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='60' characterValidation='Integer' />
 				</Cell>
 			</Row>
 			

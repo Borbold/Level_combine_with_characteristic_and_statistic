@@ -105,9 +105,9 @@ end
 
 function FunctionCall()
   Wait.time(RebuildAssets, 0.3)
-  Wait.time(UpdateExperience, 0.5)
-  Wait.time(SetObjectFeature, 0.65)
-  Wait.time(SetCharacteristic, 0.7)
+  Wait.time(UpdateExperience, 0.8)
+  Wait.time(SetObjectFeature, 0.85)
+  Wait.time(SetCharacteristic, 0.9)
 end
 
 function SetCharacteristic()
@@ -519,7 +519,6 @@ function Connect()
   if(#allFeatureGUID == 0) then broadcastToAll("Характеристики не были найдены/добавлены на стол") end
   if(#allStatisticGUID == 0) then broadcastToAll("Статистика не была найдена/добавлена на стол") end
   SetObjectFeature()
-  SetLBNValue()
   UpdateSave()
   if(gameCharacter and (allStatisticGUID or allFeatureGUID)) then
     SetGUIDInGameCharacter(gameCharacter, gameInventoryGUID, gameTalentsGUID)
@@ -531,13 +530,6 @@ function SetObjectFeature()
     if(obj ~= nil) then
       obj.call("SetGUIDLevel", self.getGUID())
       allFeatureObject[id] = obj
-    end
-  end
-end
-function SetLBNValue()
-  for i,feature in pairs(allFeatureObject) do
-    if(getObjectFromGUID(allFeatureGUID[i])) then
-      feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
     end
   end
 end
@@ -604,15 +596,33 @@ function CheckPlayer(playerColor)
 end
 
 function ChangeStatisticBonus(player, input)
+  if(input == "") then return end
+  input = tonumber(input)
+  LBN = (input >= 0 and input) or 0
+
   if(#allFeatureObject > 0) then
-	  LBN = (tonumber(input) >= 0 and tonumber(input)) or 0
     for _,feature in pairs(allFeatureObject) do
       feature.call("RecalculationLevelFromStatisticBonusPoint", LBN)
     end
-  else
-    LBN = tonumber(input) or 0
   end
+  if(#allStatisticGUID > 0) then
+    for _,stat in pairs(allStatisticGUID) do
+      getObjectFromGUID(stat).call("ChangeMaximumStatisticValue", LBN)
+    end
+  end
+
   UpdateSave()
+end
+
+function ChangeCharacteristiBonus(player, input, id)
+  if(input == "") then return end
+  input = tonumber(input)
+
+  for _,charac in pairs(allFeatureObject) do
+    if(charac.call("CheckGMNot", id)) then
+      charac.call("ChangeMinCharacteristic", input)
+    end
+  end
 end
 
 function ChangeMaxLevel(player, input)

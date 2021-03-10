@@ -1,0 +1,4 @@
+<Panel position='0 120 -65' active='true' visibility='Black'>
+	<Button resizeTextForBestFit='true' resizeTextMaxSize='60' height='60' width='200'
+		onClick='ApplyChanges' text='Применить'/>
+</Panel>
