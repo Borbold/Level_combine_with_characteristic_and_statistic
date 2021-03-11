@@ -24,12 +24,16 @@
 			</Cell>
 			<Cell>
 				<Button id='closeDistributionCharacteristic' onClick='CloseDistributionCharacteristic' resizeTextForBestFit='True'
-					resizeTextMaxSize='60' color='#00000025' interactable='false'>
+					resizeTextMaxSize='60' color='#00000025' interactable='false'
+					tooltip='Нажмите после того, как игрок все расспределил. Это поможет избежать случайных изменений характеристик в будущем.'
+					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'>
 				Завершить распределение ОХ
 				</Button>
 			</Cell>
 			<Cell>
-				<Button onClick='ResetLevel' resizeTextForBestFit='True' resizeTextMaxSize='60' color='#00000025'>
+				<Button onClick='ResetLevel' resizeTextForBestFit='True' resizeTextMaxSize='60' color='#00000025'
+					tooltip='Внимание! Помимо того, что вы обнулите все значения на плашках, вы так же сбросите все подключения! Будте аккуратны и имейте сохраненные заготовки на всякий случай'
+					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'>
 				Сбросить уровни
 				</Button>
 			</Cell>
@@ -42,9 +46,8 @@
 	</TableLayout>
 </Panel>
 
-<Panel position='0 0 -22' visibility='Black'>
-	<Button onClick='PanelTool' image='uiGear' height='75' width='70' offsetXY='835 70'>
-	</Button>
+<Panel position='0 0 -25' visibility='Black'>
+	<Button onClick='PanelTool' image='uiGear' height='75' width='70' offsetXY='835 70'/>
 	<VerticalScrollView id='panelTool' height='270' width='1600'
 		color='black' offsetXY='0 235' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
 		<TableLayout height='850' cellSpacing='5'>
@@ -58,7 +61,8 @@
 						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#9966cc'/>
 				</Cell>
 				<Cell columnSpan='1'>
-					<Button image='uiMinus' height='35' width='35' onClick='ShowOrHideUIConnectedStrips'/>
+					<Button image='uiMinus' onClick='ShowOrHideUIConnectedStrips'
+						tooltip='Скрыть UI со всех характеристик и статистик' tooltipFontSize='35'/>
 				</Cell>
 			</Row>
 			<Row>
@@ -109,7 +113,9 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicUsual' placeholder='Начальные ОХ'
-						class='changeCharacteristic' />
+						class='changeCharacteristic'
+						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'/>
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelUsual' placeholder='ОХ за уровень'
@@ -138,7 +144,9 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicCombat' placeholder='Начальные ОХ'
-						class='changeCharacteristic' />
+						class='changeCharacteristic'
+						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelCombat' placeholder='ОХ за уровень'
@@ -167,7 +175,9 @@
 			<Row>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicPeace' placeholder='Начальные ОХ'
-						class='changeCharacteristic' />
+						class='changeCharacteristic'
+						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400' />
 				</Cell>
 				<Cell columnSpan='2'>
 					<InputField value='0' id='characteristicPerLevelPeace' placeholder='ОХ за уровень'
@@ -183,16 +193,19 @@
 			
 			<Row>
 				<Cell columnSpan='2'>
-					<InputField id='обычная' placeholder='Мин. ОХ' onEndEdit='ChangeCharacteristiBonus'
-						fontSize='60' characterValidation='Integer' />
+					<InputField id='обычная' placeholder='Стартовые ОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='50' characterValidation='Integer'
+						tooltip='Задавайте их До выдачи Начальных ОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 				<Cell columnSpan='2'>
-					<InputField id='боевая' placeholder='Мин. БОХ' onEndEdit='ChangeCharacteristiBonus'
-						fontSize='60' characterValidation='Integer' />
+					<InputField id='боевая' placeholder='Стартовые БОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='50' characterValidation='Integer'
+						tooltip='Задавайте их До выдачи Начальных БОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 				<Cell columnSpan='2'>
-					<InputField id='мирная' placeholder='Мин. МОХ' onEndEdit='ChangeCharacteristiBonus'
-						fontSize='60' characterValidation='Integer' />
+					<InputField id='мирная' placeholder='Стартовые МОХ' onEndEdit='ChangeCharacteristiBonus'
+						fontSize='50' characterValidation='Integer'
+						tooltip='Задавайте их До выдачи Начальных МОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 			</Row>
 			
@@ -202,9 +215,9 @@
 						fontSize='60' characterValidation='Integer' />
 				</Cell>
 				<Cell columnSpan='3'>
-					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60'>
-					Произвести подключение
-					</Button>
+					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60' text='Произвести подключение'
+						tooltip='Нажимайте на данную кнопку для первого подключения или в случае добавления новой статистики/характеристики на стол'
+						tooltipFontSize='35' tooltipWidth='400' tooltipOffset='30'/>
 				</Cell>
 			</Row>
 		</TableLayout>

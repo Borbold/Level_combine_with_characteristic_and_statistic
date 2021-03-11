@@ -107,7 +107,9 @@ function AddNewFieldForConnection()
           <InputField id='GUID_]]..fieldIndex..[[' class='fieldForConnectGUID' placeholder='GUID' />
         </Cell>
         <Cell>
-          <InputField id='CPM_]]..fieldIndex..[[' class='fieldForConnect' placeholder='CPM' />
+          <InputField id='CPM_]]..fieldIndex..[[' class='fieldForConnect' placeholder='CPM'
+            tooltip='Пример формулы:       "- 10 / 2"                       это равносильно записи: "(x-10)/2"'
+						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400' />
         </Cell>
         <Cell>
           <InputField id='LM_]]..fieldIndex..[[' class='fieldForConnect' placeholder='LM' />
