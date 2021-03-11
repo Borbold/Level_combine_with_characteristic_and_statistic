@@ -181,7 +181,11 @@ function SetValue(id, input)
     
   input = tonumber(input)
   if(CheckIndex(id, "start")) then
-    startCharacteristic[id] = input
+    if(sumAllInitialCharacteristics) then
+      startCharacteristic[id] = input + sumAllInitialCharacteristics[id]
+    else
+      startCharacteristic[id] = input
+    end
   elseif(CheckIndex(id, "PerLevel")) then
     characteristicPerLevel[id] = input
     SetUpListCharacteristicPerLevel()
@@ -617,9 +621,23 @@ end
 function ChangeCharacteristiBonus(player, input, id)
   if(input == "") then return end
   input = tonumber(input)
+  sumAllInitialCharacteristics = {}
+  sumAllInitialCharacteristics["startCharacteristicUsual"] = 0
+  sumAllInitialCharacteristics["startCharacteristicCombat"] = 0
+  sumAllInitialCharacteristics["startCharacteristicPeace"] = 0
 
   for _,charac in pairs(allFeatureObject) do
     if(charac.call("CheckGMNot", id)) then
+      if(id == "обычная") then
+        sumAllInitialCharacteristics["startCharacteristicUsual"] = 
+                          sumAllInitialCharacteristics["startCharacteristicUsual"] + input
+      elseif(id == "боевая") then
+        sumAllInitialCharacteristics["startCharacteristicCombat"] = 
+                          sumAllInitialCharacteristics["startCharacteristicCombat"] + input
+      elseif(id == "мирная") then
+        sumAllInitialCharacteristics["startCharacteristicPeace"] =
+                          sumAllInitialCharacteristics["startCharacteristicPeace"] + input
+      end
       charac.call("ChangeMinCharacteristic", input)
     end
   end
