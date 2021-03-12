@@ -48,7 +48,7 @@ end
 function onLoad(savedData)
   self.setGMNotes("Статистика")
   CreateGlobalVariable()
-  Wait.time(RebuildAssets, 0.2)
+  Wait.time(RebuildAssets, 0.4)
   if(savedData != "") then
     local loadedData = JSON.decode(savedData)
     Confer(loadedData)
