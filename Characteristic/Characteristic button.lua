@@ -409,7 +409,7 @@ function RecalculationBonusPoints(params)
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-      locCharBonus = locCharBonus + locVC + locLN
+      locCharBonus = Round(locCharBonus + locVC + locLN, 2)
     end
   end
   ChangeCharacteristic("Black", "textCharacteristicBonus", locCharBonus)

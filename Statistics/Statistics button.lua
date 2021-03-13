@@ -230,7 +230,7 @@ function RecalculationBonusPoints(params)
     if(p ~= nil) then
       local locVC = p.CPM
       local locLN = p.LM*p.LN
-	    locCorrentVal = locCorrentVal + p.LBN + locVC + locLN
+	    locCorrentVal = Round(locCorrentVal + p.LBN + locVC + locLN)
     end
   end
   ChangeMaximumStatisticValue(locCorrentVal)
