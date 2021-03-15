@@ -26,7 +26,7 @@
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
-					<Text class='defaultText' text='характеристика' />
+					<Text class='defaultText' text='{ru}характеристика{en}characteristic' />
 				</Cell>
 			</Row>
 			<NewRowC />
@@ -41,7 +41,7 @@
 			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell columnSpan='3'>
-					<Text class='defaultText' text='доп. статистика' />
+					<Text class='defaultText' text='{ru}маловажная статистика{en}unimportant statistics' />
 				</Cell>
 			</Row>
 			<NewRowDS />
@@ -53,7 +53,7 @@
 			columnWidths='50 0 50' cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell columnSpan='3'>
-					<Text class='defaultText' text='статистика' />
+					<Text class='defaultText' text='{ru}статистика{en}statistics' />
 				</Cell>
 			</Row>
 			<NewRowS />
@@ -67,7 +67,7 @@
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
-					<Text class='defaultText' text='инвентарь' />
+					<Text class='defaultText' text='{ru}инвентарь{en}inventory' />
 				</Cell>
 			</Row>
 			<NewRowI />
@@ -81,7 +81,7 @@
 			cellBackgroundColor='1 1 1 0'>
 			<Row preferredHeight='50'>
 				<Cell>
-					<Text class='defaultText' text='таланты' />
+					<Text class='defaultText' text='{ru}таланты/особенности{en}talents/specialties' />
 				</Cell>
 			</Row>
 			<NewRowT />

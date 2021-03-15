@@ -341,7 +341,7 @@ function SetLevelUIAndCheckMaxLevel(expLeft, nextLevelExp)
   end
   self.UI.setAttribute("bar", "percentage", per)
   self.UI.setValue("textBar", strPer)
-  self.UI.setValue("level", "Ваш уровень: " .. level)
+  self.UI.setValue("level", "{ru}Ваш уровень: {en}Your level: " .. level)
   return isLevelMax
 end
 

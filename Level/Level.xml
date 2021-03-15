@@ -14,9 +14,8 @@
 	<TableLayout cellSpacing='10'>
 		<Row>
 			<Cell columnSpan='3'>
-				<Text id='level' fontSize='80' color='#000000' alignment='MiddleLeft'>
-				Ваш уровень: 1
-				</Text>
+				<Text id='level' resizeTextMaxSize='80' resizeTextForBestFit='True' color='#000000' alignment='MiddleLeft'
+					text='{ru}Ваш уровень: 1{en}Your level: 1'/>
 			</Cell>
 			<Cell columnSpan='2'>
 				<InputField id='inputExperience' onEndEdit='InputChangeExperience' fontSize='65' color='#00000025'
@@ -25,17 +24,19 @@
 			<Cell>
 				<Button id='closeDistributionCharacteristic' onClick='CloseDistributionCharacteristic' resizeTextForBestFit='True'
 					resizeTextMaxSize='60' color='#00000025' interactable='false'
-					tooltip='Нажмите после того, как игрок все расспределил. Это поможет избежать случайных изменений характеристик в будущем.'
-					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'>
-				Завершить распределение ОХ
-				</Button>
+					tooltip=
+'Нажмите после того, как игрок все распределил. Это поможет избежать случайных изменений характеристик в будущем
+Click after the player has distributed everything. This will help avoid accidental changes in characteristics in the future'
+					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'
+					text='{ru}Завершить распределение ОХ{en}Complete the distribution of the OX'/>
 			</Cell>
 			<Cell>
 				<Button onClick='ResetLevel' resizeTextForBestFit='True' resizeTextMaxSize='60' color='#00000025'
-					tooltip='Внимание! Помимо того, что вы обнулите все значения на плашках, вы так же сбросите все подключения! Будте аккуратны и имейте сохраненные заготовки на всякий случай'
-					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'>
-				Сбросить уровни
-				</Button>
+					tooltip=
+'Внимание! Помимо того, что вы обнулите все значения на плашках, вы так же сбросите все подключения! Будьте аккуратны и имейте сохраненные заготовки на всякий случай
+Warning! In addition to resetting all values on the dies, you will also reset all connections! Be careful and have some saved blanks just in case'
+					tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'
+					text='{ru}Сбросить уровни{en}Reset levels'/>
 			</Cell>
 		</Row>
 		<Row>
@@ -53,16 +54,18 @@
 		<TableLayout height='850' cellSpacing='5'>
 			<Row>
 				<Cell columnSpan='2'>
-					<Text text='Максимальный уровень'
+					<Text text='{ru}Максимальный уровень{en}Maximum level'
 						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#6600ff'/>
 				</Cell>
 				<Cell columnSpan='3'>
-					<Text text='Изменить изначальное значение опыта'
+					<Text text='{ru}Изменить изначальное значение опыта{en}Change the original value of the experience'
 						resizeTextForBestFit='true' resizeTextMaxSize='50' color='#9966cc'/>
 				</Cell>
 				<Cell columnSpan='1'>
 					<Button image='uiMinus' onClick='ShowOrHideUIConnectedStrips'
-						tooltip='Скрыть UI со всех характеристик и статистик' tooltipFontSize='35'/>
+						tooltipFontSize='35' tooltip=
+'Скрыть UI со всех характеристик и статистик
+Hide UI from all characteristics and statistics'/>
 				</Cell>
 			</Row>
 			<Row>
@@ -101,24 +104,26 @@
 			<Row>
 				<Cell columnSpan='4'>
 					<Text class='usualChar'>
-					Изменение ОХ
+					{ru}Изменение ОХ{en}Change OX
 					</Text>
 				</Cell>
 				<Cell columnSpan='2'>
 					<Text class='usualChar'>
-					Получить ОХ, пропустив указаное количество ур.
+					{ru}Получить ОХ, пропустив указанное количество уровней{en}Get OX by skipping the specified number of levels
 					</Text>
 				</Cell>
 			</Row>
 			<Row>
 				<Cell columnSpan='2'>
-					<InputField value='0' id='startCharacteristicUsual' placeholder='Начальные ОХ'
+					<InputField value='0' id='startCharacteristicUsual' placeholder='Initial OX'
 						class='changeCharacteristic'
-						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltip=
+'Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить
+Enter this value carefully, because once it is set, it cannot be changed'
 						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400'/>
 				</Cell>
 				<Cell columnSpan='2'>
-					<InputField value='0' id='characteristicPerLevelUsual' placeholder='ОХ за уровень'
+					<InputField value='0' id='characteristicPerLevelUsual' placeholder='ОХ for level'
 						class='changeCharacteristic' />
 				</Cell>
 				<Cell columnSpan='2'>
@@ -132,12 +137,12 @@
 			<Row>
 				<Cell columnSpan='4'>
 					<Text class='combatChar'>
-					Изменение боевых ОХ
+					{ru}Изменение боевых ОХ{en}Change combat OX
 					</Text>
 				</Cell>
 				<Cell columnSpan='2'>
 					<Text class='combatChar'>
-					Получить ОХ, пропустив указаное количество ур.
+					{ru}Получить ОХ, пропустив указанное количество уровней{en}Get OX by skipping the specified number of levels
 					</Text>
 				</Cell>
 			</Row>
@@ -145,7 +150,9 @@
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicCombat' placeholder='Начальные ОХ'
 						class='changeCharacteristic'
-						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltip=
+'Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить
+Enter this value carefully, because once it is set, it cannot be changed'
 						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400' />
 				</Cell>
 				<Cell columnSpan='2'>
@@ -163,12 +170,12 @@
 			<Row>
 				<Cell columnSpan='4'>
 					<Text class='peaceChar'>
-					Изменение мирных ОХ
+					{ru}Изменение мирных ОХ{en}Change peace OX
 					</Text>
 				</Cell>
 				<Cell columnSpan='2'>
 					<Text class='peaceChar'>
-					Получить ОХ, пропустив указаное количество ур.
+					{ru}Получить ОХ, пропустив указанное количество уровней{en}Get OX by skipping the specified number of levels
 					</Text>
 				</Cell>
 			</Row>
@@ -176,7 +183,9 @@
 				<Cell columnSpan='2'>
 					<InputField value='0' id='startCharacteristicPeace' placeholder='Начальные ОХ'
 						class='changeCharacteristic'
-						tooltip='Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить'
+						tooltip=
+'Вводите данное значение аккуратно, ведь после установки, его невозможно будет изменить
+Enter this value carefully, because once it is set, it cannot be changed'
 						tooltipFontSize='35' tooltipPosition='Above' tooltipWidth='400' />
 				</Cell>
 				<Cell columnSpan='2'>
@@ -193,30 +202,41 @@
 			
 			<Row>
 				<Cell columnSpan='2'>
-					<InputField id='обычная' placeholder='Стартовые ОХ' onEndEdit='ChangeCharacteristiBonus'
+					<InputField id='обычная' placeholder='Initial ОХ' onEndEdit='ChangeCharacteristiBonus'
 						fontSize='50' characterValidation='Integer'
-						tooltip='Задавайте их До выдачи Начальных ОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
+						tooltip=
+'Задавайте их До выдачи Начальных ОХ
+Ask them before issuing the Initial OX'
+						tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 				<Cell columnSpan='2'>
-					<InputField id='боевая' placeholder='Стартовые БОХ' onEndEdit='ChangeCharacteristiBonus'
+					<InputField id='боевая' placeholder='Initial БОХ' onEndEdit='ChangeCharacteristiBonus'
 						fontSize='50' characterValidation='Integer'
-						tooltip='Задавайте их До выдачи Начальных БОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
+						tooltip=
+'Задавайте их До выдачи Начальных ОХ
+Ask them before issuing the Initial OX'
+						tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 				<Cell columnSpan='2'>
-					<InputField id='мирная' placeholder='Стартовые МОХ' onEndEdit='ChangeCharacteristiBonus'
+					<InputField id='мирная' placeholder='Initial МОХ' onEndEdit='ChangeCharacteristiBonus'
 						fontSize='50' characterValidation='Integer'
-						tooltip='Задавайте их До выдачи Начальных МОХ' tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
+						tooltip=
+'Задавайте их До выдачи Начальных ОХ
+Ask them before issuing the Initial OX'
+						tooltipWidth='400' tooltipFontSize='35' tooltipPosition='Above' />
 				</Cell>
 			</Row>
 			
 			<Row>
 				<Cell columnSpan='3'>
-					<InputField id='idLBN' placeholder='Начальное знач. статы' onEndEdit='ChangeStatisticBonus'
+					<InputField id='idLBN' placeholder='Initial states' onEndEdit='ChangeStatisticBonus'
 						fontSize='60' characterValidation='Integer' />
 				</Cell>
 				<Cell columnSpan='3'>
-					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60' text='Произвести подключение'
-						tooltip='Нажимайте на данную кнопку для первого подключения или в случае добавления новой статистики/характеристики на стол'
+					<Button onClick='Connect' resizeTextForBestFit='True' resizeTextMaxSize='60' text='{ru}Произвести подключение{en}Make the connection'
+						tooltip=
+'Нажимайте на данную кнопку для первого подключения или в случае добавления новой статистики/характеристики на стол
+Press this button for the first connection or when adding a new statistic/characteristic to the table'
 						tooltipFontSize='35' tooltipWidth='400' tooltipOffset='30'/>
 				</Cell>
 			</Row>

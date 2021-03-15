@@ -14,7 +14,7 @@
 				<Row>
 					<Cell>
 						<Text id='name' resizeTextForBestFit='True' resizeTextMaxSize='80' color='#000000' alignment='MiddleLeft'>
-						Название
+						{ru}Название{en}Name
 						</Text>
 					</Cell>
 					<Cell>
@@ -22,7 +22,7 @@
 							characterValidation='Integer' />
 					</Cell>
 					<Cell>
-						<Button text='Заблокировать' id='changeLock' color='#00000025' textColor='#000000'
+						<Button text='{ru}Заблокировать{en}Lock' id='changeLock' color='#00000025' textColor='#000000'
 							onClick='ChangeMeaningLock' resizeTextForBestFit='True' resizeTextMaxSize='60' />
 					</Cell>
 				</Row>

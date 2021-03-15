@@ -26,7 +26,7 @@ function CreateGlobalVariable()
   progressBarColor, statisticName = "", ""
   currentStatisticValue, maximumStatisticValue = 0, 0
   pureMaxCurrentStatisticValue = 0
-  lockChange = true
+  lockChange = false
   ConnectedCharacteristic = {}
   listIdUI = {"buttonPlus", "buttonMinus", "inputValue"}
 end
@@ -39,7 +39,7 @@ function Confer(loadedData)
   gameCharacterGUID = loadedData.gameCharacterGUID or ""
   idForGameCharacter = loadedData.idForGameCharacter or 0
   progressBarColor = loadedData.progressBarColor or "#ffffff"
-  lockChange = loadedData.lockChange or true
+  lockChange = loadedData.lockChange
   changeViewStat = loadedData.changeViewStat or "False"
   local indexString = string.find(self.getName(), ":")
   statisticName = string.sub(self.getName(), indexString + 2, string.len(self.getName()))
@@ -84,14 +84,18 @@ end
 
 function ChangeMeaningLock(player, _, _, _, isLoad)
   if((player.color or player) == "Black") then
-    if(lockChange == false) then
-      if(not isLoad) then lockChange = true end
-      ChangeTextButton("changeLock", "Разблокировать")
-      HideUI()
+    if(not lockChange) then
+      if(not isLoad) then
+        lockChange = true
+        ChangeTextButton("changeLock", "{ru}Разблокировать{en}Unlock")
+        HideUI()
+      end
     else
-      if(not isLoad) then lockChange = false end
-      ChangeTextButton("changeLock", "Заблокировать")
-      ShowUI()
+      if(not isLoad) then
+        lockChange = false
+        ChangeTextButton("changeLock", "{ru}Заблокировать{en}Lock")
+        ShowUI()
+      end
     end
     UpdateSave()
   else
@@ -131,6 +135,8 @@ function ChangeStatisticInGameCharacter()
 end
 
 function InputChange(player, input, idInput)
+  if(not lockChange) then return end
+
   if(idInput == "inputValue") then
     input = (input ~= "" and input) or 0
 	  ChangeStatistics(player.color, input)

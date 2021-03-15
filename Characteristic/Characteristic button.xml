@@ -8,7 +8,7 @@
 	<InputField class='fieldForConnectGUID' onEndEdit='EditInput' fontSize='60' characterValidation='Alphanumeric'/>
 	<InputField class='fieldForConnect' onEndEdit='EditInput' fontSize='60' characterValidation='None'/>
 	<Button class='buttonForConnect' onClick='EnableCharacteristic' resizeTextForBestFit='True' resizeTextMaxSize='60'
-		text='Подключить' color='green' />
+		text='{ru}Подключить{en}Connect' color='green' />
 </Defaults>
 
 <Panel id='basicCharacteristic' position='0 0 -21'>
@@ -75,7 +75,7 @@
 	<Button onClick='PanelTool' image='uiGear' height='75' width='70'
 		offsetXY='835 70' />
 	<Toggle id='toggleCharacteristic' onValueChanged='DoNotShowCharacteristic' toggleWidth='40' toggleHeight='40' isOn='true'
-		offsetXY='830 10' tooltip='Показывать характеристику' tooltipPosition='Right' tooltipFontSize='35' />
+		offsetXY='830 10' tooltip='Показать/Скрыть характеристику' tooltipPosition='Right' tooltipFontSize='35' />
 	<VerticalScrollView id='panelTool' height='160' width='1600'
 		color='black' offsetXY='0 180' active='false' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
 		<TableLayout id='panelTable'  cellSpacing='10' height='510'
@@ -83,7 +83,7 @@
 			<Row preferredHeight='60'>
 				<Cell columnSpan='4'>
 					<Text class='bestFit'>
-					выберите тип характеристики
+					{ru}выберите тип характеристики{en}Select the type of characteristic
 					</Text>
 				</Cell>
 			</Row>
@@ -106,17 +106,17 @@
 				<Row preferredHeight='60'>
 					<Cell>
 						<Text class='bestFit'>
-						установите GUID необходимой плашки
+						{ru}установите GUID необходимой плашки{en}Set the GUID of the necessary partition
 						</Text>
 					</Cell>
 					<Cell>
 						<Text class='bestFit'>
-						напишите формулу для перерасчета значений
+						{ru}напишите формулу для перерасчета значений{en}Write a formula to recalculate the values
 						</Text>
 					</Cell>
 					<Cell>
 						<Text class='bestFit'>
-						установите множитель за каждый Уровень
+						{ru}установите множитель за каждый Уровень{en}Set the multiplier for each Level
 						</Text>
 					</Cell>
 				</Row>
