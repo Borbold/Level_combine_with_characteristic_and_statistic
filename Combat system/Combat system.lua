@@ -155,9 +155,9 @@ function CreateValue(charac)
 end
 
 function EnlargeHeightPanel(countIndex, id)
-  if(countIndex > 9) then
+  if(countIndex > 8) then
     --preferredHeight=50 cellSpacing=5
-    local newHeightPanel = countIndex * 50 + countIndex * 5
+    local newHeightPanel = countIndex * 50 + countIndex * 5 + 50
     Wait.time(|| self.UI.setAttribute(id, "height", newHeightPanel), 0.2)
   end
 end

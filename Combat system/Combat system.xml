@@ -73,8 +73,8 @@
 						<Cell columnSpan='2'>
 							<InputField class='basicInpitFieldAttacker' placeholder='1d20' onEndEdit='InputDiceRoll'
 							tooltip=
-'Сюда впишите куб, который собираетесь бросать (если оставить пустым, то бросок будет осуществляться физическим кубом)
-Here write the cube you are going to throw (if you leave it empty, it will be a physical cube)'
+							'Сюда впишите куб, который собираетесь бросать
+							Here write the cube you are going to throw'
 							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
 						</Cell>
 					</Row>
@@ -86,8 +86,8 @@ Here write the cube you are going to throw (if you leave it empty, it will be a 
 						<Cell columnSpan='2'>
 							<InputField class='basicInpitFieldDefensive' placeholder='1d20' onEndEdit='InputDiceRoll'
 							tooltip=
-'Сюда впишите куб, который собираетесь бросать (если оставить пустым, то бросок будет осуществляться физическим кубом)
-Here write the cube you are going to throw (if you leave it empty, it will be a physical cube)'
+							'Сюда впишите куб, который собираетесь бросать
+							Here write the cube you are going to throw'
 							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
 						</Cell>
 					</Row>
