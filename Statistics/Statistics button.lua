@@ -135,8 +135,6 @@ function ChangeStatisticInGameCharacter()
 end
 
 function InputChange(player, input, idInput)
-  if(not lockChange) then return end
-
   if(idInput == "inputValue") then
     input = (input ~= "" and input) or 0
 	  ChangeStatistics(player.color, input)
@@ -167,6 +165,9 @@ function Plus(player)
   ChangeStatistics(player.color, 1)
 end
 function ChangeStatistics(playerColor, value)
+  -- Если залочено, то даже с персонажа менять нельзя
+  if(lockChange) then return end
+
   if(CheckPlayer(playerColor)) then
     if(value and value == "") then value = 0 end
     currentStatisticValue = currentStatisticValue + tonumber(value)

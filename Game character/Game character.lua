@@ -167,7 +167,7 @@ function AddNewField()
   local newCharacteristic, longestLine = "", 30
   local countCharac = 1
   if(#allCharacteristics > 0) then
-    for index,char in pairs(allCharacteristics) do
+    for index,char in ipairs(allCharacteristics) do
       if(showCharacteristic[index] == "True") then
         local textChar = CreateNameForCharacteristic(char)
         if(textChar) then
@@ -495,4 +495,15 @@ function ChageHeight(_, value)
   saveHeightUI = (-1)*value
   self.UI.setAttribute("mainPanel", "position", "0 0 "..saveHeightUI)
   UpdateSave()
+end
+
+function InteractWithCombatSystem(player, value, id)
+  if(not combatSystem) then
+    for _, object in pairs(getObjects()) do
+      if(object.getGMNotes():find("Combat sistem")) then
+        combatSystem = object
+      end
+    end
+  end
+  combatSystem.call("CreateCharacteristics", {allCharacteristics = allCharacteristics, type = id})
 end

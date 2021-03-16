@@ -48,11 +48,18 @@
 		</TableLayout>
 	</VerticalScrollView>
 	
-	<Button text='A' offsetXY='263 -140' onClick='' height='55' width='55'
+	<Button id='attacker' text='A' offsetXY='263 -140' onClick='InteractWithCombatSystem' height='55' width='55'
 		resizeTextForBestFit='true' resizeTextMaxSize='60' color='#00000000' textColor='#ffffff'
 		tooltip=
-'Боевая система. При нажатии на данную кнопку вы сможете произвести автоматические подсчеты для нанесения урона
-Combat sistem. If you click this button, you will be able to make automatic calculations for damage'
+'Атакующий. При нажатии на данную кнопку вы сможете произвести автоматические подсчеты для нанесения урона
+Attacker. If you click this button, you will be able to make automatic calculations for damage'
+		tooltipPosition='Below' tooltipFontSize='35' tooltipWidth='400'/>
+	
+	<Button id='defensive' text='D' offsetXY='213 -140' onClick='InteractWithCombatSystem' height='55' width='55'
+		resizeTextForBestFit='true' resizeTextMaxSize='60' color='#00000000' textColor='#ffffff'
+		tooltip=
+'Защищающийся. При нажатии на данную кнопку вы сможете произвести автоматические подсчеты для нанесения урона
+Defensive. If you click this button, you will be able to make automatic calculations for damage'
 		tooltipPosition='Below' tooltipFontSize='35' tooltipWidth='400'/>
 	
 	<VerticalScrollView height='215' width='800' verticalScrollbarVisibility='AutoHideAndExpandViewport'>
