@@ -15,9 +15,9 @@
 		height='502' width='2000'>
 		<Row>
 			<Cell columnSpan='5'>
-				<VerticalScrollView color='#ff4f09'>
+				<VerticalScrollView color='#ff4f09' height='502'>
 					<TableLayout id='TLPanelCharAt' color='rgba(0,0,0,0)' cellSpacing='5' rowBackgroundColor='#909090'
-						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport'>
+						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport' height='502'>
 						<Row preferredHeight='50' dontUseTableRowBackground='true'>
 							<Cell columnSpan='6'>
 								<Text id='textAttacker' class='defaultText' text='{ru}атакующий{en}attacker'/>
@@ -28,9 +28,9 @@
 				</VerticalScrollView>
 			</Cell>
 			<Cell columnSpan='5'>
-				<VerticalScrollView color='#fefe29'>
+				<VerticalScrollView color='#fefe29' height='502'>
 					<TableLayout id='TLPanelCharDef' color='rgba(0,0,0,0)' cellSpacing='5' rowBackgroundColor='#909090'
-						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport'>
+						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport' height='502'>
 						<Row preferredHeight='50' dontUseTableRowBackground='true'>
 							<Cell columnSpan='6'>
 								<Text id='textDefensive' class='defaultText' text='{ru}защищающийся{en}defensive' />

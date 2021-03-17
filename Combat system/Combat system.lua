@@ -95,7 +95,10 @@ function CreateCharacteristics(param)
   end
 
   if(characteristicAttacker ~= "") then
-    Wait.time(function() self.UI.setAttribute("textAttacker", "text", nameAttacker) end, 0.1)
+    Wait.time(function()
+      self.UI.setAttribute("textAttacker", "text", nameAttacker)
+      EnlargeHeightPanel(#allCharacteristicsAt, "TLPanelCharAt")
+    end, 0.1)
     searchStringLength = #searchStringAt
     indexEndFirstCharacteristic = allXml:find(searchStringAt)
     startXml = allXml:sub(1, indexEndFirstCharacteristic + searchStringLength)
@@ -104,7 +107,10 @@ function CreateCharacteristics(param)
     allXml = startXml .. characteristicAttacker .. endXml
   end
   if(characteristicDefensive ~= "") then
-    Wait.time(function() self.UI.setAttribute("textDefensive", "text", nameDefensive) end, 0.1)
+    Wait.time(function()
+      self.UI.setAttribute("textDefensive", "text", nameDefensive)
+      EnlargeHeightPanel(#allCharacteristicsDef, "TLPanelCharDef")
+    end, 0.1)
     searchStringLength = #searchStringDef
     indexEndFirstCharacteristic = allXml:find(searchStringDef)
     startXml = allXml:sub(1, indexEndFirstCharacteristic + searchStringLength)
@@ -113,9 +119,6 @@ function CreateCharacteristics(param)
     allXml = startXml .. characteristicDefensive .. endXml
   end
   self.UI.setXml(allXml)
-
-  EnlargeHeightPanel(#param.allCharacteristics, "TLPanelCharAt")
-  EnlargeHeightPanel(#param.allCharacteristics, "TLPanelCharDef")
 end
 function AddNewCharacteristic(allCharacteristics, type)
   local newCharacteristic = ""
