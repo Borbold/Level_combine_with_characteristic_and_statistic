@@ -1,7 +1,7 @@
 <Defaults>
 	<Text class='defaultText' color='#ffffff' resizeTextForBestFit='true' resizeTextMaxSize='50'
 		fontStyle='Bold' outline='#000000' outlineSize='1 1' height='50'/>
-	<InputField id='attacker' class='basicInpitFieldAttacker' color='#ff4f00' textColor='#f0f0f0'
+	<InputField id='attacker' class='basicInpitFieldAttacker' color='#f80000' textColor='#f0f0f0'
 		height='75' resizeTextForBestFit='true' resizeTextMaxSize='50'/>
 	<InputField id='defensive' class='basicInpitFieldDefensive' color='#fefe22' textColor='#0f0f0f'
 		height='75' resizeTextForBestFit='true' resizeTextMaxSize='50'/>
@@ -66,28 +66,42 @@
 						</Cell>
 					</Row>
 					<Row preferredHeight='80'>
-						<Cell columnSpan='4'>
-							<InputField class='basicInpitFieldAttacker' placeholder='Count throw (1)'
+						<Cell columnSpan='2'>
+							<InputField class='basicInpitFieldAttacker' placeholder='Count roll(1)'
 								characterValidation='Integer' onEndEdit='InputCountRoll'/>
 						</Cell>
 						<Cell columnSpan='2'>
-							<InputField class='basicInpitFieldAttacker' placeholder='1d20' onEndEdit='InputDiceRoll'
+							<InputField class='basicInpitFieldAttacker' placeholder='1/20' onEndEdit='InputDiceRoll'
 							tooltip=
-							'Сюда впишите куб, который собираетесь бросать
+							'Сюда впишите куб, который собираетесь бросать(1-min/20-max)
 							Here write the cube you are going to throw'
+							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
+						</Cell>
+						<Cell columnSpan='2'>
+							<InputField class='basicInpitFieldAttacker' placeholder='1/10' onEndEdit='InputMoreDiceRoll'
+							tooltip=
+							'Дополнительный куб. Он рассчитан на прокидку урона (если не нужен, напишите 0/0)
+							Additional cube. It is designed for damage rolls (if not needed, write 0/0)'
 							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
 						</Cell>
 					</Row>
 					<Row preferredHeight='80'>
-						<Cell columnSpan='4'>
-							<InputField class='basicInpitFieldDefensive' placeholder='Count throw (1)'
+						<Cell columnSpan='2'>
+							<InputField class='basicInpitFieldDefensive' placeholder='Count roll(1)'
 								characterValidation='Integer' onEndEdit='InputCountRoll'/>
 						</Cell>
 						<Cell columnSpan='2'>
-							<InputField class='basicInpitFieldDefensive' placeholder='1d20' onEndEdit='InputDiceRoll'
+							<InputField class='basicInpitFieldDefensive' placeholder='1/20' onEndEdit='InputDiceRoll'
 							tooltip=
-							'Сюда впишите куб, который собираетесь бросать
+							'Сюда впишите куб, который собираетесь бросать(1-min/20-max)
 							Here write the cube you are going to throw'
+							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
+						</Cell>
+						<Cell columnSpan='2'>
+							<InputField class='basicInpitFieldDefensive' placeholder='1/10' onEndEdit='InputMoreDiceRoll'
+							tooltip=
+							'Дополнительный куб. Он рассчитан на прокидку урона (если не нужен, напишите 0/0)
+							Additional cube. It is designed for damage rolls (if not needed, write 0/0)'
 							tooltipFontSize='35' tooltipWidth='400' tooltipOffset='40'/>
 						</Cell>
 					</Row>

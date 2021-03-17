@@ -2,30 +2,34 @@
   allCharacteristicsAt, allCharacteristicsDef = {}, {}
   modifiedAttacker, modifiedDefensive = 0, 0
   countRollAttacker, countRollDefensive = 1, 1
-  diceRollMinAttacker, diceRollMaxAttacker = 1, 20
-  diceRollMinDefensive, diceRollMaxDefensive = 1, 20
+  diceRollMinAttacker, diceRollMaxAttacker = {1, 1}, {20, 10}
+  diceRollMinDefensive, diceRollMaxDefensive = {1, 1}, {20, 10}
   characteristicAttacker, characteristicDefensive = "", ""
   nameAttacker, nameDefensive = "", ""
   Wait.time(function() originalXml = self.UI.getXml() end, 0.8)
 end
 
 function Roll()
+  broadcastToAll("-•-•-•-•-•-•-•-•-•-•-", {r = 0, g = 0, b = 0})
   if(countRollAttacker > 0) then
-    broadcastToAll("Атакующий/Attacker " ..
-                   CreateRollText(countRollAttacker, diceRollMinAttacker, diceRollMaxAttacker, modifiedAttacker),
-                   {r = 1, g = 0.3, b = 0})
+    broadcastToAll(string.format("Атакующий/Attacker %d•%d",
+                   CreateRollText(countRollAttacker, diceRollMinAttacker[1], diceRollMaxAttacker[1], modifiedAttacker),
+                   CreateRollText(countRollAttacker, diceRollMinAttacker[2], diceRollMaxAttacker[2], modifiedAttacker)),
+                   {r = 1, g = 0.14, b = 0})
   end
   if(countRollDefensive > 0) then
-    broadcastToAll("Защищаюсийся/Defensive " ..
-                   CreateRollText(countRollDefensive, diceRollMinDefensive, diceRollMaxDefensive, modifiedDefensive),
+    broadcastToAll(string.format("Защищаюсийся/Defensive %d•%d",
+                   CreateRollText(countRollDefensive, diceRollMinDefensive[1], diceRollMaxDefensive[1], modifiedDefensive),
+                   CreateRollText(countRollDefensive, diceRollMinDefensive[2], diceRollMaxDefensive[2], modifiedDefensive)),
                    {r = 0.99, g = 0.99, b = 0.16})
   end
+  broadcastToAll("-•-•-•-•-•-•-•-•-•-•-", {r = 0, g = 0, b = 0})
 end
 function CreateRollText(countRoll, diceRollMin, diceRollMax, modified)
   local messageRoll = ""
   for i = 1, countRoll do
     local additionalText = (((countRoll - i > 0) and "-•-") or "")
-    local randomValue = math.random(diceRollMin, diceRollMax)
+    local randomValue = math.ceil(math.random(diceRollMin, diceRollMax*100)/100)
     local resultText = (modified ~= 0 and ((randomValue + modified) .. "("..randomValue..")")) or
                         randomValue
     messageRoll = messageRoll .. resultText .. additionalText
@@ -47,20 +51,41 @@ function InputDiceRoll(_, input, id)
   if(input == "") then return end
 
   if(id == "attacker") then
-    local findD = input:find("d")
+    local findD = input:find("/")
     if(findD) then
-      diceRollMinAttacker = tonumber(input:sub(1, findD - 1))
-      diceRollMaxAttacker = tonumber(input:sub(findD + 1))
+      diceRollMinAttacker[1] = tonumber(input:sub(1, findD - 1))
+      diceRollMaxAttacker[1] = tonumber(input:sub(findD + 1))
     else
-      diceRollMaxAttacker = tonumber(input)
+      diceRollMaxAttacker[1] = tonumber(input)
     end
   elseif(id == "defensive") then
-    local findD = input:find("d")
+    local findD = input:find("/")
     if(findD) then
-      diceRollMinDefensive = tonumber(input:sub(1, findD - 1))
-      diceRollMaxDefensive = tonumber(input:sub(findD + 1))
+      diceRollMinDefensive[1] = tonumber(input:sub(1, findD - 1))
+      diceRollMaxDefensive[1] = tonumber(input:sub(findD + 1))
     else
-      diceRollMaxDefensive = tonumber(input)
+      diceRollMaxDefensive[1] = tonumber(input)
+    end
+  end
+end
+function InputMoreDiceRoll(_, input, id)
+  if(input == "") then return end
+
+  if(id == "attacker") then
+    local findD = input:find("/")
+    if(findD) then
+      diceRollMinAttacker[2] = tonumber(input:sub(1, findD - 1))
+      diceRollMaxAttacker[2] = tonumber(input:sub(findD + 1))
+    else
+      diceRollMaxAttacker[2] = tonumber(input)
+    end
+  elseif(id == "defensive") then
+    local findD = input:find("/")
+    if(findD) then
+      diceRollMinDefensive[2] = tonumber(input:sub(1, findD - 1))
+      diceRollMaxDefensive[2] = tonumber(input:sub(findD + 1))
+    else
+      diceRollMaxDefensive[2] = tonumber(input)
     end
   end
 end
