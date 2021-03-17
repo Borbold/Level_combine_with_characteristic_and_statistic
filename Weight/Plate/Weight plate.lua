@@ -7,7 +7,7 @@
   self.script_state = savedData
 end
 
-function onLoad(savedData)
+function CreateGlobalVariable(savedData)
   replacementTable = {["(+"] = "(-", ["(-"] = "(+", ["(/"] = "(*", ["(*"] = "(/", ["-"] = "+", ["/"] = "*", ["*"] = "/"}
   allObjectGUID = {}
   currentWeight, maxWeight = 0, 20
@@ -18,8 +18,12 @@ function onLoad(savedData)
     gameCharacterGUID = loadedData.gameCharacterGUID or nil
     allFeatureGUID = loadedData.allFeatureGUID or nil
   end
-  Wait.time(SetNumber, 0.5)
-  Wait.time(CreateAllFeatureObj, 0.6)
+end
+
+function onLoad(savedData)
+  Wait.time(|| CreateGlobalVariable(savedData), 1.25)
+  Wait.time(SetNumber, 1.3)
+  Wait.time(CreateAllFeatureObj, 1.6)
 end
 
 function CreateAllFeatureObj()

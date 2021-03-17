@@ -118,7 +118,7 @@ function PanelTool()
 end
 
 function UpdateValue()
-  local per = currentStatisticValue / maximumStatisticValue * 100
+  local per = Round(currentStatisticValue, 2) / maximumStatisticValue * 100
   local strPer = currentStatisticValue .. "/" .. maximumStatisticValue
 	self.UI.setAttribute("bar", "percentage", per)
   self.UI.setValue("textBar", strPer)
