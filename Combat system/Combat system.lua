@@ -5,6 +5,7 @@
   diceRollMinAttacker, diceRollMaxAttacker = 1, 20
   diceRollMinDefensive, diceRollMaxDefensive = 1, 20
   characteristicAttacker, characteristicDefensive = "", ""
+  nameAttacker, nameDefensive = "", ""
   Wait.time(function() originalXml = self.UI.getXml() end, 0.8)
 end
 
@@ -80,16 +81,21 @@ function CreateCharacteristics(param)
   local allXml = originalXml
 
   if(param.type == "attacker") then
+    local locText = "{ru}атакующий %s{en}attacker %s"
+    nameAttacker = string.format(locText, param.name, param.name)
     allCharacteristicsAt = param.allCharacteristics
     characteristicAttacker = AddNewCharacteristic(param.allCharacteristics, param.type)
     searchStringAt = "<NewRowAt />"
   elseif(param.type == "defensive") then
+    local locText = "{ru}защищающийся %s{en}defensive %s"
+    nameDefensive = string.format(locText, param.name, param.name)
     allCharacteristicsDef = param.allCharacteristics
     characteristicDefensive = AddNewCharacteristic(param.allCharacteristics, param.type)
     searchStringDef = "<NewRowDef />"
   end
 
   if(characteristicAttacker ~= "") then
+    Wait.time(function() self.UI.setAttribute("textAttacker", "text", nameAttacker) end, 0.1)
     searchStringLength = #searchStringAt
     indexEndFirstCharacteristic = allXml:find(searchStringAt)
     startXml = allXml:sub(1, indexEndFirstCharacteristic + searchStringLength)
@@ -98,6 +104,7 @@ function CreateCharacteristics(param)
     allXml = startXml .. characteristicAttacker .. endXml
   end
   if(characteristicDefensive ~= "") then
+    Wait.time(function() self.UI.setAttribute("textDefensive", "text", nameDefensive) end, 0.1)
     searchStringLength = #searchStringDef
     indexEndFirstCharacteristic = allXml:find(searchStringDef)
     startXml = allXml:sub(1, indexEndFirstCharacteristic + searchStringLength)

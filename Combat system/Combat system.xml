@@ -20,7 +20,7 @@
 						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport'>
 						<Row preferredHeight='50' dontUseTableRowBackground='true'>
 							<Cell columnSpan='6'>
-								<Text class='defaultText' text='{ru}атакующий{en}attacker'/>
+								<Text id='textAttacker' class='defaultText' text='{ru}атакующий{en}attacker'/>
 							</Cell>
 						</Row>
 						<NewRowAt />
@@ -33,7 +33,7 @@
 						cellBackgroundColor='1 1 1 0' erticalScrollbarVisibility='AutoHideAndExpandViewport'>
 						<Row preferredHeight='50' dontUseTableRowBackground='true'>
 							<Cell columnSpan='6'>
-								<Text class='defaultText' text='{ru}защищающийся{en}defensive' />
+								<Text id='textDefensive' class='defaultText' text='{ru}защищающийся{en}defensive' />
 							</Cell>
 						</Row>
 						<NewRowDef />

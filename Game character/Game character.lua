@@ -505,5 +505,5 @@ function InteractWithCombatSystem(player, value, id)
       end
     end
   end
-  combatSystem.call("CreateCharacteristics", {allCharacteristics = allCharacteristics, type = id})
+  combatSystem.call("CreateCharacteristics", {allCharacteristics = allCharacteristics, type = id, name = self.getName()})
 end
