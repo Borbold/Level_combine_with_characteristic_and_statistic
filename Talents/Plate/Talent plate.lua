@@ -37,7 +37,7 @@ end
 
 function onCollisionEnter(obj)
   if(obj.collision_object.getName() == "" and obj.collision_object.getPosition().y > self.getPosition().y) then
-    broadcastToAll("Добавте таланту название!")
+    log("Добавте таланту название!")
     return
   end
   if(creatingUI and obj.collision_object.getName() ~= "") then

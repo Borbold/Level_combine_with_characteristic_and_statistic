@@ -52,7 +52,7 @@ end
 
 function onCollisionEnter(obj)
   if(obj.collision_object.getName() == "" and obj.collision_object.getPosition().y > self.getPosition().y) then
-    broadcastToAll("Добавте предмету название!")
+    log("Добавте предмету название!")
     return
   end
   if(currentWeight and obj.collision_object.getName() ~= "") then
