@@ -160,7 +160,7 @@ function onLoad(savedData)
     end
     FunctionCall()
     Wait.time(SetInteracteble, 0.5)
-    Wait.time(|| ShowOrHideUIConnectedStrips(_, _, _, _, true), 2)
+    Wait.time(|| ShowOrHideUIConnectedStrips(_, _, _, _, true), 3)
   end, 1.4)
 end
 
@@ -679,6 +679,14 @@ end
 
 function ShowOrHideUIConnectedStrips(_, _, _, _, isLoad)
   if(not isLoad) then showUIPanel = not showUIPanel end
+  if #allFeatureGUID ~= 0 and #allStatisticGUID then
+    HideOrShowUI(showUIPanel)
+  else
+    Wait.time(|| HideOrShowUI(showUIPanel), 3)
+  end
+  UpdateSave()
+end
+function HideOrShowUI(showUIPanel)
   for i,v in ipairs(allStatisticGUID) do
     if(getObjectFromGUID(v)) then
       getObjectFromGUID(v).call("ShowOrHideMainPanel", showUIPanel)
@@ -689,7 +697,6 @@ function ShowOrHideUIConnectedStrips(_, _, _, _, isLoad)
       getObjectFromGUID(v).call("ShowOrHideMainPanel", showUIPanel)
     end
   end
-  UpdateSave()
 end
 
 function RebuildAssets()

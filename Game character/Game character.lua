@@ -131,9 +131,9 @@ end
 
 function CreateFields()
   self.UI.setXml(originalXml)
-  AddNewField()
+  Wait.time(|| AddNewField(), 1.5)
   for i = 1, #allStatisticsGUID do
-    Wait.time(|| ChangeStatistic(i), 1.2)
+    Wait.time(|| ChangeStatistic(i), 2)
   end
 end
 function AddNewField()

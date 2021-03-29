@@ -63,7 +63,7 @@ Warning! In addition to resetting all values on the dies, you will also reset al
 				</Cell>
 				<Cell columnSpan='1'>
 					<Button image='uiMinus' onClick='ShowOrHideUIConnectedStrips'
-						tooltipFontSize='35' tooltip=
+						tooltipFontSize='35' tooltipWidth='400' tooltip=
 'Скрыть UI со всех характеристик и статистик
 Hide UI from all characteristics and statistics'/>
 				</Cell>
